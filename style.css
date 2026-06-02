@@ -1,0 +1,364 @@
+/* ===== 基本設定 ===== */
+* {
+  box-sizing:border-box;
+  margin:0;
+  padding:0
+}
+
+html,body {
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  font-family:"Segoe UI","Meiryo",sans-serif;
+  color:#f5f9ff;
+  background:radial-gradient(circle at 50% -20%,rgba(0,180,255,.25),transparent 38%),linear-gradient(180deg,#06101d 0%,#020711 100%)
+}
+
+/* ===== 画面全体 ===== */
+.page {
+  width:100vw;
+  height:100vh;
+  padding:18px;
+  display:grid;
+  grid-template-rows:64px 150px 1fr;
+  gap:14px
+}
+
+/* ===== ヘッダー ===== */
+.header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center
+}
+
+.title-area {
+  display:flex;
+  align-items:center;
+  gap:14px
+}
+
+.toyota-mark {
+  width:42px;
+  height:42px;
+  border:3px solid #e7f4ff;
+  border-radius:50%;
+  box-shadow:0 0 22px rgba(70,188,255,.32)
+}
+
+h1 {
+  font-size:clamp(18px,2.2vw,32px);
+  letter-spacing:.1em;
+  color:#ea0a24
+}
+
+h1 span {
+  color:#fff
+}
+
+.header p {
+  margin-top:3px;
+  font-size:13px;
+  color:#d8ecff;
+  letter-spacing:.12em
+}
+
+.top-button {
+  padding:10px 18px;
+  border:1px solid rgba(118,196,255,.5);
+  border-radius:8px;
+  color:#d8efff;
+  background:rgba(10,26,47,.78)
+}
+
+/* ===== 上段タイムライン ===== */
+.timeline-frame {
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(97,183,255,.36);
+  border-radius:20px;
+  background:linear-gradient(180deg,rgba(9,25,48,.9),rgba(5,15,30,.96))
+}
+
+.center-line {
+  position:absolute;
+  left:50%;
+  top:0;
+  width:4px;
+  height:100%;
+  transform:translateX(-50%);
+  background:rgba(255,255,255,.92);
+  box-shadow:0 0 18px rgba(255,255,255,.95);
+  z-index:5
+}
+
+.track-mask {
+  height:100%;
+  overflow:hidden;
+  padding:18px 70px
+}
+
+.timeline-track {
+  height:100%;
+  display:flex;
+  width:max-content;
+  transform:translateX(0)
+}
+
+.year-node {
+  width:160px;
+  height:112px;
+  flex:0 0 auto;
+  border:0;
+  color:#f2f7ff;
+  background:transparent;
+  cursor:pointer;
+  font-family:inherit
+}
+
+.year-node .era {
+  display:inline-block;
+  padding:4px 9px;
+  border:1px solid rgba(120,194,255,.35);
+  border-radius:6px;
+  background:rgba(11,25,45,.86);
+  color:#cfe9ff;
+  font-size:11px
+}
+
+.wheel {
+  width:56px;
+  height:56px;
+  margin:5px auto 0;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:#0b1422;
+  border:6px solid #17283e;
+  box-shadow:0 0 12px rgba(102,178,255,.28)
+}
+
+.year-node.active .wheel,.year-node:hover .wheel {
+  border-color:#1bbcff;
+  box-shadow:0 0 28px rgba(33,196,255,.95);
+  transform:scale(1.08)
+}
+
+.node-photo {
+  width:98px;
+  height:24px;
+  margin:3px auto 0;
+  border-radius:9px;
+  overflow:hidden;
+  border:1px solid rgba(117,200,255,.26)
+}
+
+.node-photo img {
+  width:100%;
+  height:100%;
+  object-fit:cover
+}
+
+.pause-note {
+  position:absolute;
+  right:14px;
+  bottom:8px;
+  font-size:11px;
+  color:#bde8ff;
+  z-index:6
+}
+
+/* ===== 下段メイン表示 ===== */
+.main-card {
+  min-height:0;
+  display:grid;
+  grid-template-columns:minmax(320px,36%) 1fr;
+  gap:18px;
+  padding:18px;
+  border:1px solid rgba(99,184,255,.34);
+  border-radius:22px;
+  background:linear-gradient(180deg,rgba(10,25,47,.92),rgba(5,14,27,.97));
+  overflow:hidden
+}
+
+/* ===== 左側：年・メイン写真 ===== */
+.left-panel {
+  min-width:0;
+  display:grid;
+  grid-template-rows:auto auto auto 1fr;
+  gap:10px
+}
+
+.label {
+  color:#77c8ff;
+  font-size:14px;
+  letter-spacing:.26em
+}
+
+.year-line {
+  display:flex;
+  align-items:flex-end;
+  gap:12px
+}
+
+.big-year {
+  font-size:clamp(58px,6.5vw,100px);
+  line-height:.86;
+  font-weight:850;
+  letter-spacing:.07em
+}
+
+.era-badge {
+  margin-bottom:5px;
+  padding:7px 11px;
+  border:1px solid rgba(128,195,255,.4);
+  border-radius:7px;
+  background:rgba(10,23,43,.74)
+}
+
+.left-panel h2 {
+  font-size:clamp(18px,1.6vw,26px)
+}
+
+.photo-link {
+  min-height:0;
+  position:relative;
+  width:100%;
+  border:1px solid rgba(128,216,255,.3);
+  border-radius:18px;
+  background:rgba(245,248,255,.96);
+  overflow:hidden;
+  cursor:pointer
+}
+
+.photo-link img {
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block
+}
+
+.photo-link span {
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  background:rgba(2,7,17,.72);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.65);
+  border-radius:999px;
+  padding:10px 18px;
+  font-size:14px;
+  letter-spacing:.08em;
+  opacity:0;
+  transition:.2s
+}
+
+.photo-link:hover span {
+  opacity:1
+}
+
+/* ===== 右側：説明カード ===== */
+.right-area {
+  min-width:0;
+  display:grid;
+  grid-template-rows:auto 1fr;
+  gap:12px
+}
+
+.visual-title-box {
+  border-radius:16px;
+  border:1px solid rgba(118,196,255,.28);
+  background:linear-gradient(90deg,rgba(8,22,42,.86),rgba(12,43,73,.72));
+  padding:14px 16px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center
+}
+
+#visualTitle {
+  font-size:clamp(34px,4vw,68px);
+  line-height:1;
+  font-weight:850;
+  letter-spacing:.14em
+}
+
+.visual-title-box p {
+  color:#b7ddff;
+  text-align:right
+}
+
+.event-grid {
+  min-height:0;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px
+}
+
+article {
+  min-width:0;
+  padding:15px;
+  border:1px solid rgba(118,196,255,.3);
+  border-radius:14px;
+  background:linear-gradient(180deg,rgba(11,30,55,.84),rgba(7,19,36,.92));
+  display:flex;
+  flex-direction:column;
+  gap:10px
+}
+
+article h3 {
+  font-size:22px;
+  color:#bce6ff
+}
+
+article p {
+  font-size:clamp(20px,1vw,16px);
+  line-height:1.55
+}
+
+.spec-row {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-top:auto
+}
+
+.spec-row div {
+  padding:10px 6px;
+  text-align:center;
+  border:1px solid rgba(116,190,255,.26);
+  border-radius:11px;
+  background:rgba(13,34,61,.72)
+}
+
+.spec-row small {
+  display:block;
+  color:#b8dfff;
+  font-size:10px
+}
+
+.spec-row strong {
+  display:block;
+  margin-top:4px;
+  font-size:15px
+}
+
+/* ===== 画面が小さい時 ===== */
+@media(max-width:1100px) {
+  .top-button {
+    display:none
+  }
+
+  .page {
+    padding:10px;
+    grid-template-rows:56px 130px 1fr
+  }
+
+  .main-card {
+    grid-template-columns:310px 1fr
+  }
+
+  .event-grid {
+    grid-template-columns:1fr
+  }
+
+}

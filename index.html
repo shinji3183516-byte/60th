@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>高岡工場 60th Anniversary Timeline**********角田編集テスト中です************</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <main class="page">
+    <header class="header">
+      <div class="title-area">
+        <div class="toyota-mark" aria-hidden="true"></div>
+        <div>
+          <h1><span>高岡工場 60th Anniversary</span> TIMELINE 1966-2026**********角田編集テスト中です************</h1>
+          <p>車紹介・工場の出来事・社会の出来事 / 写真入り年表</p>
+        </div>
+      </div>
+      <div class="top-button">TAKAOKA PLANT ARCHIVE</div>
+    </header>
+
+    <section class="timeline-frame" id="timelineFrame" aria-label="自動スクロール年表">
+      <div class="center-line" aria-hidden="true"></div>
+      <div class="track-mask"><div class="timeline-track" id="timelineTrack"></div></div>
+      <p class="pause-note">年表にマウスを乗せると、年表と下の表示が同時に止まります</p>
+    </section>
+
+    <section class="main-card">
+      <div class="left-panel">
+        <p class="label">SELECTED YEAR</p>
+        <div class="year-line">
+          <span class="big-year" id="selectedYear">1966</span>
+          <span class="era-badge" id="selectedEra">昭和41年</span>
+        </div>
+        <h2 id="selectedTitle">高岡工場スタート</h2>
+        <button class="photo-link" id="photoLink" type="button">
+          <img id="mainPhoto" alt="選択された年代の写真" />
+          <span>画像中央リンク</span>
+        </button>
+      </div>
+
+      <div class="right-area">
+        <div class="visual-title-box">
+          <div id="visualTitle">PLANT</div>
+          <p>中央ラインの年代と下表示を連動</p>
+        </div>
+
+        <div class="event-grid">
+          <article>
+            <h3>🚗 車紹介</h3>
+            <p id="carIntro"></p>
+            <div class="spec-row">
+              <div><small>テーマ</small><strong id="spec1"></strong></div>
+              <div><small>生産</small><strong id="spec2"></strong></div>
+              <div><small>時代</small><strong id="spec3"></strong></div>
+            </div>
+          </article>
+          <article><h3>🏭 工場の出来事</h3><p id="factoryEvent"></p></article>
+          <article><h3>🌐 社会の出来事</h3><p id="socialEvent"></p></article>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

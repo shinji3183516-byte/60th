@@ -38,10 +38,14 @@ html,body {
 }
 
 .toyota-mark {
-  width:42px;
-  height:42px;
-  border:3px solid #e7f4ff;
-  border-radius:50%;
+  width:72px;
+  height:46px;
+  object-fit:cover;
+  object-position:center;
+  display:block;
+  border:1px solid rgba(231,244,255,.75);
+  border-radius:8px;
+  background:#fff;
   box-shadow:0 0 22px rgba(70,188,255,.32)
 }
 
@@ -57,7 +61,7 @@ h1 span {
 
 .header p {
   margin-top:3px;
-  font-size:13px;
+  font-size:18px;
   color:#d8ecff;
   letter-spacing:.12em
 }
@@ -122,7 +126,7 @@ h1 span {
   border-radius:6px;
   background:rgba(11,25,45,.86);
   color:#cfe9ff;
-  font-size:11px
+  font-size:14px
 }
 
 .wheel {
@@ -153,7 +157,7 @@ h1 span {
 }
 
 .node-photo img {
-  width:100%;
+  width:120%;
   height:100%;
   object-fit:cover
 }
@@ -216,7 +220,7 @@ h1 span {
 }
 
 .left-panel h2 {
-  font-size:clamp(18px,1.6vw,26px)
+  font-size:clamp(20px,1.6vw,26px)
 }
 
 .photo-link {
@@ -306,12 +310,12 @@ article {
 }
 
 article h3 {
-  font-size:22px;
+  font-size:30px;
   color:#bce6ff
 }
 
 article p {
-  font-size:clamp(20px,1vw,16px);
+  font-size:clamp(24px,1vw,16px);
   line-height:1.55
 }
 

@@ -50,7 +50,7 @@ html,body {
 }
 
 h1 {
-  font-size:clamp(18px,2.2vw,32px);
+  font-size:clamp(16px,2.2vw,32px);
   letter-spacing:.1em;
   color:#ea0a24
 }
@@ -310,12 +310,12 @@ article {
 }
 
 article h3 {
-  font-size:30px;
+  font-size:23px;
   color:#bce6ff
 }
 
 article p {
-  font-size:clamp(24px,1vw,16px);
+  font-size:clamp(20px,1vw,16px);
   line-height:1.55
 }
 
@@ -365,4 +365,13 @@ article p {
     grid-template-columns:1fr
   }
 
+}
+/* 車紹介・工場の出来事・社会の出来事の写真サイズ */
+.event-grid article img {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  display: block;
+  margin: 14px auto;
+  object-fit: contain;
 }

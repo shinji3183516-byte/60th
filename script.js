@@ -154,16 +154,13 @@ const socialEvent=document.getElementById("socialEvent");
 const spec1=document.getElementById("spec1");
 const spec2=document.getElementById("spec2");
 const spec3=document.getElementById("spec3");
+const speedButtons=document.querySelectorAll(".speed-button");
 
 function createInfoPhoto(textElement,idName){
   const photo=document.createElement("img");
   photo.id=idName;
-  photo.style.width="100%";
-  photo.style.maxHeight="230px";
-  photo.style.objectFit="contain";
-  photo.style.display="none";
-  photo.style.margin="12px auto 0";
-  photo.style.borderRadius="8px";
+  photo.className="info-photo";
+  photo.hidden=true;
   if(textElement){
     textElement.insertAdjacentElement("afterend",photo);
   }
@@ -178,17 +175,22 @@ function updateInfoPhoto(photo,imagePath,altText){
   if(imagePath){
     photo.src=imagePath;
     photo.alt=altText;
-    photo.style.display="block";
+    photo.hidden=false;
   }else{
     photo.removeAttribute("src");
     photo.alt="";
-    photo.style.display="none";
+    photo.hidden=true;
   }
 }
 let offset=0;
 let paused=false;
 let activeIndex=0;
-const speed=0.38;
+const speedMap={
+  verySlow:0.1,
+  slow:0.18,
+  normal:0.38
+};
+let speed=speedMap.normal;
 
 function createNode(item,index){
   const button=document.createElement("button");
@@ -290,6 +292,16 @@ function animate(){
 
 timelineFrame.addEventListener("mouseenter",function(){paused=true;});
 timelineFrame.addEventListener("mouseleave",function(){paused=false;});
+
+speedButtons.forEach(function(button){
+  button.addEventListener("click",function(){
+    const nextSpeed=button.dataset.speed;
+    speed=speedMap[nextSpeed]||speedMap.normal;
+    speedButtons.forEach(function(item){
+      item.classList.toggle("active",item===button);
+    });
+  });
+});
 
 photoLink.addEventListener("click",function(){
   const item=timelineData[activeIndex];

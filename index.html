@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>高岡工場 60th Anniversary Timeline**********角田編集テスト中です************</title>
+  <title>高岡工場 60th Anniversary Timeline</title>
   <link rel="stylesheet" href="style.css" />
   <script src="script.js" defer></script>
 </head>
@@ -17,11 +17,18 @@
           class="toyota-mark"
         />
         <div>
-          <h1><span>高岡工場 60th Anniversary</span> TIMELINE 1966-2026*角田編集テスト中です***</h1>
-          <p>車紹介・工場の出来事・社会の出来事 / 写真入り年表     Shinji Tsunoda</p>
+          <h1><span>高岡工場 60th Anniversary</span> TIMELINE 1966-2026</h1>
+          <p>車紹介・工場の出来事・社会の出来事 / 写真入り年表</p>
         </div>
       </div>
-      <div class="top-button">TAKAOKA PLANT ARCHIVE</div>
+      <div class="header-actions" aria-label="年表操作">
+        <div class="speed-control" aria-label="年表の速度切替">
+          <button class="speed-button" type="button" data-speed="verySlow">より遅い</button>
+          <button class="speed-button" type="button" data-speed="slow">遅い</button>
+          <button class="speed-button active" type="button" data-speed="normal">普通</button>
+        </div>
+        <div class="top-button">TAKAOKA PLANT ARCHIVE</div>
+      </div>
     </header>
 
     <section class="timeline-frame" id="timelineFrame" aria-label="自動スクロール年表">
@@ -52,7 +59,7 @@
 
         <div class="event-grid">
           <article>
-            <h3>🚗 車紹介</h3>
+            <h3><span>CAR</span> 車紹介</h3>
             <p id="carIntro"></p>
             <div class="spec-row">
               <div><small>テーマ</small><strong id="spec1"></strong></div>
@@ -60,8 +67,8 @@
               <div><small>時代</small><strong id="spec3"></strong></div>
             </div>
           </article>
-          <article><h3>🏭 工場の出来事</h3><p id="factoryEvent"></p></article>
-          <article><h3>🌐 社会の出来事</h3><p id="socialEvent"></p></article>
+          <article><h3><span>PLANT</span> 工場の出来事</h3><p id="factoryEvent"></p></article>
+          <article><h3><span>SOCIETY</span> 社会の出来事</h3><p id="socialEvent"></p></article>
         </div>
       </div>
     </section>

@@ -90,7 +90,7 @@ h1 {
   font-weight: 850;
   letter-spacing: .08em;
   color: transparent;
-  background: linear-gradient(100deg, #fff 0%, #fff 27%, #ffe9ad 36%, #fff 45%, #e50922 58%, #ff5267 72%, #e50922 100%);
+  background: linear-gradient(100deg, #fff 0%, #f8fbff 22%, #ffe9ad 36%, #fff 46%, #d8b76a 62%, #f7e7b0 78%, #fff 100%);
   background-size: 260% 100%;
   -webkit-background-clip: text;
   background-clip: text;
@@ -116,7 +116,7 @@ h1 span {
 
   100% {
     background-position: 0% 50%;
-    filter: drop-shadow(0 0 8px rgba(229, 9, 34, .12));
+    filter: drop-shadow(0 0 8px rgba(216, 183, 106, .12));
   }
 }
 

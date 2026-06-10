@@ -4,7 +4,7 @@
   編集方法
   ------------------------------------------------------------
   1) 年代シートを増やす:
-     timelineData に { year, era, title, visual, image, spec1, spec2, spec3, content } を追加します。
+     timelineData に { year, era, title, visual, image, content } を追加します。
      削除したい場合は、その年代の { ... } を丸ごと削除します。
 
   2) 下段3コンテナの画像:
@@ -698,18 +698,63 @@ function getCurrentItem() {
   return timelineData[activeIndex];
 }
 
-function getBaseBlocks(item, sectionKey) {
-  if (item.content && Array.isArray(item.content[sectionKey])) {
-    return item.content[sectionKey];
+function normalizeSectionKey(sectionKey) {
+  if (sectionKey === "car1") return "car";
+  if (sectionKey === "car2") return "plant";
+  if (sectionKey === "Plant") return "society";
+  return sectionKey;
+}
+
+function getEditorSectionKey() {
+  const selectedOption = editorTarget.options[editorTarget.selectedIndex];
+  const labelText = selectedOption ? selectedOption.textContent : "";
+
+  if (labelText.includes("車")) return "car";
+  if (labelText.includes("工場")) return "plant";
+  if (labelText.includes("社会")) return "society";
+
+  return normalizeSectionKey(editorTarget.value);
+}
+
+function getSectionAliases(sectionKey) {
+  const normalizedKey = normalizeSectionKey(sectionKey);
+
+  if (normalizedKey === "car") {
+    return ["car", "car1"];
   }
-  return [];
+
+  if (normalizedKey === "plant") {
+    return ["plant", "car2"];
+  }
+
+  if (normalizedKey === "society") {
+    return ["society", "Plant"];
+  }
+
+  return [normalizedKey];
+}
+
+function getBaseBlocks(item, sectionKey) {
+  if (!item.content) return [];
+
+  return getSectionAliases(sectionKey).flatMap(function(key) {
+    if (Array.isArray(item.content[key])) {
+      return item.content[key];
+    }
+    return [];
+  });
 }
 
 function getLocalBlocks(item, sectionKey) {
   const yearKey = String(item.year);
   if (!localAdditions[yearKey]) return [];
-  if (!Array.isArray(localAdditions[yearKey][sectionKey])) return [];
-  return localAdditions[yearKey][sectionKey];
+
+  return getSectionAliases(sectionKey).flatMap(function(key) {
+    if (Array.isArray(localAdditions[yearKey][key])) {
+      return localAdditions[yearKey][key];
+    }
+    return [];
+  });
 }
 
 function getMergedBlocks(item, sectionKey) {
@@ -778,19 +823,25 @@ function renderContent(sectionKey, item) {
   container.innerHTML = "";
 
   blocks.forEach(function(block) {
-    if (!block || !block.type) return;
+    if (!block) return;
 
-    if (block.type === "text") {
+    const blockType = block.type || (block.src ? "image" : block.text ? "text" : "");
+
+    if (blockType === "text") {
       if (block.text && block.text.trim() !== "") {
         container.appendChild(makeTextBlock(block.text));
       }
       return;
     }
 
-    if (block.type === "image") {
+    if (blockType === "image") {
       if (!block.src || renderedImageCount >= MAX_IMAGES_PER_SECTION) return;
       renderedImageCount += 1;
       container.appendChild(makeImageBlock(block));
+
+      if (block.text && block.text.trim() !== "") {
+        container.appendChild(makeTextBlock(block.text));
+      }
     }
   });
 
@@ -982,7 +1033,7 @@ function animate() {
 function addTextToCurrentYear() {
   const item = getCurrentItem();
   const text = editorText.value.trim();
-  const sectionKey = editorTarget.value;
+  const sectionKey = getEditorSectionKey();
 
   if (!text) {
     alert("追加する文章を入力してください。");
@@ -1017,7 +1068,7 @@ function readFileAsDataURL(file) {
 
 async function addImagesToCurrentYear(files) {
   const item = getCurrentItem();
-  const sectionKey = editorTarget.value;
+  const sectionKey = getEditorSectionKey();
   const fileList = Array.from(files || []);
 
   if (fileList.length === 0) return;

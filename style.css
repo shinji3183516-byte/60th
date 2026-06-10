@@ -51,8 +51,8 @@ body::before {
   height: 100vh;
   padding: 22px;
   display: grid;
-  grid-template-rows: 72px 154px 1fr;
-  gap: 16px;
+  grid-template-rows: 72px 150px minmax(0, 1fr);
+  gap: 14px;
 }
 
 /* ===== ヘッダー ===== */
@@ -473,6 +473,20 @@ h1 span {
   transition: transform .45s ease;
 }
 
+.photo-link.empty::before {
+  content: attr(data-placeholder);
+  position: absolute;
+  inset: 18px;
+  display: grid;
+  place-items: center;
+  border: 1px dashed rgba(14, 18, 28, .28);
+  border-radius: 10px;
+  color: rgba(14, 18, 28, .72);
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-align: center;
+}
+
 .photo-link:hover img {
   transform: scale(1.025);
 }
@@ -504,17 +518,18 @@ h1 span {
   min-width: 0;
   min-height: 0;
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
-  gap: 13px;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  gap: 9px;
 }
 
 .visual-title-box {
+  min-height: 58px;
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, .14);
   background:
     linear-gradient(90deg, rgba(229, 9, 34, .12), transparent 36%),
     linear-gradient(135deg, rgba(255, 255, 255, .08), rgba(255, 255, 255, .025));
-  padding: 14px 16px;
+  padding: 8px 14px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -522,8 +537,8 @@ h1 span {
 }
 
 #visualTitle {
-  font-size: clamp(34px, 4.2vw, 70px);
-  line-height: .92;
+  font-size: clamp(30px, 3.2vw, 52px);
+  line-height: .9;
   font-weight: 900;
   letter-spacing: .13em;
   background: linear-gradient(90deg, #fff, #e8cf8e 62%, #e50922);
@@ -537,6 +552,93 @@ h1 span {
   text-align: right;
   font-size: 13px;
   letter-spacing: .11em;
+}
+
+
+/* ===== 写真・文章追加パネル ===== */
+.editor-panel {
+  min-height: 0;
+  border: 1px solid rgba(255, 255, 255, .12);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, .045);
+  overflow: hidden;
+}
+
+.editor-panel summary {
+  min-height: 32px;
+  padding: 7px 10px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  color: #ffe7aa;
+  cursor: pointer;
+  font-size: 12px;
+  letter-spacing: .12em;
+}
+
+.editor-panel summary small {
+  color: var(--muted);
+  letter-spacing: .06em;
+}
+
+.editor-grid {
+  padding: 9px 10px 8px;
+  display: grid;
+  grid-template-columns: 140px 210px minmax(220px, 1fr) auto;
+  gap: 9px;
+  align-items: end;
+  border-top: 1px solid rgba(255, 255, 255, .09);
+}
+
+.editor-grid label {
+  display: grid;
+  gap: 5px;
+  color: #cbd4df;
+  font-size: 11px;
+  letter-spacing: .08em;
+}
+
+.editor-grid select,
+.editor-grid input,
+.editor-grid textarea {
+  width: 100%;
+  min-height: 32px;
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: 8px;
+  color: #f8fbff;
+  background: rgba(4, 6, 11, .8);
+  font: inherit;
+  font-size: 12px;
+  padding: 7px 8px;
+}
+
+.editor-grid textarea {
+  min-height: 46px;
+  resize: vertical;
+}
+
+.editor-buttons {
+  display: grid;
+  gap: 6px;
+}
+
+.editor-buttons button {
+  min-height: 30px;
+  border: 1px solid rgba(216, 183, 106, .35);
+  border-radius: 8px;
+  color: #fff4ce;
+  background: linear-gradient(135deg, rgba(216, 183, 106, .16), rgba(255, 255, 255, .05));
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.editor-note {
+  padding: 0 10px 9px;
+  color: rgba(223, 229, 238, .68);
+  font-size: 11px;
+  line-height: 1.45;
 }
 
 .event-grid {
@@ -578,22 +680,57 @@ article h3 span {
   letter-spacing: .2em;
 }
 
-article p {
+.article-content {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.content-text,
+.editor-note {
   color: #dfe5ee;
   font-size: clamp(13px, .92vw, 16px);
   line-height: 1.58;
 }
 
-.info-photo {
+.empty-content {
+  color: rgba(223, 229, 238, .58);
+}
+
+.image-block {
   width: 100%;
-  max-width: 500px;
-  max-height: 150px;
+  margin: 0;
+}
+
+.info-photo {
+  width: min(100%, 520px);
+  height: auto;
+  max-height: clamp(92px, 14vh, 172px);
   display: block;
-  margin: 4px auto 0;
+  margin: 0 auto;
   object-fit: contain;
   border-radius: 9px;
   border: 1px solid rgba(255, 255, 255, .12);
   background: rgba(255, 255, 255, .04);
+}
+
+.image-block figcaption {
+  margin-top: 4px;
+  color: rgba(223, 229, 238, .68);
+  font-size: 11px;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.image-missing {
+  padding: 10px;
+  border-radius: 9px;
+  border: 1px dashed rgba(216, 183, 106, .35);
+  color: rgba(255, 231, 170, .8);
+  background: rgba(216, 183, 106, .08);
+  font-size: 12px;
+  overflow-wrap: anywhere;
 }
 
 .info-photo[hidden] {
@@ -696,4 +833,33 @@ article p {
   .pause-note {
     display: none;
   }
+}
+
+
+@media (max-width: 1100px) {
+  .editor-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .editor-text-label,
+  .editor-buttons {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 760px) {
+  .editor-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .editor-text-label,
+  .editor-buttons {
+    grid-column: auto;
+  }
+}
+
+
+/* 見出し・スペック行を削除した後の余白調整 */
+.event-grid article {
+  padding-top: 16px;
 }

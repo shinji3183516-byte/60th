@@ -18,7 +18,7 @@
         />
         <div>
           <h1><span>高岡工場 60th Anniversary</span> TIMELINE 1966-2026</h1>
-          <p>車紹介・工場の出来事・社会の出来事 / 写真入り年表</p>
+          <p>車紹介・工場の出来事 / 写真入り年表</p>
         </div>
       </div>
       <div class="header-actions" aria-label="年表操作">
@@ -33,7 +33,9 @@
 
     <section class="timeline-frame" id="timelineFrame" aria-label="自動スクロール年表">
       <div class="center-line" aria-hidden="true"></div>
-      <div class="track-mask"><div class="timeline-track" id="timelineTrack"></div></div>
+      <div class="track-mask">
+        <div class="timeline-track" id="timelineTrack"></div>
+      </div>
       <p class="pause-note">年表にマウスを乗せると、年表と下の表示が同時に止まります</p>
     </section>
 
@@ -45,9 +47,9 @@
           <span class="era-badge" id="selectedEra">昭和41年</span>
         </div>
         <h2 id="selectedTitle">高岡工場スタート</h2>
-        <button class="photo-link" id="photoLink" type="button">
+        <button class="photo-link" id="photoLink" type="button" data-placeholder="メイン写真を追加してください">
           <img id="mainPhoto" alt="選択された年代の写真" />
-          <span>画像中央リンク</span>
+          <span>画像を開く</span>
         </button>
       </div>
 
@@ -57,18 +59,50 @@
           <p>中央ラインの年代と下表示を連動</p>
         </div>
 
+        <details class="editor-panel">
+          <summary>
+            <span>写真・文章を一時追加</span>
+            <small id="editorYearLabel">1966年に追加</small>
+          </summary>
+          <div class="editor-grid">
+            <label>
+              追加先
+              <select id="editorTarget">
+                <option value="car1">車紹介</option>
+                <option value="car2">工場の出来事</option>
+                <option value="plant">社会の出来事</option>
+              </select>
+            </label>
+            <label>
+              写真追加（最大3枚）
+              <input id="editorImages" type="file" accept="image/*" multiple />
+            </label>
+            <label class="editor-text-label">
+              文章追加
+              <textarea id="editorText" rows="2" placeholder="選択中の年代に追加する文章"></textarea>
+            </label>
+            <div class="editor-buttons">
+              <button id="addEditorText" type="button">文章を追加</button>
+              <button id="clearEditorAdditions" type="button">一時追加をリセット</button>
+            </div>
+          </div>
+          <p class="editor-note">
+            アップローダーは、このブラウザ内の一時追加です。正式保存する場合は画像を images フォルダへ入れ、script.js の content に画像パスを追加してください。
+          </p>
+        </details>
+
         <div class="event-grid">
           <article>
-            <h3><span>CAR</span> 車紹介</h3>
-            <p id="carIntro"></p>
-            <div class="spec-row">
-              <div><small>テーマ</small><strong id="spec1"></strong></div>
-              <div><small>生産</small><strong id="spec2"></strong></div>
-              <div><small>時代</small><strong id="spec3"></strong></div>
-            </div>
+            <div id="carContent" class="article-content"></div>
           </article>
-          <article><h3><span>PLANT</span> 工場の出来事</h3><p id="factoryEvent"></p></article>
-          <article><h3><span>SOCIETY</span> 社会の出来事</h3><p id="socialEvent"></p></article>
+
+          <article>
+            <div id="factoryContent" class="article-content"></div>
+          </article>
+
+          <article>
+            <div id="societyContent" class="article-content"></div>
+          </article>
         </div>
       </div>
     </section>

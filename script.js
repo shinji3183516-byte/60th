@@ -31,6 +31,11 @@ const MAX_IMAGES_PER_SECTION = 3;
 const LOOP_COUNT = 3;
 const STORAGE_KEY = "takaokaTimelineLocalAdditions_v2";
 
+// 走り抜けるRAV4とトヨタマークの画像パス
+// zip内の images フォルダに入っています。
+const RAV4_RUN_IMAGE = "images/transparent-rav4.png";
+const TOYOTA_MARK_IMAGE = "images/toyota-emblem.jpg";
+
 const timelineData = [
   {
     "year": "1966",
@@ -49,35 +54,35 @@ const timelineData = [
         },
         {
           "type": "image",
-          "src": "images/1960/1966publica.JPG",
-          "alt": "パブリカ"
+          "src": "images/1960/1966Corolla1.JPG",
+          "alt": "カローラ"
         },
         {
           "type":"image",
-          "src" :"images/1960/publicaVan.JPG",
-          "art" :"パブリカバン",
+          "src":"images/1960/123.png",
+          "art" :"スペック",
         }
       ],
       "car2": [
         {
           "src": "images/1960/1966publicaPickup.JPG",
-          "text": "工場の歩みの起点。生産車種と工場の歴史をここから紹介します。高岡工場はカローラの専用工場として建設され、月間3万台を生産すると記者会見で発表。"
+          "text": "工場の歩みの起点。生産車種と工場の歴史をここから紹介します。パブリカは1961年に発売され、エンジンは697cc強制空冷水平対向２気筒OHV最高出力28ps最高速度110km/h トヨタ車史上唯一の空冷エンジン搭載　発売当時価格38.9万円。"
         },
         {
           "type": "image",
-          "src": "images/1960/1966Corolla1.JPG",
-          "alt": "カローラ"
+          "src": "images/1960/1966publica.JPG",
+          "alt": "パブリカ",
         }
       ],
       "Plant": [
         {
           "type": "text",
-          "text": "高度経済成長の中で、家庭に車が広がっていく時代でした。初代トヨタ・カローラ発売、日本の総人口1億人突破、いざなぎ景気の始まりなどが重なります。"
+          "text": "高度経済成長の中で、家庭に車が広がっていく時代でした。初代トヨタ・カローラ発売、日本の総人口1億人突破、いざなぎ景気の始まりなどが重なります。1000ドルカーという初代後期型のキャッチコピーで親しまれ、セダン、コンバーチブル、トラック、バンとバリエーションは多彩であった"
         },
         {
           "type": "image",
-          "src": "images/society/ビートルズ.jpg",
-          "alt": "1966年 社会"
+          "src": "images/1960/1966publicaVan.JPG",
+          "alt": "パブリカバン"
         }
       ]
     }
@@ -641,6 +646,8 @@ const carContent = document.getElementById("carContent");
 const factoryContent = document.getElementById("factoryContent");
 const societyContent = document.getElementById("societyContent");
 const speedButtons = document.querySelectorAll(".speed-button");
+const pauseButton = document.getElementById("pauseButton");
+const playButton = document.getElementById("playButton");
 const editorTarget = document.getElementById("editorTarget");
 const editorImages = document.getElementById("editorImages");
 const editorText = document.getElementById("editorText");
@@ -664,7 +671,8 @@ const sectionConfig = {
 };
 
 let offset = 0;
-let paused = false;
+let manualPaused = false;
+let hoverPaused = false;
 let activeIndex = 0;
 let localAdditions = loadLocalAdditions();
 
@@ -1019,8 +1027,19 @@ function keepEndlessLoop() {
   }
 }
 
+function updatePlayButtons() {
+  if (!pauseButton || !playButton) return;
+
+  pauseButton.classList.toggle("active", manualPaused);
+  playButton.classList.toggle("active", !manualPaused);
+}
+
+function isPaused() {
+  return manualPaused || hoverPaused;
+}
+
 function animate() {
-  if (!paused) {
+  if (!isPaused()) {
     offset -= speed;
     keepEndlessLoop();
     timelineTrack.style.transform = "translateX(" + offset + "px)";
@@ -1125,13 +1144,89 @@ function clearCurrentLocalAdditions() {
   showData(activeIndex);
 }
 
+
+/* ===== 追加：トヨタマーク復元・RAV4走り抜けアニメーション ===== */
+function restoreToyotaMark() {
+  const titleArea = document.querySelector(".title-area");
+  if (!titleArea) return;
+
+  let mark = titleArea.querySelector(".toyota-mark");
+
+  if (!mark) {
+    mark = document.createElement("img");
+    mark.className = "toyota-mark";
+    mark.alt = "TOYOTA";
+    titleArea.insertBefore(mark, titleArea.firstChild);
+  }
+
+  mark.src = TOYOTA_MARK_IMAGE;
+}
+
+function createRav4Runner() {
+  if (!timelineFrame) return;
+  if (timelineFrame.querySelector(".rav4-runner")) return;
+
+  const runner = document.createElement("div");
+  runner.className = "rav4-runner";
+  runner.setAttribute("aria-hidden", "true");
+
+  const light = document.createElement("span");
+  light.className = "rav4-speed-light";
+
+  const car = document.createElement("img");
+  car.src = RAV4_RUN_IMAGE;
+  car.alt = "";
+  car.draggable = false;
+
+  runner.appendChild(light);
+  runner.appendChild(car);
+  timelineFrame.appendChild(runner);
+
+  runner.addEventListener("animationend", function() {
+    runner.classList.remove("is-running");
+  });
+}
+
+function runRav4Once() {
+  const runner = timelineFrame ? timelineFrame.querySelector(".rav4-runner") : null;
+  if (!runner || runner.classList.contains("is-running") || isPaused()) return;
+
+  // 少しだけ高さを変えて、毎回同じ位置に見えないようにします。
+  const laneTop = 34 + Math.floor(Math.random() * 18);
+  runner.style.setProperty("--rav4-top", laneTop + "px");
+  runner.classList.add("is-running");
+}
+
+function scheduleRav4Run() {
+  const nextDelay = 9000 + Math.floor(Math.random() * 9000);
+
+  window.setTimeout(function() {
+    runRav4Once();
+    scheduleRav4Run();
+  }, nextDelay);
+}
+
 timelineFrame.addEventListener("mouseenter", function() {
-  paused = true;
+  hoverPaused = true;
 });
 
 timelineFrame.addEventListener("mouseleave", function() {
-  paused = false;
+  hoverPaused = false;
 });
+
+if (pauseButton) {
+  pauseButton.addEventListener("click", function() {
+    manualPaused = true;
+    updatePlayButtons();
+  });
+}
+
+if (playButton) {
+  playButton.addEventListener("click", function() {
+    manualPaused = false;
+    updatePlayButtons();
+  });
+}
 
 speedButtons.forEach(function(button) {
   button.addEventListener("click", function() {
@@ -1168,6 +1263,10 @@ window.addEventListener("resize", function() {
   centerNode(activeIndex);
 });
 
+restoreToyotaMark();
 buildTimeline();
 centerNode(0);
+createRav4Runner();
+updatePlayButtons();
 animate();
+scheduleRav4Run();

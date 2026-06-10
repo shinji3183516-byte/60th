@@ -169,6 +169,41 @@ h1 span {
   box-shadow: inset 0 0 18px rgba(216, 183, 106, .12), 0 0 18px rgba(216, 183, 106, .16);
 }
 
+
+.play-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.control-button {
+  min-width: 58px;
+  height: 32px;
+  border: 1px solid rgba(120, 231, 255, .42);
+  border-radius: 999px;
+  color: #eafbff;
+  background: linear-gradient(135deg, rgba(120, 231, 255, .18), rgba(255, 255, 255, .045));
+  box-shadow: inset 0 0 18px rgba(120, 231, 255, .1), 0 10px 26px rgba(0, 0, 0, .22);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  cursor: pointer;
+  transition: color .2s ease, background .2s ease, box-shadow .2s ease, opacity .2s ease;
+}
+
+.control-button:hover {
+  color: #fff;
+  background: linear-gradient(135deg, rgba(120, 231, 255, .28), rgba(216, 183, 106, .12));
+  box-shadow: inset 0 0 18px rgba(120, 231, 255, .14), 0 0 18px rgba(120, 231, 255, .18);
+}
+
+.control-button.active {
+  color: #fff4ce;
+  border-color: rgba(216, 183, 106, .55);
+  background: linear-gradient(135deg, rgba(216, 183, 106, .24), rgba(229, 9, 34, .16));
+}
+
 .top-button {
   flex: 0 0 auto;
   padding: 11px 18px;
@@ -862,4 +897,99 @@ article h3 span {
 /* 見出し・スペック行を削除した後の余白調整 */
 .event-grid article {
   padding-top: 16px;
+}
+
+
+/* ===== 追加：年表帯を時々走り抜ける透過RAV4 ===== */
+.rav4-runner {
+  --rav4-top: 42px;
+  position: absolute;
+  left: 0;
+  top: var(--rav4-top);
+  width: clamp(190px, 19vw, 320px);
+  height: clamp(74px, 7.8vw, 128px);
+  z-index: 7;
+  pointer-events: none;
+  transform: translateX(-135%) scale(1);
+  opacity: 0;
+  filter: drop-shadow(0 16px 18px rgba(0, 0, 0, .62));
+}
+
+.rav4-runner img {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  user-select: none;
+}
+
+.rav4-speed-light {
+  position: absolute;
+  right: -94%;
+  top: 48%;
+  width: 104%;
+  height: 18px;
+  transform: translateY(-50%);
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, .36), rgba(229, 9, 34, .38), transparent 72%),
+    linear-gradient(90deg, rgba(120, 231, 255, .18), transparent 65%);
+  filter: blur(3px);
+  opacity: 0;
+}
+
+.rav4-runner.is-running {
+  animation: rav4DriveThrough 4.8s cubic-bezier(.22, .74, .28, 1) forwards;
+}
+
+.rav4-runner.is-running .rav4-speed-light {
+  animation: rav4LightTrail 4.8s ease-out forwards;
+}
+
+@keyframes rav4DriveThrough {
+  0% {
+    transform: translateX(calc(100vw + 120%)) scale(.92);
+    opacity: 0;
+  }
+
+  8% {
+    opacity: 1;
+  }
+
+  48% {
+    transform: translateX(calc(50vw - 50%)) scale(1.02);
+    opacity: 1;
+  }
+
+  88% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(-145%) scale(.96);
+    opacity: 0;
+  }
+}
+
+@keyframes rav4LightTrail {
+  0%, 15% {
+    opacity: 0;
+  }
+
+  28%, 78% {
+    opacity: .85;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 760px) {
+  .rav4-runner {
+    width: 190px;
+    height: 74px;
+  }
 }

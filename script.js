@@ -31,10 +31,62 @@ const MAX_IMAGES_PER_SECTION = 3;
 const LOOP_COUNT = 3;
 const STORAGE_KEY = "takaokaTimelineLocalAdditions_v2";
 
-// 走り抜けるRAV4とトヨタマークの画像パス
-// zip内の images フォルダに入っています。
-const RAV4_RUN_IMAGE = "images/transparent-rav4.png";
-const TOYOTA_MARK_IMAGE = "images/toyota-emblem.jpg";
+// 年代別に年表の上を走る車画像
+// 1960年代: corolla-60th / 1970年代: corolla-green / 1980年代: levin
+// 1990年代: prius / 2000年代: iQ / 2010年代: hayy / 2020年代: rav4-silver
+const ERA_RUNNER_CARS = [
+  {
+    from: 1960,
+    to: 1969,
+    src: "images/run-cars/corolla-60th.png",
+    alt: "Corolla 60th",
+    width: "clamp(210px, 20vw, 340px)"
+  },
+  {
+    from: 1970,
+    to: 1979,
+    src: "images/run-cars/corolla-green.png",
+    alt: "Classic Corolla",
+    width: "clamp(210px, 20vw, 340px)"
+  },
+  {
+    from: 1980,
+    to: 1989,
+    src: "images/run-cars/levin.png",
+    alt: "Levin",
+    width: "clamp(210px, 20vw, 340px)"
+  },
+  {
+    from: 1990,
+    to: 1999,
+    src: "images/run-cars/prius.png",
+    alt: "Prius",
+    width: "clamp(210px, 20vw, 340px)"
+  },
+  {
+    from: 2000,
+    to: 2009,
+    src: "images/run-cars/iQ.png",
+    alt: "iQ",
+    width: "clamp(150px, 15vw, 260px)"
+  },
+  {
+    from: 2010,
+    to: 2019,
+    src: "images/run-cars/hayy.png",
+    alt: "Harrier 60th",
+    width: "clamp(200px, 19vw, 330px)"
+  },
+  {
+    from: 2020,
+    to: 2026,
+    src: "images/run-cars/rav4-silver.png",
+    alt: "RAV4 Silver",
+    width: "clamp(200px, 19vw, 330px)"
+  }
+];
+
+const TOYOTA_MARK_IMAGE = "images/toytamark.jpg";
 
 const timelineData = [
   {
@@ -88,11 +140,11 @@ const timelineData = [
     }
   },
   {
-    "year": "1969",
-    "era": "昭和44年",
-    "title": "追加シート：1969",
-    "visual": "ADD",
-    "image": "",
+    "year": "1967",
+    "era": "昭和42年",
+    "title": "追加シート：1967",
+    "visual": "パブリカ生産開始",
+    "image": "images/1960/1967CrollaVan.JPG",
     "spec1": "追加枠",
     "spec2": "写真追加",
     "spec3": "編集用",
@@ -100,74 +152,109 @@ const timelineData = [
       "car": [
         {
           "type": "text",
-          "text": "ここに1969年の車紹介を入力してください。画像は下のアップローダー、または script.js の content.car に追加できます。"
-        }
+           "text": "1967年 元町工場よりパブリカの生産移管、ミニエースは｢パブリカ｣のコンポーネンツを用いた小型商用車。当初「トラック（低床／高床）」と「パネルバン」のラインナップ 1968年8月に「バン」と乗用車登録の「コーチ（7名乗り）」を追加。エンジンを運転席の下に搭載する、キャブ・オーバー・ザ・エンジン型(いわゆるキャブオーバー)のデザインにして、限られた全長の中で荷台寸法を最長にとり、軽トラックより150kg多い500kgの最大積載量を確保した。" ,   }
       ],
       "plant": [
         {
-          "type": "text",
-          "text": "ここに1969年の工場の出来事を入力してください。"
-        }
+          "type":"image",
+          "src":"images/1960/カラーミニエース.png",
+          "alt":"ミニエース"
+
+        },
+        {
+          "type": "image",
+           "src": "images/1960/1967miniace.JPG",
+           "alt" : "miniace"
+        },
+        {
+          "type" : "text",
+          "text" : "スペック  エンジンは空冷水平対向2気筒OHV800cc・36PS (2U-B)。トランスミッションは4速MTコラムシフト。サスペンションは、フロントがダブルウィッシュボーン/トーションバーの独立式、リヤがリジッドアクスル/リーフスプリング"
+        },
+
+        
+        
+        
       ],
       "society": [
         {
-          "type": "text",
-          "text": "ここに1969年の社会の出来事を入力してください。"
-        }
+          "type": "image",
+           "src": "images/1960/1968miniace.JPG",
+        },
+        {
+          "type": "image",
+          "src" : "images/1960/カタログミニエース.png",
+          "alt" : "ミニエース"
+        },
+        {
+          "type": "image",
+          "src" : "images/1960/カタログミニエース１.png",
+          "alt" : "ミニエース"
+        },
       ]
     }
   },
   {
-    "year": "1978",
-    "era": "昭和53年",
-    "title": "カローラ生産拡大",
-    "visual": "COROLLA",
-    "image": "images/3.jpg",
-    "spec1": "カローラ",
+    "year": "1969",
+    "era": "昭和44年",
+    "title": "高岡工場オンライン生産指示",
+    "visual": "2代目パブリカ",
+    "image": "images/1960/1969P.png",
+    "spec1": "パブリカ",
     "spec2": "量産",
     "spec3": "大衆車",
     "content": {
       "car": [
         {
           "type": "text",
-          "text": "カローラを中心に、小型で扱いやすい車づくりが広がりました。また、トヨタ初の前輪駆動（FF）車である「ターセル」「コルサ」の生産を開始。1982年カローラⅡ生産開始。"
+          "text": "2代目パブリカ発売　1969年4月に発売した2代目。社会環境の変化に合わせて高性能化と上級化を実施。ラインナップは2ドアセダン、2ドアバン、ピックアップ（1969年10月追加）の3種類でコンバーチブルとディタッチャブルトップは継続しなかった。ボデーをひとまわり大きくし、エンジンは、800ccエンジンを残しながら、「カローラ」用の1100c（9月に1200ccに変更）と、それを縮小した1000ccの2種の水冷4気筒エンジンを追加",　
         },
+
+
         {
           "type": "image",
-          "src": "images/car/コルサ.jpg",
-          "alt": "コルサ"
+          "src": "images/1960/スペック.png",
+          "alt": "スペック"
         }
       ],
       "plant": [
         {
-          "type": "text",
-          "text": "量産体制を強め、高岡工場の存在感が高まっていきました。1980年トヨタ国内車両生産累計3,000万台を記念して時計塔設置。"
+          "type": "image",
+          "src": "images/1960/sheet.png",
+          "alt": "内装",
         },
         {
+          "type":"image",
+          "src" :"images/1960/1969-P2.jpg",
+          "alt" :""
+        },
+
+
+        {
           "type": "image",
-          "src": "images/factory/img01.jpg",
-          "alt": "工場写真"
+          "src": "images/1960/inpane.png",
+          "alt": "インパネ"
         }
       ],
       "society": [
         {
-          "type": "text",
-          "text": "生活の中に自動車が定着し、大衆車の需要が拡大しました。成田空港開港、沖縄の交通方法変更、キャンディーズ解散など、昭和の社会・流行も話題に。"
+          "type": "image",
+          "src": "images/1960/1969pubicaPicup.png",
+          "alt":"トラック"
         },
         {
           "type": "image",
-          "src": "images/society/okinawa.png",
-          "alt": "沖縄交通方法変更"
+          "src": "images/1960/1969publicaVan.JPG",
+          "alt": "Van"
         }
       ]
     }
   },
   {
-    "year": "1980",
-    "era": "昭和55年",
-    "title": "追加シート：1980",
-    "visual": "ADD",
-    "image": "",
+    "year": "1970~1972",
+    "era": "昭和45年",
+    "title": "追加シート：1970",
+    "visual": "2代目カローラ発売",
+    "image": "images/1970/1970co.JPG",
     "spec1": "追加枠",
     "spec2": "写真追加",
     "spec3": "編集用",
@@ -175,20 +262,42 @@ const timelineData = [
       "car": [
         {
           "type": "text",
-          "text": "ここに1980年の車紹介を入力してください。"
+          "text": "1966年の誕生以来、日本の小型大衆車市場を牽引してきた「カローラ」の2代目。1970年5月のモデルチェンジを機に、「カローラ　スプリンター」は「トヨタ　スプリンター」（販売はカローラ店ではなくオート店）として独立させた。そして新スプリンターのクーペとボデーを共有する、「カローラ　クーペ」を新設した.エンジンは当初、前代から引き継いだ直列4気筒OHV1200cc（3K）でスタートし、モデルライフ中にT系エンジン（OHV1400cc、1600cc、DOHC1600cc）を加え、最終的にはカローラ系として3種類6仕様のエンジンを用意した。その他の機構も先代から受け継ぐが、フロント・サスペンションからは横置リーフスプリングを使わない、一般的なマクファーソンストラット式とした。"
         }
       ],
       "plant": [
         {
-          "type": "text",
-          "text": "ここに1980年の工場の出来事を入力してください。写真は最大3枚まで表示できます。"
-        }
+          "type": "image",
+          "src": "images/1970/1970クーペ.JPG",
+          "alt" :""
+        },
+        {
+          "type": "image",
+          "src" :"images/1970/1970バン.JPG",
+          "alt" : ""
+        },
+        {
+          "type": "image",
+          "src" :"images/1970/1971スプリンター.JPG",
+          "alt": "スプリンター",
+        },
+
+
+
       ],
       "society": [
         {
-          "type": "text",
-          "text": "ここに1980年の社会の出来事を入力してください。"
-        }
+          "type": "image",
+          "src": "images/1970/1972カリーナハードトップ.JPG",
+        },
+        {
+          "type":"image",
+          "src":"images/1970/カリーナカタログ.png",
+        },
+        {
+          "type":"image",
+          "src" :"images/1970/カリーナ内装.png",
+        },
       ]
     }
   },
@@ -1162,6 +1271,24 @@ function restoreToyotaMark() {
   mark.src = TOYOTA_MARK_IMAGE;
 }
 
+function getRunnerCarConfigByYear(year) {
+  const targetYear = Number(year);
+
+  if (Number.isNaN(targetYear)) {
+    return ERA_RUNNER_CARS[0];
+  }
+
+  return ERA_RUNNER_CARS.find(function(car) {
+    return targetYear >= car.from && targetYear <= car.to;
+  }) || ERA_RUNNER_CARS[ERA_RUNNER_CARS.length - 1];
+}
+
+function getCurrentRunnerCarConfig() {
+  const item = getCurrentItem();
+  const year = item ? item.year : timelineData[0].year;
+  return getRunnerCarConfigByYear(year);
+}
+
 function createRav4Runner() {
   if (!timelineFrame) return;
   if (timelineFrame.querySelector(".rav4-runner")) return;
@@ -1174,9 +1301,15 @@ function createRav4Runner() {
   light.className = "rav4-speed-light";
 
   const car = document.createElement("img");
-  car.src = RAV4_RUN_IMAGE;
-  car.alt = "";
+  const initialCar = getCurrentRunnerCarConfig();
+
+  car.src = initialCar ? initialCar.src : "";
+  car.alt = initialCar ? initialCar.alt : "";
   car.draggable = false;
+
+  if (initialCar && initialCar.width) {
+    runner.style.setProperty("--runner-width", initialCar.width);
+  }
 
   runner.appendChild(light);
   runner.appendChild(car);
@@ -1191,14 +1324,30 @@ function runRav4Once() {
   const runner = timelineFrame ? timelineFrame.querySelector(".rav4-runner") : null;
   if (!runner || runner.classList.contains("is-running") || isPaused()) return;
 
+  const selectedCar = getCurrentRunnerCarConfig();
+  const car = runner.querySelector("img");
+
+  if (selectedCar && car) {
+    car.src = selectedCar.src;
+    car.alt = selectedCar.alt || "";
+
+    if (selectedCar.width) {
+      runner.style.setProperty("--runner-width", selectedCar.width);
+    }
+  }
+
   // 少しだけ高さを変えて、毎回同じ位置に見えないようにします。
   const laneTop = 34 + Math.floor(Math.random() * 18);
   runner.style.setProperty("--rav4-top", laneTop + "px");
+
+  // 同じアニメーションを確実に再スタートさせます。
+  runner.classList.remove("is-running");
+  void runner.offsetWidth;
   runner.classList.add("is-running");
 }
 
 function scheduleRav4Run() {
-  const nextDelay = 9000 + Math.floor(Math.random() * 9000);
+  const nextDelay = 7000 + Math.floor(Math.random() * 5000);
 
   window.setTimeout(function() {
     runRav4Once();

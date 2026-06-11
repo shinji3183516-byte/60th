@@ -283,7 +283,15 @@ h1 span {
   background: transparent;
   cursor: pointer;
   font-family: inherit;
+
+   /* 追加 */
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
+
 
 .year-node .era {
   display: inline-block;
@@ -906,7 +914,7 @@ article h3 span {
   position: absolute;
   left: 0;
   top: var(--rav4-top);
-  width: clamp(190px, 19vw, 320px);
+  width: var(--runner-width, clamp(190px, 19vw, 320px));
   height: clamp(74px, 7.8vw, 128px);
   z-index: 7;
   pointer-events: none;

@@ -86,7 +86,7 @@ const ERA_RUNNER_CARS = [
   }
 ];
 
-const TOYOTA_MARK_IMAGE = "images/toytamark.jpg";
+const TOYOTA_MARK_IMAGE = "images/factory/toyotamark.jpg?v=20260612";
 
 const timelineData = [
   {
@@ -992,11 +992,37 @@ function updateEditorYear(item) {
   }
 }
 
+function renderYearLabel(element, yearValue) {
+  const yearText = String(yearValue || "").trim();
+  element.textContent = "";
+  element.classList.remove("year-range-label");
+
+  if (yearText.includes("~")) {
+    const parts = yearText.split("~");
+    const startYear = parts[0].trim();
+    const endYear = parts.slice(1).join("~").trim();
+
+    element.classList.add("year-range-label");
+
+    const firstLine = document.createElement("span");
+    firstLine.textContent = startYear + "~";
+
+    const secondLine = document.createElement("span");
+    secondLine.textContent = endYear;
+
+    element.appendChild(firstLine);
+    element.appendChild(secondLine);
+    return;
+  }
+
+  element.textContent = yearText;
+}
+
 function showData(index) {
   const item = timelineData[index];
   if (!item) return;
 
-  selectedYear.textContent = item.year;
+  renderYearLabel(selectedYear, item.year);
   selectedEra.textContent = item.era;
   selectedTitle.textContent = item.title;
   visualTitle.textContent = item.visual;
@@ -1029,7 +1055,7 @@ function createNode(item, index, loopIndex) {
   wheel.className = "wheel";
 
   const year = document.createElement("strong");
-  year.textContent = item.year || "";
+  renderYearLabel(year, item.year);
   wheel.appendChild(year);
 
   const nodePhoto = document.createElement("span");

@@ -74,7 +74,7 @@ body::before {
 .toyota-mark {
   width: 78px;
   height: 48px;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
   display: block;
   border: 1px solid rgba(255, 255, 255, .64);
@@ -356,7 +356,26 @@ h1 span {
   z-index: 1;
   font-size: 15px;
   letter-spacing: .05em;
+  line-height: 1.05;
+  text-align: center;
+  white-space: nowrap;
   text-shadow: 0 1px 2px rgba(0, 0, 0, .8), 0 0 12px rgba(255, 244, 206, .28);
+}
+
+/* ===== 複数年表示のズレ防止 =====
+   1970~1972 のようにまとめた年代は、
+   年表ボタン内で 1970~ / 1972 の2段にして中央固定します。
+   1年表示の 1966 などは今まで通り1段表示です。
+*/
+.wheel strong.year-range-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  font-size: 13px;
+  line-height: .95;
+  letter-spacing: .02em;
 }
 
 .year-node.active .era,
@@ -456,17 +475,35 @@ h1 span {
   align-items: flex-end;
   gap: 12px;
   padding-top: 8px;
+  min-width: 0;
+  flex-wrap: wrap;
 }
 
 .big-year {
-  font-size: clamp(64px, 7vw, 112px);
+  /* SELECTED YEAR の通常1年表示。小さくしたい時は、この clamp の数値を下げます */
+  font-size: clamp(45px, 5vw, 85px);
   line-height: .98;
-  font-weight: 900;
+  font-weight: 700;
   letter-spacing: .04em;
+  max-width: 100%;
   background: linear-gradient(180deg, #fff 14%, #d9dee8 48%, #b49248 100%);
   -webkit-background-clip: text;
   color: transparent;
   filter: drop-shadow(0 0 22px rgba(216, 183, 106, .18));
+}
+
+/* SELECTED YEAR が 1970~1972 のような複数年の時だけ自動で小さめ・2段表示にする */
+.big-year.year-range-label {
+  font-weight: 500;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 0;
+  font-size: clamp(28px, 3vw, 48px);
+  line-height: .82;
+  letter-spacing: .02em;
+  white-space: nowrap;
 }
 
 .era-badge {
@@ -744,12 +781,17 @@ article h3 span {
 .image-block {
   width: 100%;
   margin: 0;
+  flex: 0 0 auto;
 }
 
+/* ===== 下段コンテナ内の写真ズレ防止 =====
+   写真ごとの縦横比が違っても、写真枠の高さをそろえます。
+   object-fit: contain なので、写真は切れずに枠内へ収まります。
+*/
 .info-photo {
-  width: min(100%, 520px);
-  height: auto;
-  max-height: clamp(92px, 14vh, 172px);
+  width: 100%;
+  height: clamp(96px, 13vh, 160px);
+  max-height: none;
   display: block;
   margin: 0 auto;
   object-fit: contain;

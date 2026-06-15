@@ -163,7 +163,7 @@ const timelineData = [
         },
         {
           "type": "image",
-           "src": "images/1960/カタログミニエース１.png",
+           "src": "images/1960/カタログミニ.png",
            "alt" : "miniace"
         },
         {
@@ -187,7 +187,7 @@ const timelineData = [
         },
         {
           "type": "image",
-          "src" : "images/1960/カタログミニエース１.png",
+          "src" : "images/1960/ミニエースカタログ.png",
           "alt" : "ミニエース"
         },
       ]

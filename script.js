@@ -86,7 +86,7 @@ const ERA_RUNNER_CARS = [
   }
 ];
 
-const TOYOTA_MARK_IMAGE = "images/toytamark.jpg";
+const TOYOTA_MARK_IMAGE = "images/toyotamark.jpg";
 
 const timelineData = [
   {

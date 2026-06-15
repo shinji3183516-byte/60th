@@ -164,7 +164,7 @@ const timelineData = [
         {
           "type": "image",
            "src": "images/1960/カタログミニ.png",
-           "alt" : "miniace"
+           "alt" : "miniace",
         },
         {
           "type" : "text",
@@ -178,17 +178,17 @@ const timelineData = [
       "society": [
         {
           "type": "image",
-           "src": "images/1960/1968miniace.JPG",
+           "src": "images/1960/1968miniace.JPG"
         },
         {
           "type": "image",
           "src" : "images/1960/カタログミニエース.png",
-          "alt" : "ミニエース"
+          "alt" : "ミニエース",
         },
         {
           "type": "image",
           "src" : "images/1960/ミニエースカタログ.png",
-          "alt" : "ミニエース"
+          "alt" : "ミニエース",
         },
       ]
     }

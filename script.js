@@ -157,13 +157,13 @@ const timelineData = [
       "plant": [
         {
           "type":"image",
-          "src":"images/1960/カラーミニエース.png",
+          "src":"images/1960/カラーミニエース.jpg",
           "alt":"ミニエース"
 
         },
         {
           "type": "image",
-           "src": "images/1960/カタログミニ.png",
+           "src": "images/1960/カタログミニ.jpg",
            "alt" : "miniace",
         },
         {
@@ -182,12 +182,12 @@ const timelineData = [
         },
         {
           "type": "image",
-          "src" : "images/1960/カタログミニエース.png",
+          "src" : "images/1960/カタログミニエース.jpg",
           "alt" : "ミニエース",
         },
         {
           "type": "image",
-          "src" : "images/1960/ミニエースカタログ.png",
+          "src" : "images/1960/ミニエースカタログ.jpg",
           "alt" : "ミニエース",
         },
       ]
@@ -219,7 +219,7 @@ const timelineData = [
       "plant": [
         {
           "type": "image",
-          "src": "images/1960/sheet.png",
+          "src": "images/1960/sheet.jpg",
           "alt": "内装",
         },
         {
@@ -231,14 +231,14 @@ const timelineData = [
 
         {
           "type": "image",
-          "src": "images/1960/inpane.png",
+          "src": "images/1960/inpane.jpg",
           "alt": "インパネ"
         }
       ],
       "society": [
         {
           "type": "image",
-          "src": "images/1960/1969pubicaPicup.png",
+          "src": "images/1960/パブリカピックアップ.jpg",
           "alt":"トラック"
         },
         {
@@ -292,11 +292,11 @@ const timelineData = [
         },
         {
           "type":"image",
-          "src":"images/1970/カリーナカタログ.png"
+          "src":"images/1970/カリーナカタログ.jpg"
         },
         {
           "type":"image",
-          "src" :"images/1970/カリーナ内装.png"
+          "src" :"images/1970/カリーナ内装.jpg"
         },
       ]
     }

@@ -86,7 +86,7 @@ const ERA_RUNNER_CARS = [
   }
 ];
 
-const TOYOTA_MARK_IMAGE = "images/factory/toyotamark.jpg?v=20260612";
+const TOYOTA_MARK_IMAGE = "images/toytamark.jpg";
 
 const timelineData = [
   {
@@ -94,7 +94,7 @@ const timelineData = [
     "era": "昭和41年",
     "title": "高岡工場スタート",
     "visual": "PLANT",
-    "image": "images/1960/1966Corolla.JPG",
+    "image": "images/1960/1966Corolla.jpg",
     "spec1": "創業期",
     "spec2": "生産開始",
     "spec3": "60年の起点",
@@ -163,7 +163,7 @@ const timelineData = [
         },
         {
           "type": "image",
-           "src": "images/1960/1967miniace.JPG",
+           "src": "images/1960/カタログミニエース１.png",
            "alt" : "miniace"
         },
         {
@@ -992,37 +992,11 @@ function updateEditorYear(item) {
   }
 }
 
-function renderYearLabel(element, yearValue) {
-  const yearText = String(yearValue || "").trim();
-  element.textContent = "";
-  element.classList.remove("year-range-label");
-
-  if (yearText.includes("~")) {
-    const parts = yearText.split("~");
-    const startYear = parts[0].trim();
-    const endYear = parts.slice(1).join("~").trim();
-
-    element.classList.add("year-range-label");
-
-    const firstLine = document.createElement("span");
-    firstLine.textContent = startYear + "~";
-
-    const secondLine = document.createElement("span");
-    secondLine.textContent = endYear;
-
-    element.appendChild(firstLine);
-    element.appendChild(secondLine);
-    return;
-  }
-
-  element.textContent = yearText;
-}
-
 function showData(index) {
   const item = timelineData[index];
   if (!item) return;
 
-  renderYearLabel(selectedYear, item.year);
+  selectedYear.textContent = item.year;
   selectedEra.textContent = item.era;
   selectedTitle.textContent = item.title;
   visualTitle.textContent = item.visual;
@@ -1055,7 +1029,7 @@ function createNode(item, index, loopIndex) {
   wheel.className = "wheel";
 
   const year = document.createElement("strong");
-  renderYearLabel(year, item.year);
+  year.textContent = item.year || "";
   wheel.appendChild(year);
 
   const nodePhoto = document.createElement("span");

@@ -288,15 +288,15 @@ const timelineData = [
       "society": [
         {
           "type": "image",
-          "src": "images/1970/1972カリーナハードトップ.JPG",
+          "src": "images/1970/1972カリーナハードトップ.JPG"
         },
         {
           "type":"image",
-          "src":"images/1970/カリーナカタログ.png",
+          "src":"images/1970/カリーナカタログ.png"
         },
         {
           "type":"image",
-          "src" :"images/1970/カリーナ内装.png",
+          "src" :"images/1970/カリーナ内装.png"
         },
       ]
     }

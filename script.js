@@ -112,18 +112,18 @@ const timelineData = [
         {
           "type":"image",
           "src":"images/1960/123.png",
-          "art" :"スペック",
+          "art" :"スペック"
         }
       ],
       "car2": [
         {
-          "src": "images/1960/1966publicaPickup.JPG",
+          "type": "text",
           "text": "工場の歩みの起点。生産車種と工場の歴史をここから紹介します。パブリカは1961年に発売され、エンジンは697cc強制空冷水平対向２気筒OHV最高出力28ps最高速度110km/h トヨタ車史上唯一の空冷エンジン搭載　発売当時価格38.9万円。"
         },
         {
           "type": "image",
           "src": "images/1960/1966publica.JPG",
-          "alt": "パブリカ",
+          "alt": "パブリカ"
         }
       ],
       "Plant": [
@@ -163,32 +163,29 @@ const timelineData = [
         },
         {
           "type": "image",
-           "src": "images/1960/カタログミニ.jpg",
-           "alt" : "miniace",
+           "src": "images/1960/ミニエーストラック.jpg",
+           "alt" : "miniace"
         },
         {
           "type" : "text",
           "text" : "スペック  エンジンは空冷水平対向2気筒OHV800cc・36PS (2U-B)。トランスミッションは4速MTコラムシフト。サスペンションは、フロントがダブルウィッシュボーン/トーションバーの独立式、リヤがリジッドアクスル/リーフスプリング"
         },
-
-        
-        
-        
-      ],
+       ],
       "society": [
         {
           "type": "image",
-           "src": "images/1960/1968miniace.JPG"
+           "src": "images/1960/1968miniace.JPG",
+           "alt":"miniace"
         },
         {
           "type": "image",
-          "src" : "images/1960/カタログミニエース.jpg",
-          "alt" : "ミニエース",
+          "src" : "images/1960/カタログエース.jpg",
+          "alt" : "ミニエース"
         },
         {
-          "type": "image",
-          "src" : "images/1960/ミニエースカタログ.jpg",
-          "alt" : "ミニエース",
+          "type": "text",
+          "text" : "パブリカの部品を流用したトヨタ最小のキャブオーバー車として1967年に登場。愛嬌あるデザインと実用性で人気を集め、トラック・バンに加え乗用登録のコーチも展開。空冷2気筒ながら販売は好調で、競合車と互角に戦った。1971年にライトエースへバトンタッチ後も改良されつつ1975年まで生産が続いた。",
+          
         },
       ]
     }
@@ -198,7 +195,7 @@ const timelineData = [
     "era": "昭和44年",
     "title": "高岡工場オンライン生産指示",
     "visual": "2代目パブリカ",
-    "image": "images/1960/1969P.png",
+    "image": "images/1960/1969p.jpg",
     "spec1": "パブリカ",
     "spec2": "量産",
     "spec3": "大衆車",
@@ -212,9 +209,9 @@ const timelineData = [
 
         {
           "type": "image",
-          "src": "images/1960/スペック.png",
+          "src": "images/1960/spec.png",
           "alt": "スペック"
-        }
+        },
       ],
       "plant": [
         {
@@ -225,7 +222,7 @@ const timelineData = [
         {
           "type":"image",
           "src" :"images/1960/1969-P2.jpg",
-          "alt" :""
+          "alt" :"p2"
         },
 
 
@@ -233,19 +230,19 @@ const timelineData = [
           "type": "image",
           "src": "images/1960/inpane.jpg",
           "alt": "インパネ"
-        }
+        },
       ],
       "society": [
         {
           "type": "image",
-          "src": "images/1960/パブリカピックアップ.jpg",
+          "src": "images/1960/pickup.jpg",
           "alt":"トラック"
         },
         {
           "type": "image",
           "src": "images/1960/1969publicaVan.JPG",
           "alt": "Van"
-        }
+        },
       ]
     }
   },
@@ -268,18 +265,18 @@ const timelineData = [
       "plant": [
         {
           "type": "image",
-          "src": "images/1970/1970クーペ.JPG",
-          "alt" :""
+          "src": "images/1970/sedan.jpg",
+          "alt" :"クーペ"
         },
         {
           "type": "image",
-          "src" :"images/1970/1970バン.JPG",
-          "alt" : ""
+          "src" :"images/1970/darkblue.jpg",
+          "alt" : "バン"
         },
         {
           "type": "image",
-          "src" :"images/1970/1971スプリンター.JPG",
-          "alt": "スプリンター",
+          "src" :"images/1970/sedan.jpg",
+          "alt": "スプリンター"
         },
 
 
@@ -288,103 +285,150 @@ const timelineData = [
       "society": [
         {
           "type": "image",
-          "src": "images/1970/1972カリーナハードトップ.JPG",
+          "src": "images/1970/カリーナHT.JPG",
+          "alt":"カリーナ"
+        },
+        {
+          "type":"image",
+          "src":"images/1970/2000gt_1977.jpg",
           "alt":"カリーナ",
         },
         {
           "type":"image",
-          "src":"images/1970/カリーナカタログ.jpg",
-          "alt":"カリーナ",
-        },
-        {
-          "type":"image",
-          "src" :"images/1970/カリーナ内装.jpg",
-          "alt":"内装",
+          "src" :"images/1970/interior_small.jpg",
+          "alt":"内装"
         },
       ]
     }
   },
   {
-    "year": "1984",
-    "era": "昭和59年",
-    "title": "品質向上とグローバル対応",
-    "visual": "QUALITY",
-    "image": "images/5.jpg",
-    "spec1": "品質",
+    "year": "1975~",
+    "era": "昭和50年",
+    "title": "1000湖ラリー",
+    "visual": "3代目カローラ",
+    "image": "images/1970/1975ラリー.jpg",
+    "SPEC1":  "",
+    "spec1": "",
     "spec2": "効率化",
     "spec3": "海外支援",
     "content": {
       "car": [
         {
-          "type": "text",
-          "text": "カローラFXなど、使いやすさと品質を重視した車種が登場しました。"
+          "type": "image",
+          "src": "images/1970/78コルサ.JPG",
+          "alt": "コルサ"
         },
         {
           "type": "image",
-          "src": "images/car/FX.jpg",
-          "alt": "カローラFX"
-        }
+          "src": "images/1970/78コルサクーペ.jpg",
+          "alt": "コルサ"
+        },
+        {
+          "type":"image",
+          "src" :"images/1970/79クーペ.jpg",
+          "alt" :"HT"
+        },
       ],
       "plant": [
         {
-          "type": "text",
-          "text": "品質・生産性向上に取り組み、グローバルな車づくりへつながりました。米国GMとの合弁会社「NUMMI」の立ち上げでは、親工場として現地従業員の研修など生産ノウハウを支援。"
+          "type": "image",
+          "src": "images/1970/78.jpg",
+          "alt": "wagon"
         },
         {
           "type": "image",
-          "src": "images/car/1000man.jpg",
+          "src": "images/1970/79カローラ.jpg",
           "alt": "1000万台"
+        },
+        {
+          "type":"image",
+          "src": "images/1970/1979カローラ.jpg",
+          "alt": "カローラ"
         }
       ],
       "society": [
         {
-          "type": "text",
-          "text": "省エネ志向や小型車需要が高まりました。ファミコン人気拡大、ロサンゼルスオリンピック開催。"
+          "type": "image",
+          "src": "images/1970/cb8.jpg",
+          "alt":"ラリー"
         },
         {
           "type": "image",
-          "src": "images/society/Olympic.jpg",
-          "alt": "ロサンゼルスオリンピック"
-        }
-      ]
+          "src": "images/1970/Rally75.jpg",
+          "alt": "ラリー"
+        },
+      ],
     }
   },
   {
-    "year": "1989",
-    "era": "平成1年",
-    "title": "追加シート：1989",
-    "visual": "ADD",
-    "image": "",
+    "year": "1982",
+    "era": "昭和57年",
+    "title": "追加シート：1,000万台",
+    "visual": "カローラが販売の中心",
+    "image": "images/1980/10000000.jpg",
     "spec1": "追加枠",
     "spec2": "写真追加",
     "spec3": "編集用",
     "content": {
       "car": [
         {
-          "type": "text",
-          "text": "ここに1989年の車紹介を入力してください。"
-        }
+          "type": "image",
+          "src": "images/1980/レビン.jpg",
+          "alt": "Levin"
+        },
+        {
+          "type":"image",
+          "src": "images/1980/トレノ.jpg",
+          "alt":"トレノ"
+        },
+        {
+          "type":"image",
+          "src":"images/1980/4AG.jpg",
+          "alt":"4AG"
+        },
       ],
       "plant": [
         {
-          "type": "text",
-          "text": "ここに1989年の工場の出来事を入力してください。"
-        }
+          "type": "image",
+          "src": "images/1980/1984カローラFX.jpg",
+          "alt": "FX"
+        },
+        {
+          "type":"image",
+          "src" :"images/1980/1982コルサ.jpg",
+          "alt":"コルサ"
+        },
+        {
+          "type":"image",
+          "src": "images/1980/1982カローラワゴン.jpg",
+          "alt":"wagon"
+        },
       ],
       "society": [
         {
-          "type": "text",
-          "text": "ここに1989年の社会の出来事を入力してください。"
-        }
-      ]
+          "type": "image",
+          "image": "images/1980/1982carib.jpg",
+          "alt":"カリブ"
+        },
+        {
+          "type":"image",
+          "src" :"images/1980/1982コルサハッチバック.jpg",
+          "alt" :"コルサ"
+        },
+        {
+          "type":"image",
+          "src" :"images/1980/1983カローラ.jpg",
+          "alt": "カローラ"
+        },
+      ],
     }
   },
   {
-    "year": "1997",
-    "era": "平成9年",
-    "title": "プリウス生産開始",
-    "visual": "PRIUS",
-    "image": "images/prius.jpg",
+    "year": "1987",
+    "era": "昭和62年",
+    "title": "フレキシブルボデーライン",
+    "visual": "4WD",
+    "image": "images/1980/1987カローラレビン.jpg",
     "spec1": "HV",
     "spec2": "環境技術",
     "spec3": "新時代",
@@ -392,92 +436,138 @@ const timelineData = [
       "car": [
         {
           "type": "text",
-          "text": "世界初の量産ハイブリッド車プリウスの生産により、環境技術の時代へ進みました。SUV初代ハリアー登場。"
+          "text": "「カローラ」「スプリンター」ラインオフに伴い、ボデー工程にFBL（フレキシブルボデーライン）導入",
         },
         {
           "type": "image",
-          "src": "images/car/shodaiharr.jpg",
-          "alt": "初代ハリアー"
-        }
+          "src": "images/1980/1982carib.jpg",
+          "alt": "カリブ"
+        },
+        {
+          "type":"image",
+          "src":"images/1980/1987カロ.jpg",
+          "alt":"sedan"
+
+        },
       ],
       "plant": [
         {
-          "type": "text",
-          "text": "初代プリウスの生産を開始しました。高岡工場にとって、環境技術と新しい車づくりへの大きな転機となりました。"
-        }
+          "type": "image",
+          "src": "images/1980/87トレノ.jpg",
+          "alt": "FFレビン"
+        },
+        {
+          "type":"image",
+          "src" :"images/1980/1987カローラワゴン.jpg",
+          "alt":"wagon"
+        
+        },
+        {
+          "type":"image",
+          "src":"images/1980/1987スプリンター.jpg",
+        },
       ],
       "society": [
         {
-          "type": "text",
-          "text": "環境性能と技術革新への関心が高まりました。金融危機、京都議定書の採択、東京湾アクアライン開通、消費税5％など、社会の転換点となる出来事が続きました。"
+          "type": "image",
+          "src": "images/1980/1987FX.jpg",
+          "alt":"FX"
         },
         {
           "type": "image",
-          "src": "images/Aqua.jpg",
-          "alt": "東京湾アクアライン"
-        }
-      ]
+          "src": "images/1980/1986コルサハッチバック.jpg",
+          "alt": "コルサ"
+        },
+       {
+        "type":"image",
+        "src":"images/1980/1987シエロ.jpg",
+        "alt":"シエロ"
+       }
+      ],
     }
-  },
+  }, 
   {
-    "year": "1999",
-    "era": "平成11年",
-    "title": "ヴィッツ・ファンカーゴ・プラッツ",
-    "visual": "VITZ",
-    "image": "images/vit.jpg",
+    "year": "1991",
+    "era": "平成3年",
+    "title": "7代目カローラ",
+    "visual": "カローラ",
+    "image": "images/1990/1991カローラ.jpg",
     "spec1": "コンパクト",
     "spec2": "多車種",
     "spec3": "実用性",
     "content": {
       "car": [
         {
-          "type": "text",
-          "text": "コンパクトカーのラインアップが広がりました。e-かんばん導入。ターセル、コルサ、サイノス生産終了。"
+          "type": "image",
+          "src": "images/1990/1991サイノス.jpg",
+          "alt":"サイノス"
         },
         {
           "type": "image",
-          "src": "images/car/fan.jpg",
-          "alt": "ファンカーゴ"
-        }
+          "src": "images/1990/91バン.jpg",
+          "alt": "カローラ"
+        },
+        {
+          "type":"image",
+          "src":"images/1990/ワゴン91.jpg",
+          "alt":"wagon"
+        },
       ],
       "plant": [
         {
-          "type": "text",
-          "text": "多車種生産への対応力を高めました。ヴィッツ生産開始、ボデー工程にトヨタ初のGBL導入。"
+          "type": "image",
+          "src": "images/1990/1991スプリンター.jpg",
+          "alt":"スプリンター"
+        },
+        {
+          "type":"image",
+          "src":"images/1990/1992カローラセレス.jpg",
+          "alt":"セレス"
+        },
+        {
+          "type":"image",
+          "src":"images/1990/1990コルサハッチバック.jpg",
+          "alt":"コルサ"
         }
       ],
       "society": [
         {
           "type": "text",
-          "text": "暮らしにフィットする車が注目されました。NTTドコモ i-mode開始。東海村JCO臨界事故。"
+          "text": "1991年6月に発売した7代目。ホイールベース・全長・全幅・全高ともに拡大、ボデーデザインのボリューム感を増すことで、さらに高級感を増した。1966年の誕生以来、高級化路線を進んできて頂点に達したモデルであり、あらゆる面にわたって高品質な大衆車となった。ワゴンとバンは約3カ月遅れてモデルチェンジした。"
         },
         {
           "type": "image",
-          "src": "images/society/mail.jpg",
-          "alt": "i-mode"
-        }
+          "src": "images/1990/カローラFX.jpg",
+          "alt": "FX"
+        },
       ]
     }
   },
   {
-    "year": "2001",
-    "era": "平成13年",
-    "title": "工場生産累計2,000万台",
-    "visual": "20M",
-    "image": "images/corolla_runx.jpg",
+    "year": "1999",
+    "era": "平成11年",
+    "title": "Vitz",
+    "visual": "Vitz Fun Cargo ",
+    "image": "images/1990/1999ヴィッツ.JPG",
     "spec1": "2,000万台",
     "spec2": "高効率",
     "spec3": "品質強化",
     "content": {
       "car": [
         {
-          "type": "text",
-          "text": "カローラ ランクス・アレックスなど、日常の使いやすさを重視したモデルが生産されました。"
+          "type": "image",
+          "src": "images/1990/1998対米.jpg",
+          "alt": "アメリカ"
         },
         {
           "type": "image",
-          "src": "images/car/01.jpg",
-          "alt": "ランクス・アレックス"
+          "src": "images/1990/1999ファンカーゴ.JPG",
+          "alt": "ファンカーゴ"
+        },
+        {
+          "type":"image",
+          "src":"images/1990/1999プラッツ.JPG",
+          "alt":"プラッツ"
         }
       ],
       "plant": [
@@ -500,10 +590,10 @@ const timelineData = [
     }
   },
   {
-    "year": "2006",
-    "era": "平成18年",
+    "year": "2000~",
+    "era": "平成12年",
     "title": "追加シート：2006",
-    "visual": "ADD",
+    "visual": "",
     "image": "",
     "spec1": "追加枠",
     "spec2": "写真追加",
@@ -787,6 +877,7 @@ let manualPaused = false;
 let hoverPaused = false;
 let activeIndex = 0;
 let localAdditions = loadLocalAdditions();
+let allCarsParadeRunning = false;
 
 const speedMap = {
   verySlow: 0.1,
@@ -1011,6 +1102,7 @@ function showData(index) {
 
 
   updateEditorYear(item);
+  rotateLuxuryPanel();
 
   document.querySelectorAll(".year-node").forEach(function(node) {
     node.classList.toggle("active", Number(node.dataset.index) === index);
@@ -1121,8 +1213,14 @@ function updateSelectedByCenter() {
 
   const newIndex = Number(nearestNode.dataset.index);
   if (newIndex !== activeIndex) {
+    const previousIndex = activeIndex;
     activeIndex = newIndex;
     showData(activeIndex);
+
+    // 2026年から1966年へ戻る瞬間に、歴代の全車を時間差で走らせます。
+    if (previousIndex === timelineData.length - 1 && newIndex === 0) {
+      runAllCarsParade();
+    }
   }
 }
 
@@ -1275,7 +1373,8 @@ function restoreToyotaMark() {
 }
 
 function getRunnerCarConfigByYear(year) {
-  const targetYear = Number(year);
+  // 「1970~1972」「1975~」のような表記でも先頭の年を取得します。
+  const targetYear = parseInt(year, 10);
 
   if (Number.isNaN(targetYear)) {
     return ERA_RUNNER_CARS[0];
@@ -1325,7 +1424,7 @@ function createRav4Runner() {
 
 function runRav4Once() {
   const runner = timelineFrame ? timelineFrame.querySelector(".rav4-runner") : null;
-  if (!runner || runner.classList.contains("is-running") || isPaused()) return;
+  if (!runner || runner.classList.contains("is-running") || isPaused() || allCarsParadeRunning) return;
 
   const selectedCar = getCurrentRunnerCarConfig();
   const car = runner.querySelector("img");
@@ -1347,6 +1446,46 @@ function runRav4Once() {
   runner.classList.remove("is-running");
   void runner.offsetWidth;
   runner.classList.add("is-running");
+}
+
+// 2026年から1966年へ戻る際に、年代別の全車を年表帯へ走らせます。
+function runAllCarsParade() {
+  if (!timelineFrame || allCarsParadeRunning || isPaused()) return;
+
+  allCarsParadeRunning = true;
+
+  const normalRunner = timelineFrame.querySelector(".rav4-runner");
+  if (normalRunner) {
+    normalRunner.classList.remove("is-running");
+  }
+
+  const paradeLayer = document.createElement("div");
+  paradeLayer.className = "all-cars-parade";
+  paradeLayer.setAttribute("aria-hidden", "true");
+
+  ERA_RUNNER_CARS.forEach(function(carConfig, index) {
+    const runner = document.createElement("div");
+    runner.className = "all-cars-parade__car";
+    runner.style.setProperty("--parade-delay", (index * 0.42) + "s");
+    runner.style.setProperty("--parade-lane", (22 + (index % 3) * 25) + "px");
+    runner.style.setProperty("--parade-width", carConfig.width || "clamp(190px, 19vw, 320px)");
+
+    const image = document.createElement("img");
+    image.src = carConfig.src;
+    image.alt = carConfig.alt || "";
+    image.draggable = false;
+
+    runner.appendChild(image);
+    paradeLayer.appendChild(runner);
+  });
+
+  timelineFrame.appendChild(paradeLayer);
+
+  // 最後の車が走り終えたあと、レイヤーを削除して通常走行へ戻します。
+  window.setTimeout(function() {
+    paradeLayer.remove();
+    allCarsParadeRunning = false;
+  }, 7600);
 }
 
 function scheduleRav4Run() {
@@ -1415,10 +1554,24 @@ window.addEventListener("resize", function() {
   centerNode(activeIndex);
 });
 
-restoreToyotaMark();
+// 左上の余分なTOYOTA文字を出さないため、JSでロゴを追加しません。
+// restoreToyotaMark();
 buildTimeline();
 centerNode(0);
 createRav4Runner();
 updatePlayButtons();
 animate();
 scheduleRav4Run();
+
+
+/* ===== 追加：高級感のあるタイトル帯アニメーション ===== */
+function rotateLuxuryPanel() {
+  const target = document.querySelector(".visual-title-box");
+  if (!target) return;
+
+  target.classList.remove("luxury-rotate");
+
+  void target.offsetWidth;
+
+  target.classList.add("luxury-rotate");
+}

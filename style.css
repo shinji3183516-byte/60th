@@ -71,7 +71,7 @@ body::before {
   gap: 16px;
 }
 
-.toyota-mark {
+.mark {
   width: 78px;
   height: 48px;
   object-fit: contain;
@@ -1041,5 +1041,279 @@ article h3 span {
   .rav4-runner {
     width: 190px;
     height: 74px;
+  }
+}
+
+/* =========================================================
+   最終上書き：3つのコンテナ内の画像切れ防止
+   車の形は変えない / 画像を切らない / 枠内に自動で収める
+   ========================================================= */
+.event-grid article {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+.event-grid article .article-content,
+.event-grid article .image-block {
+  width: 100% !important;
+  min-width: 0 !important;
+  overflow: visible !important;
+}
+
+.event-grid article img,
+.article-content img,
+.image-block img,
+.info-photo {
+  width: 100% !important;
+  height: auto !important;
+  max-width: 100% !important;
+  max-height: none !important;
+  aspect-ratio: auto !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  display: block !important;
+  margin: 0 auto !important;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, .96);
+}
+
+/* 写真の上下に少し余白を入れて、端が切れて見えないようにする */
+.event-grid article .image-block {
+  padding: 6px 0 !important;
+}
+
+/* 横長画像だけ大きくなりすぎる時の上限 */
+.event-grid article img.info-photo,
+.event-grid article .image-block > img {
+  max-height: 185px !important;
+}
+
+/* 左側メイン写真も形を変えず、切れないようにする */
+.photo-link img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+}
+
+
+/* ===== 追加：高級感のある金色発光アニメーション =====
+   年号が中央に来て表示が切り替わるたびに、右上のタイトル帯だけが上品に光ります。
+*/
+.visual-title-box {
+  position: relative;
+  overflow: hidden;
+  transform-origin: center;
+  will-change: transform, box-shadow, filter;
+}
+
+.visual-title-box::after {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    transparent 36%,
+    rgba(255, 236, 170, .12) 44%,
+    rgba(255, 215, 94, .62) 50%,
+    rgba(255, 244, 206, .18) 56%,
+    transparent 66%,
+    transparent 100%
+  );
+  transform: translateX(-62%) rotate(8deg);
+}
+
+.luxury-rotate {
+  animation: luxuryGoldGlow 2.1s ease-in-out;
+}
+
+.luxury-rotate::after {
+  animation: luxuryGoldSweep 2.1s ease-in-out;
+}
+
+.luxury-rotate #visualTitle {
+  animation: luxuryGoldText 2.1s ease-in-out;
+}
+
+@keyframes luxuryGoldGlow {
+  0% {
+    transform: scale(1);
+    box-shadow: inset 0 0 34px rgba(216, 183, 106, .06);
+    filter: brightness(1);
+  }
+
+  38% {
+    transform: scale(1.018);
+    box-shadow:
+      inset 0 0 40px rgba(255, 226, 140, .18),
+      0 0 24px rgba(216, 183, 106, .52),
+      0 0 62px rgba(216, 183, 106, .26);
+    filter: brightness(1.18);
+  }
+
+  100% {
+    transform: scale(1);
+    box-shadow: inset 0 0 34px rgba(216, 183, 106, .06);
+    filter: brightness(1);
+  }
+}
+
+@keyframes luxuryGoldSweep {
+  0% {
+    opacity: 0;
+    transform: translateX(-62%) rotate(8deg);
+  }
+
+  24% {
+    opacity: 1;
+  }
+
+  62% {
+    opacity: .92;
+    transform: translateX(62%) rotate(8deg);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(88%) rotate(8deg);
+  }
+}
+
+@keyframes luxuryGoldText {
+  0% {
+    filter: drop-shadow(0 0 0 rgba(216, 183, 106, 0));
+  }
+
+  42% {
+    filter:
+      drop-shadow(0 0 10px rgba(255, 226, 140, .76))
+      drop-shadow(0 0 24px rgba(216, 183, 106, .42));
+  }
+
+  100% {
+    filter: drop-shadow(0 0 0 rgba(216, 183, 106, 0));
+  }
+}
+
+
+/* ===== 右上：60周年ロゴ =====
+   TAKAOKA PLANT ARCHIVEボタンを削除し、ロゴ画像に差し替え */
+.archive-logo {
+  flex: 0 0 auto;
+  width: clamp(54px, 5.2vw, 82px);
+  height: clamp(54px, 5.2vw, 82px);
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 10px 22px rgba(0, 0, 0, .55))
+          drop-shadow(0 0 10px rgba(120, 231, 255, .22));
+}
+
+.archive-logo:hover {
+  transform: scale(1.04);
+}
+
+
+/* ===== 右上ロゴ：通常時ゆっくり発光 ===== */
+.archive-logo {
+  border-radius: 16px !important;
+  padding: 4px !important;
+  background: rgba(255, 255, 255, .045) !important;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, .16),
+    0 10px 22px rgba(0, 0, 0, .55),
+    0 0 10px rgba(120, 231, 255, .20) !important;
+  animation: archiveLogoGlow 5.2s ease-in-out infinite;
+  transition: transform .25s ease, filter .25s ease, box-shadow .25s ease;
+}
+
+.archive-logo:hover {
+  transform: scale(1.05);
+  filter:
+    drop-shadow(0 12px 24px rgba(0, 0, 0, .62))
+    drop-shadow(0 0 16px rgba(120, 231, 255, .45));
+}
+
+@keyframes archiveLogoGlow {
+  0%, 100% {
+    transform: scale(1);
+    filter:
+      drop-shadow(0 10px 22px rgba(0, 0, 0, .55))
+      drop-shadow(0 0 8px rgba(120, 231, 255, .18));
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, .14),
+      0 10px 22px rgba(0, 0, 0, .55),
+      0 0 10px rgba(120, 231, 255, .18);
+  }
+
+  50% {
+    transform: scale(1.035);
+    filter:
+      drop-shadow(0 12px 26px rgba(0, 0, 0, .62))
+      drop-shadow(0 0 18px rgba(120, 231, 255, .52))
+      drop-shadow(0 0 24px rgba(216, 183, 106, .34));
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, .24),
+      0 12px 28px rgba(0, 0, 0, .6),
+      0 0 18px rgba(120, 231, 255, .42),
+      0 0 30px rgba(216, 183, 106, .24);
+  }
+}
+
+
+/* ===== 追加：2026年から1966年へ戻る時の全車パレード ===== */
+.all-cars-parade {
+  position: absolute;
+  inset: 0;
+  z-index: 9;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.all-cars-parade__car {
+  position: absolute;
+  top: var(--parade-lane, 42px);
+  left: 0;
+  width: var(--parade-width, clamp(190px, 19vw, 320px));
+  height: clamp(66px, 7vw, 116px);
+  opacity: 0;
+  transform: translateX(calc(100vw + 130%));
+  filter: drop-shadow(0 13px 16px rgba(0, 0, 0, .68));
+  animation: allCarsParadeDrive 4.8s cubic-bezier(.22, .74, .28, 1) var(--parade-delay, 0s) forwards;
+}
+
+.all-cars-parade__car img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  user-select: none;
+}
+
+@keyframes allCarsParadeDrive {
+  0% {
+    transform: translateX(calc(100vw + 130%)) scale(.92);
+    opacity: 0;
+  }
+
+  7% {
+    opacity: 1;
+  }
+
+  88% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(-145%) scale(1.02);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 760px) {
+  .all-cars-parade__car {
+    height: 72px;
   }
 }

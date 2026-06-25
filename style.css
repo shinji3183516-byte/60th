@@ -1,1319 +1,979 @@
-/* ===== 基本設定 ===== */
-:root {
-  --ink: #f8fbff;
-  --muted: #aeb9c8;
-  --line: rgba(255, 255, 255, .14);
-  --line-strong: rgba(255, 255, 255, .28);
-  --panel: rgba(12, 15, 22, .78);
-  --panel-deep: rgba(4, 6, 11, .9);
-  --red: #e50922;
-  --red-soft: rgba(229, 9, 34, .55);
-  --gold: #d8b76a;
-  --gold-soft: rgba(216, 183, 106, .42);
-  --cyan: #78e7ff;
-  --cyan-soft: rgba(120, 231, 255, .3);
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html,
-body {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  font-family: "Segoe UI", "Meiryo", sans-serif;
-  color: var(--ink);
-  background:
-    radial-gradient(circle at 18% 12%, rgba(229, 9, 34, .18), transparent 28%),
-    radial-gradient(circle at 84% 4%, rgba(216, 183, 106, .16), transparent 31%),
-    linear-gradient(135deg, rgba(120, 231, 255, .06) 0 1px, transparent 1px 58px),
-    linear-gradient(180deg, #12151c 0%, #05070c 48%, #020307 100%);
-}
-
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background:
-    linear-gradient(90deg, transparent 0 49%, rgba(255, 255, 255, .035) 50%, transparent 51%),
-    repeating-linear-gradient(0deg, rgba(255, 255, 255, .026) 0 1px, transparent 1px 44px);
-  mask-image: radial-gradient(circle at center, #000 0%, transparent 78%);
-}
-
-/* ===== 画面全体 ===== */
-.page {
-  width: 100vw;
-  height: 100vh;
-  padding: 22px;
-  display: grid;
-  grid-template-rows: 72px 150px minmax(0, 1fr);
-  gap: 14px;
-}
-
-/* ===== ヘッダー ===== */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 18px;
-  border-bottom: 1px solid rgba(255, 255, 255, .1);
-}
-
-.title-area {
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.mark {
-  width: 78px;
-  height: 48px;
-  object-fit: contain;
-  object-position: center;
-  display: block;
-  border: 1px solid rgba(255, 255, 255, .64);
-  border-radius: 7px;
-  background: #fff;
-  box-shadow: 0 0 0 1px rgba(216, 183, 106, .22), 0 18px 42px rgba(0, 0, 0, .45);
-}
-
-h1 {
-  position: relative;
-  font-size: clamp(18px, 2.25vw, 34px);
-  line-height: 1.03;
-  font-weight: 850;
-  letter-spacing: .08em;
-  color: transparent;
-  background: linear-gradient(100deg, #fff 0%, #f8fbff 22%, #ffe9ad 36%, #fff 46%, #d8b76a 62%, #f7e7b0 78%, #fff 100%);
-  background-size: 260% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  text-transform: uppercase;
-  text-shadow: 0 0 24px rgba(229, 9, 34, .18);
-  animation: titleShine 5.8s ease-in-out infinite;
-}
-
-h1 span {
-  color: transparent;
-}
-
-@keyframes titleShine {
-  0% {
-    background-position: 100% 50%;
-    filter: drop-shadow(0 0 8px rgba(216, 183, 106, .08));
-  }
-
-  42% {
-    background-position: 0% 50%;
-    filter: drop-shadow(0 0 18px rgba(216, 183, 106, .28));
-  }
-
-  100% {
-    background-position: 0% 50%;
-    filter: drop-shadow(0 0 8px rgba(216, 183, 106, .12));
-  }
-}
-
-.header p {
-  margin-top: 7px;
-  color: var(--muted);
-  font-size: clamp(12px, 1.1vw, 16px);
-  letter-spacing: .18em;
-  white-space: nowrap;
-}
-
-.header-actions {
-  flex: 0 0 auto;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.speed-control {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  padding: 3px;
-  border: 1px solid rgba(255, 255, 255, .14);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, .055);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
-}
-
-.speed-button {
-  min-width: 64px;
-  height: 32px;
-  border: 0;
-  border-radius: 999px;
-  color: #c6ced9;
-  background: transparent;
-  font: inherit;
-  font-size: 12px;
-  letter-spacing: .08em;
-  cursor: pointer;
-  transition: color .2s ease, background .2s ease, box-shadow .2s ease;
-}
-
-.speed-button:hover {
-  color: #fff;
-}
-
-.speed-button.active {
-  color: #fff4ce;
-  background: linear-gradient(135deg, rgba(216, 183, 106, .24), rgba(229, 9, 34, .16));
-  box-shadow: inset 0 0 18px rgba(216, 183, 106, .12), 0 0 18px rgba(216, 183, 106, .16);
-}
-
-
-.play-control {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.control-button {
-  min-width: 58px;
-  height: 32px;
-  border: 1px solid rgba(120, 231, 255, .42);
-  border-radius: 999px;
-  color: #eafbff;
-  background: linear-gradient(135deg, rgba(120, 231, 255, .18), rgba(255, 255, 255, .045));
-  box-shadow: inset 0 0 18px rgba(120, 231, 255, .1), 0 10px 26px rgba(0, 0, 0, .22);
-  font: inherit;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: .12em;
-  cursor: pointer;
-  transition: color .2s ease, background .2s ease, box-shadow .2s ease, opacity .2s ease;
-}
-
-.control-button:hover {
-  color: #fff;
-  background: linear-gradient(135deg, rgba(120, 231, 255, .28), rgba(216, 183, 106, .12));
-  box-shadow: inset 0 0 18px rgba(120, 231, 255, .14), 0 0 18px rgba(120, 231, 255, .18);
-}
-
-.control-button.active {
-  color: #fff4ce;
-  border-color: rgba(216, 183, 106, .55);
-  background: linear-gradient(135deg, rgba(216, 183, 106, .24), rgba(229, 9, 34, .16));
-}
-
-.top-button {
-  flex: 0 0 auto;
-  padding: 11px 18px;
-  border: 1px solid rgba(216, 183, 106, .45);
-  border-radius: 7px;
-  color: #f8e8bd;
-  background: linear-gradient(135deg, rgba(216, 183, 106, .12), rgba(255, 255, 255, .04));
-  box-shadow: inset 0 0 22px rgba(216, 183, 106, .08), 0 14px 34px rgba(0, 0, 0, .28);
-  font-size: 12px;
-  letter-spacing: .17em;
-}
-
-/* ===== 上段タイムライン ===== */
-.timeline-frame {
-  position: relative;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background:
-    linear-gradient(90deg, rgba(229, 9, 34, .08), transparent 20%, transparent 80%, rgba(216, 183, 106, .1)),
-    linear-gradient(180deg, rgba(16, 20, 29, .92), rgba(6, 8, 13, .94));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08), 0 18px 48px rgba(0, 0, 0, .34);
-}
-
-.timeline-frame::before,
-.timeline-frame::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 22%;
-  z-index: 4;
-  pointer-events: none;
-}
-
-.timeline-frame::before {
-  left: 0;
-  background: linear-gradient(90deg, rgba(5, 7, 11, .96), transparent);
-}
-
-.timeline-frame::after {
-  right: 0;
-  background: linear-gradient(270deg, rgba(5, 7, 11, .96), transparent);
-}
-
-.center-line {
-  position: absolute;
-  left: 50%;
-  top: 12px;
-  width: 2px;
-  height: calc(100% - 24px);
-  transform: translateX(-50%);
-  background: linear-gradient(180deg, transparent, #fff, var(--gold), transparent);
-  box-shadow: 0 0 24px rgba(216, 183, 106, .72), 0 0 48px rgba(120, 231, 255, .18);
-  z-index: 5;
-}
-
-.track-mask {
-  height: 100%;
-  overflow: hidden;
-  padding: 18px 70px 20px;
-}
-
-.timeline-track {
-  height: 100%;
-  display: flex;
-  width: max-content;
-  transform: translateX(0);
-}
-
-.year-node {
-  width: 164px;
-  height: 116px;
-  flex: 0 0 auto;
-  border: 0;
-  color: var(--ink);
-  background: transparent;
-  cursor: pointer;
-  font-family: inherit;
-
-   /* 追加 */
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-
-.year-node .era {
-  display: inline-block;
-  min-width: 74px;
-  padding: 4px 8px;
-  border: 1px solid rgba(255, 255, 255, .16);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, .055);
-  color: #d7dee9;
-  font-size: 12px;
-  letter-spacing: .05em;
-}
-
-.wheel {
-  position: relative;
-  width: 60px;
-  height: 60px;
-  margin: 7px auto 0;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background:
-    radial-gradient(circle at 32% 24%, rgba(255, 255, 255, .98) 0 4px, rgba(255, 255, 255, .34) 5px, transparent 17px),
-    radial-gradient(circle at 58% 68%, rgba(0, 0, 0, .62), transparent 48%),
-    linear-gradient(145deg, rgba(255, 255, 255, .3), rgba(216, 183, 106, .23) 34%, rgba(4, 7, 12, .9) 68%, rgba(229, 9, 34, .18)),
-    conic-gradient(from 130deg, rgba(255, 255, 255, .54), rgba(216, 183, 106, .8), rgba(120, 231, 255, .22), rgba(12, 15, 22, .9), rgba(229, 9, 34, .44), rgba(255, 255, 255, .54));
-  border: 1px solid rgba(255, 255, 255, .34);
-  box-shadow:
-    inset 9px 10px 16px rgba(255, 255, 255, .1),
-    inset -12px -14px 18px rgba(0, 0, 0, .72),
-    inset 0 0 0 7px rgba(0, 0, 0, .44),
-    0 14px 28px rgba(0, 0, 0, .54),
-    0 2px 0 rgba(255, 255, 255, .18);
-  transition: transform .24s ease, box-shadow .24s ease, border-color .24s ease;
-}
-
-.wheel::before {
-  content: "";
-  position: absolute;
-  inset: 7px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, .2);
-  background: linear-gradient(145deg, rgba(255, 255, 255, .08), transparent 42%);
-  pointer-events: none;
-}
-
-.wheel::after {
-  content: "";
-  position: absolute;
-  left: 15px;
-  top: 12px;
-  width: 18px;
-  height: 10px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, .42);
-  filter: blur(5px);
-  pointer-events: none;
-}
-
-.wheel strong {
-  position: relative;
-  z-index: 1;
-  font-size: 15px;
-  letter-spacing: .05em;
-  line-height: 1.05;
-  text-align: center;
-  white-space: nowrap;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, .8), 0 0 12px rgba(255, 244, 206, .28);
-}
-
-/* ===== 複数年表示のズレ防止 =====
-   1970~1972 のようにまとめた年代は、
-   年表ボタン内で 1970~ / 1972 の2段にして中央固定します。
-   1年表示の 1966 などは今まで通り1段表示です。
-*/
-.wheel strong.year-range-label {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0;
-  font-size: 13px;
-  line-height: .95;
-  letter-spacing: .02em;
-}
-
-.year-node.active .era,
-.year-node:hover .era {
-  border-color: rgba(216, 183, 106, .58);
-  color: #fff2ca;
-}
-
-.year-node.active .wheel,
-.year-node:hover .wheel {
-  border-color: rgba(255, 255, 255, .58);
-  box-shadow:
-    inset 10px 10px 18px rgba(255, 255, 255, .13),
-    inset -12px -14px 20px rgba(0, 0, 0, .62),
-    inset 0 0 0 7px rgba(0, 0, 0, .32),
-    0 0 28px rgba(216, 183, 106, .52),
-    0 0 58px rgba(229, 9, 34, .28),
-    0 18px 34px rgba(0, 0, 0, .58);
-  transform: scale(1.18);
-}
-
-.year-node.active .wheel {
-  animation: activeWheelPulse 1.8s ease-in-out infinite;
-}
-
-@keyframes activeWheelPulse {
-  0%,
-  100% {
-    transform: scale(1.16);
-  }
-
-  50% {
-    transform: scale(1.24);
-  }
-}
-
-.node-photo {
-  width: 104px;
-  height: 26px;
-  margin: 5px auto 0;
-  border-radius: 999px;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, .18);
-  opacity: .64;
-}
-
-.node-photo img {
-  width: 120%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.pause-note {
-  position: absolute;
-  right: 16px;
-  bottom: 9px;
-  z-index: 6;
-  color: rgba(238, 231, 208, .72);
-  font-size: 11px;
-  letter-spacing: .06em;
-}
-
-/* ===== 下段メイン表示 ===== */
-.main-card {
-  min-height: 0;
-  display: grid;
-  grid-template-columns: minmax(320px, 35%) 1fr;
-  gap: 18px;
-  padding: 18px;
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, .07), transparent 36%),
-    linear-gradient(180deg, var(--panel), var(--panel-deep));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08), 0 22px 58px rgba(0, 0, 0, .4);
-  overflow: hidden;
-}
-
-/* ===== 左側：年・メイン写真 ===== */
-.left-panel {
-  min-width: 0;
-  min-height: 0;
-  display: grid;
-  grid-template-rows: auto auto auto minmax(0, 1fr);
-  gap: 12px;
-  overflow: hidden;
-}
-
-.label {
-  color: #f1d58f;
-  font-size: 12px;
-  letter-spacing: .34em;
-}
-
-.year-line {
-  display: flex;
-  align-items: flex-end;
-  gap: 12px;
-  padding-top: 8px;
-  min-width: 0;
-  flex-wrap: wrap;
-}
-
-.big-year {
-  /* SELECTED YEAR の通常1年表示。小さくしたい時は、この clamp の数値を下げます */
-  font-size: clamp(45px, 5vw, 85px);
-  line-height: .98;
-  font-weight: 700;
-  letter-spacing: .04em;
-  max-width: 100%;
-  background: linear-gradient(180deg, #fff 14%, #d9dee8 48%, #b49248 100%);
-  -webkit-background-clip: text;
-  color: transparent;
-  filter: drop-shadow(0 0 22px rgba(216, 183, 106, .18));
-}
-
-/* SELECTED YEAR が 1970~1972 のような複数年の時だけ自動で小さめ・2段表示にする */
-.big-year.year-range-label {
-  font-weight: 500;
-  display: inline-flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-end;
-  gap: 0;
-  font-size: clamp(28px, 3vw, 48px);
-  line-height: .82;
-  letter-spacing: .02em;
-  white-space: nowrap;
-}
-
-.era-badge {
-  margin-bottom: 5px;
-  padding: 7px 11px;
-  border: 1px solid rgba(216, 183, 106, .38);
-  border-radius: 999px;
-  background: rgba(216, 183, 106, .1);
-  color: #ffe7aa;
-  font-size: 13px;
-}
-
-.left-panel h2 {
-  font-size: clamp(20px, 1.7vw, 28px);
-  line-height: 1.25;
-  font-weight: 750;
-  letter-spacing: .03em;
-}
-
-.photo-link {
-  min-height: 0;
-  height: 100%;
-  position: relative;
-  width: 100%;
-  border: 1px solid rgba(255, 255, 255, .16);
-  border-radius: 12px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, .96), rgba(226, 229, 234, .96));
-  overflow: hidden;
-  cursor: pointer;
-  box-shadow: 0 18px 44px rgba(0, 0, 0, .35);
-}
-
-.photo-link::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(135deg, rgba(255, 255, 255, .28), transparent 30%, transparent 68%, rgba(229, 9, 34, .16));
-  mix-blend-mode: screen;
-}
-
-.photo-link img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-  transition: transform .45s ease;
-}
-
-.photo-link.empty::before {
-  content: attr(data-placeholder);
-  position: absolute;
-  inset: 18px;
-  display: grid;
-  place-items: center;
-  border: 1px dashed rgba(14, 18, 28, .28);
-  border-radius: 10px;
-  color: rgba(14, 18, 28, .72);
-  font-weight: 700;
-  letter-spacing: .08em;
-  text-align: center;
-}
-
-.photo-link:hover img {
-  transform: scale(1.025);
-}
-
-.photo-link span {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  z-index: 2;
-  transform: translate(-50%, -50%);
-  background: rgba(5, 7, 11, .78);
-  color: #fff;
-  border: 1px solid rgba(216, 183, 106, .65);
-  border-radius: 999px;
-  padding: 10px 18px;
-  font-size: 13px;
-  letter-spacing: .14em;
-  opacity: 0;
-  transition: opacity .2s ease;
-  backdrop-filter: blur(8px);
-}
-
-.photo-link:hover span {
-  opacity: 1;
-}
-
-/* ===== 右側：説明カード ===== */
-.right-area {
-  min-width: 0;
-  min-height: 0;
-  display: grid;
-  grid-template-rows: auto auto minmax(0, 1fr);
-  gap: 9px;
-}
-
-.visual-title-box {
-  min-height: 58px;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, .14);
-  background:
-    linear-gradient(90deg, rgba(229, 9, 34, .12), transparent 36%),
-    linear-gradient(135deg, rgba(255, 255, 255, .08), rgba(255, 255, 255, .025));
-  padding: 8px 14px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: inset 0 0 34px rgba(216, 183, 106, .06);
-}
-
-#visualTitle {
-  font-size: clamp(30px, 3.2vw, 52px);
-  line-height: .9;
-  font-weight: 900;
-  letter-spacing: .13em;
-  background: linear-gradient(90deg, #fff, #e8cf8e 62%, #e50922);
-  -webkit-background-clip: text;
-  color: transparent;
-}
-
-.visual-title-box p {
-  max-width: 220px;
-  color: var(--muted);
-  text-align: right;
-  font-size: 13px;
-  letter-spacing: .11em;
-}
-
-
-/* ===== 写真・文章追加パネル ===== */
-.editor-panel {
-  min-height: 0;
-  border: 1px solid rgba(255, 255, 255, .12);
-  border-radius: 10px;
-  background: rgba(255, 255, 255, .045);
-  overflow: hidden;
-}
-
-.editor-panel summary {
-  min-height: 32px;
-  padding: 7px 10px;
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  align-items: center;
-  color: #ffe7aa;
-  cursor: pointer;
-  font-size: 12px;
-  letter-spacing: .12em;
-}
-
-.editor-panel summary small {
-  color: var(--muted);
-  letter-spacing: .06em;
-}
-
-.editor-grid {
-  padding: 9px 10px 8px;
-  display: grid;
-  grid-template-columns: 140px 210px minmax(220px, 1fr) auto;
-  gap: 9px;
-  align-items: end;
-  border-top: 1px solid rgba(255, 255, 255, .09);
-}
-
-.editor-grid label {
-  display: grid;
-  gap: 5px;
-  color: #cbd4df;
-  font-size: 11px;
-  letter-spacing: .08em;
-}
-
-.editor-grid select,
-.editor-grid input,
-.editor-grid textarea {
-  width: 100%;
-  min-height: 32px;
-  border: 1px solid rgba(255, 255, 255, .16);
-  border-radius: 8px;
-  color: #f8fbff;
-  background: rgba(4, 6, 11, .8);
-  font: inherit;
-  font-size: 12px;
-  padding: 7px 8px;
-}
-
-.editor-grid textarea {
-  min-height: 46px;
-  resize: vertical;
-}
-
-.editor-buttons {
-  display: grid;
-  gap: 6px;
-}
-
-.editor-buttons button {
-  min-height: 30px;
-  border: 1px solid rgba(216, 183, 106, .35);
-  border-radius: 8px;
-  color: #fff4ce;
-  background: linear-gradient(135deg, rgba(216, 183, 106, .16), rgba(255, 255, 255, .05));
-  font: inherit;
-  font-size: 11px;
-  cursor: pointer;
-}
-
-.editor-note {
-  padding: 0 10px 9px;
-  color: rgba(223, 229, 238, .68);
-  font-size: 11px;
-  line-height: 1.45;
-}
-
-.event-grid {
-  min-height: 0;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  overflow: hidden;
-}
-
-article {
-  min-width: 0;
-  min-height: 0;
-  padding: 15px;
-  border: 1px solid rgba(255, 255, 255, .13);
-  border-radius: 12px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, .07), transparent 36%),
-    rgba(8, 10, 15, .72);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  overflow: auto;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .07);
-}
-
-article h3 {
-  display: flex;
-  align-items: baseline;
-  gap: 9px;
-  color: #fff;
-  font-size: clamp(17px, 1.28vw, 22px);
-  line-height: 1.2;
-}
-
-article h3 span {
-  color: var(--gold);
-  font-size: 10px;
-  letter-spacing: .2em;
-}
-
-.article-content {
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 9px;
-}
-
-.content-text,
-.editor-note {
-  color: #dfe5ee;
-  font-size: clamp(13px, .92vw, 16px);
-  line-height: 1.58;
-}
-
-.empty-content {
-  color: rgba(223, 229, 238, .58);
-}
-
-.image-block {
-  width: 100%;
-  margin: 0;
-  flex: 0 0 auto;
-}
-
-/* ===== 下段コンテナ内の写真ズレ防止 =====
-   写真ごとの縦横比が違っても、写真枠の高さをそろえます。
-   object-fit: contain なので、写真は切れずに枠内へ収まります。
-*/
-.info-photo {
-  width: 100%;
-  height: clamp(96px, 13vh, 160px);
-  max-height: none;
-  display: block;
-  margin: 0 auto;
-  object-fit: contain;
-  border-radius: 9px;
-  border: 1px solid rgba(255, 255, 255, .12);
-  background: rgba(255, 255, 255, .04);
-}
-
-.image-block figcaption {
-  margin-top: 4px;
-  color: rgba(223, 229, 238, .68);
-  font-size: 11px;
-  text-align: center;
-  overflow-wrap: anywhere;
-}
-
-.image-missing {
-  padding: 10px;
-  border-radius: 9px;
-  border: 1px dashed rgba(216, 183, 106, .35);
-  color: rgba(255, 231, 170, .8);
-  background: rgba(216, 183, 106, .08);
-  font-size: 12px;
-  overflow-wrap: anywhere;
-}
-
-.info-photo[hidden] {
-  display: none;
-}
-
-.spec-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  margin-top: auto;
-}
-
-.spec-row div {
-  min-width: 0;
-  padding: 10px 6px;
-  text-align: center;
-  border: 1px solid rgba(216, 183, 106, .22);
-  border-radius: 9px;
-  background: linear-gradient(180deg, rgba(216, 183, 106, .1), rgba(255, 255, 255, .035));
-}
-
-.spec-row small {
-  display: block;
-  color: #c6ced9;
-  font-size: 10px;
-}
-
-.spec-row strong {
-  display: block;
-  margin-top: 4px;
-  color: #fff4ce;
-  font-size: clamp(12px, .9vw, 15px);
-  line-height: 1.15;
-  overflow-wrap: anywhere;
-}
-
-/* ===== 画面が小さい時 ===== */
-@media (max-width: 1100px) {
-  .header-actions {
-    display: none;
-  }
-
-  .page {
-    padding: 12px;
-    grid-template-rows: 62px 134px 1fr;
-  }
-
-  .header p {
-    white-space: normal;
-  }
-
-  .main-card {
-    grid-template-columns: minmax(280px, 34%) 1fr;
-  }
-
-  .event-grid {
-    grid-template-columns: 1fr;
-    overflow: auto;
-    padding-right: 4px;
-  }
-
-  article {
-    overflow: visible;
-  }
-}
-
-@media (max-width: 760px) {
-  html,
-  body {
-    overflow: auto;
-  }
-
-  .page {
-    height: auto;
-    min-height: 100vh;
-    grid-template-rows: auto 136px auto;
-  }
-
-  .header,
-  .title-area,
-  .visual-title-box,
-  .year-line {
-    align-items: flex-start;
-  }
-
-  .header,
-  .visual-title-box {
-    flex-direction: column;
-  }
-
-  .main-card {
-    grid-template-columns: 1fr;
-  }
-
-  .photo-link {
-    min-height: 260px;
-  }
-
-  .pause-note {
-    display: none;
-  }
-}
-
-
-@media (max-width: 1100px) {
-  .editor-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .editor-text-label,
-  .editor-buttons {
-    grid-column: 1 / -1;
-  }
-}
-
-@media (max-width: 760px) {
-  .editor-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .editor-text-label,
-  .editor-buttons {
-    grid-column: auto;
-  }
-}
-
-
-/* 見出し・スペック行を削除した後の余白調整 */
-.event-grid article {
-  padding-top: 16px;
-}
-
-
-/* ===== 追加：年表帯を時々走り抜ける透過RAV4 ===== */
-.rav4-runner {
-  --rav4-top: 42px;
-  position: absolute;
-  left: 0;
-  top: var(--rav4-top);
-  width: var(--runner-width, clamp(190px, 19vw, 320px));
-  height: clamp(74px, 7.8vw, 128px);
-  z-index: 7;
-  pointer-events: none;
-  transform: translateX(-135%) scale(1);
-  opacity: 0;
-  filter: drop-shadow(0 16px 18px rgba(0, 0, 0, .62));
-}
-
-.rav4-runner img {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-  user-select: none;
-}
-
-.rav4-speed-light {
-  position: absolute;
-  right: -94%;
-  top: 48%;
-  width: 104%;
-  height: 18px;
-  transform: translateY(-50%);
-  border-radius: 999px;
-  background:
-    linear-gradient(90deg, rgba(255, 255, 255, .36), rgba(229, 9, 34, .38), transparent 72%),
-    linear-gradient(90deg, rgba(120, 231, 255, .18), transparent 65%);
-  filter: blur(3px);
-  opacity: 0;
-}
-
-.rav4-runner.is-running {
-  animation: rav4DriveThrough 4.8s cubic-bezier(.22, .74, .28, 1) forwards;
-}
-
-.rav4-runner.is-running .rav4-speed-light {
-  animation: rav4LightTrail 4.8s ease-out forwards;
-}
-
-@keyframes rav4DriveThrough {
-  0% {
-    transform: translateX(calc(100vw + 120%)) scale(.92);
-    opacity: 0;
-  }
-
-  8% {
-    opacity: 1;
-  }
-
-  48% {
-    transform: translateX(calc(50vw - 50%)) scale(1.02);
-    opacity: 1;
-  }
-
-  88% {
-    opacity: 1;
-  }
-
-  100% {
-    transform: translateX(-145%) scale(.96);
-    opacity: 0;
-  }
-}
-
-@keyframes rav4LightTrail {
-  0%, 15% {
-    opacity: 0;
-  }
-
-  28%, 78% {
-    opacity: .85;
-  }
-
-  100% {
-    opacity: 0;
-  }
-}
-
-@media (max-width: 760px) {
-  .rav4-runner {
-    width: 190px;
-    height: 74px;
-  }
-}
-
 /* =========================================================
-   最終上書き：3つのコンテナ内の画像切れ防止
-   車の形は変えない / 画像を切らない / 枠内に自動で収める
+   高岡工場 60th Anniversary Timeline
+   黒背景・白文字 強調版 CSS
+   ※ JSの光の流れ・車の走行アクションは変更不要
+   ※ このファイルを style.css として使ってください
    ========================================================= */
-.event-grid article {
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
+
+:root{
+  --bg:#000;
+  --bg2:#050505;
+  --panel:rgba(8,10,14,.88);
+  --panel2:rgba(0,0,0,.76);
+  --line:rgba(255,255,255,.16);
+  --line2:rgba(218,178,78,.38);
+  --text:#fff;
+  --soft:#e9edf4;
+  --muted:#aeb6c4;
+  --gold:#dab24e;
+  --gold2:#f7d879;
+  --red:#d71920;
+  --shadow:0 18px 46px rgba(0,0,0,.62);
+  --runner-width:clamp(160px, 15vw, 260px);
+  --rav4-top:24px;
 }
 
-.event-grid article .article-content,
-.event-grid article .image-block {
-  width: 100% !important;
-  min-width: 0 !important;
-  overflow: visible !important;
+*{
+  box-sizing:border-box;
 }
 
-.event-grid article img,
-.article-content img,
-.image-block img,
-.info-photo {
-  width: 100% !important;
-  height: auto !important;
-  max-width: 100% !important;
-  max-height: none !important;
-  aspect-ratio: auto !important;
-  object-fit: contain !important;
-  object-position: center center !important;
-  display: block !important;
-  margin: 0 auto !important;
-  border-radius: 9px;
-  background: rgba(255, 255, 255, .96);
+html{
+  min-height:100%;
+  background:#000;
 }
 
-/* 写真の上下に少し余白を入れて、端が切れて見えないようにする */
-.event-grid article .image-block {
-  padding: 6px 0 !important;
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--text);
+  font-family:"Segoe UI", "Noto Sans JP", system-ui, sans-serif;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(85,85,85,.22), transparent 34%),
+    radial-gradient(circle at 12% 22%, rgba(218,178,78,.13), transparent 32%),
+    linear-gradient(180deg, #070707 0%, #000 48%, #020202 100%);
+  overflow-x:hidden;
 }
 
-/* 横長画像だけ大きくなりすぎる時の上限 */
-.event-grid article img.info-photo,
-.event-grid article .image-block > img {
-  max-height: 185px !important;
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg, transparent, rgba(255,255,255,.035), transparent),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.025) 0 1px, transparent 1px 120px);
+  opacity:.55;
+  animation:bgFlow 12s linear infinite;
 }
 
-/* 左側メイン写真も形を変えず、切れないようにする */
-.photo-link img {
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: contain !important;
-  object-position: center center !important;
+@keyframes bgFlow{
+  from{ transform:translateX(-120px); }
+  to{ transform:translateX(120px); }
 }
 
+button,
+input,
+select,
+textarea{
+  font:inherit;
+}
 
-/* ===== 追加：高級感のある金色発光アニメーション =====
-   年号が中央に来て表示が切り替わるたびに、右上のタイトル帯だけが上品に光ります。
-*/
-.visual-title-box {
+button{
+  cursor:pointer;
+}
+
+img{
+  max-width:100%;
+  display:block;
+}
+
+.page{
+  width:min(1500px, calc(100% - 32px));
+  margin:0 auto;
+  padding:24px 0 36px;
+}
+
+.header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  margin-bottom:18px;
+  padding:16px 18px;
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:22px;
+  background:linear-gradient(135deg, rgba(12,12,12,.94), rgba(0,0,0,.82));
+  box-shadow:var(--shadow), inset 0 0 30px rgba(218,178,78,.06);
+}
+
+.title-area{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  min-width:0;
+  overflow:hidden;
+  border-radius:14px;
+}
+
+/* トヨタマークから右へ流れるゴールドの光 */
+.title-area::after{
+  content:"";
+  position:absolute;
+  left:74px;
+  top:50%;
+  width:46%;
+  height:2px;
+  pointer-events:none;
+  border-radius:999px;
+  background:linear-gradient(90deg,
+    rgba(247,216,121,0),
+    rgba(247,216,121,.95),
+    rgba(255,255,255,.72),
+    rgba(247,216,121,0)
+  );
+  box-shadow:
+    0 0 8px rgba(247,216,121,.95),
+    0 0 18px rgba(218,178,78,.62);
+  transform:translateY(-50%) translateX(-105%);
+  animation:toyotaGoldFlow 4.2s linear infinite;
+  z-index:1;
+}
+
+.title-area > *{
+  position:relative;
+  z-index:2;
+}
+
+@keyframes toyotaGoldFlow{
+  0%{ transform:translateY(-50%) translateX(-115%); opacity:0; }
+  12%{ opacity:1; }
+  72%{ opacity:1; }
+  100%{ transform:translateY(-50%) translateX(235%); opacity:0; }
+}
+
+.mark,
+.toyota-mark{
+  width:78px;
+  height:48px;
+  object-fit:cover;
+  object-position:center;
+  flex:0 0 auto;
+  border:1px solid rgba(255,255,255,.35);
+  border-radius:8px;
+  background:#fff;
+  box-shadow:0 0 0 1px rgba(216,183,106,.22), 0 12px 28px rgba(0,0,0,.45);
+}
+
+h1{
+  margin:0;
+  font-size:clamp(22px, 3vw, 46px);
+  line-height:1.02;
+  letter-spacing:.04em;
+  color:#fff;
+  text-shadow:0 0 10px rgba(255,255,255,.3), 0 0 24px rgba(218,178,78,.22);
+}
+
+h1 span{
+  display:block;
+  margin-bottom:4px;
+  color:var(--gold2);
+  font-size:.46em;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+
+.header-actions{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+.speed-control,
+.play-control{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.speed-button,
+.control-button,
+.editor-buttons button{
+  min-height:36px;
+  padding:8px 14px;
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:999px;
+  color:#fff;
+  background:linear-gradient(180deg, rgba(35,35,35,.94), rgba(0,0,0,.9));
+  box-shadow:inset 0 0 16px rgba(255,255,255,.04), 0 8px 20px rgba(0,0,0,.35);
+}
+
+.speed-button.active,
+.control-button.active,
+.editor-buttons button:hover{
+  border-color:rgba(247,216,121,.72);
+  color:#fff;
+  box-shadow:0 0 18px rgba(218,178,78,.28), inset 0 0 14px rgba(218,178,78,.12);
+}
+
+.archive-logo{
+  width:92px;
+  height:92px;
+  object-fit:contain;
+  border-radius:16px;
+  background:rgba(255,255,255,.05);
+  box-shadow:0 0 20px rgba(218,178,78,.2);
+}
+
+.timeline-frame{
+  position:relative;
+  height:178px;
+  overflow:hidden;
+  margin-bottom:18px;
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:24px;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.94), rgba(4,4,4,.94)),
+    radial-gradient(circle at center, rgba(218,178,78,.16), transparent 50%);
+  box-shadow:var(--shadow), inset 0 0 42px rgba(255,255,255,.035);
+}
+
+.timeline-frame::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(90deg, transparent 0%, rgba(255,255,255,.14) 48%, transparent 56%);
+  opacity:.42;
+  animation:lightSweep 5.2s linear infinite;
+}
+
+@keyframes lightSweep{
+  from{ transform:translateX(-100%); }
+  to{ transform:translateX(100%); }
+}
+
+.center-line{
+  position:absolute;
+  left:50%;
+  top:12px;
+  bottom:34px;
+  width:2px;
+  transform:translateX(-50%);
+  background:linear-gradient(180deg, transparent, var(--gold2), transparent);
+  box-shadow:0 0 18px rgba(247,216,121,.75);
+  z-index:4;
+}
+
+.track-mask{
+  position:absolute;
+  inset:18px 18px 42px;
+  overflow:hidden;
+}
+
+.timeline-track{
+  position:absolute;
+  left:0;
+  top:0;
+  display:flex;
+  align-items:flex-start;
+  gap:18px;
+  height:112px;
+  will-change:transform;
+}
+
+.year-node{
+  position:relative;
+  display:grid;
+  grid-template-rows:auto 44px 52px;
+  justify-items:center;
+  align-items:center;
+  flex:0 0 122px;
+  width:122px;
+  height:112px;
+  padding:7px 8px;
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:18px;
+  color:#fff;
+  background:linear-gradient(180deg, rgba(28,28,28,.92), rgba(0,0,0,.94));
+  box-shadow:0 8px 24px rgba(0,0,0,.46), inset 0 0 18px rgba(255,255,255,.04);
+}
+
+.year-node.active{
+  border-color:rgba(247,216,121,.75);
+  box-shadow:0 0 24px rgba(218,178,78,.36), inset 0 0 18px rgba(218,178,78,.12);
+}
+
+.year-node .era{
+  color:#d9dfeb;
+  font-size:12px;
+  line-height:1.1;
+}
+
+.year-node .wheel{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  color:#fff;
+}
+
+.year-node .wheel strong{
+  display:block;
+  max-width:100%;
+  color:#fff;
+  font-size:clamp(16px, 1.4vw, 22px);
+  line-height:1;
+  white-space:normal;
+  text-align:center;
+  overflow-wrap:anywhere;
+  text-shadow:0 0 8px rgba(255,255,255,.35);
+}
+
+.node-photo{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:86px;
+  height:46px;
+  border-radius:10px;
+  overflow:hidden;
+  background:rgba(255,255,255,.06);
+  color:rgba(255,255,255,.58);
+  font-size:10px;
+}
+
+.node-photo img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.pause-note{
+  position:absolute;
+  left:50%;
+  bottom:9px;
+  transform:translateX(-50%);
+  margin:0;
+  width:max-content;
+  max-width:calc(100% - 32px);
+  color:rgba(255,255,255,.78);
+  font-size:13px;
+  text-align:center;
+  z-index:5;
+}
+
+.main-card{
+  display:grid;
+  grid-template-columns:minmax(310px, .86fr) minmax(520px, 1.6fr);
+  gap:18px;
+  align-items:stretch;
+}
+
+.left-panel,
+.right-area{
+  min-width:0;
+}
+
+.left-panel{
+  padding:20px;
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:24px;
+  background:linear-gradient(180deg, rgba(10,10,10,.94), rgba(0,0,0,.88));
+  box-shadow:var(--shadow), inset 0 0 42px rgba(218,178,78,.06);
+}
+
+.label{
+  margin:0 0 8px;
+  color:var(--gold2);
+  font-size:12px;
+  letter-spacing:.18em;
+}
+
+.year-line{
+  display:flex;
+  align-items:flex-end;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom:8px;
+}
+
+.big-year{
+  color:#fff;
+  font-size:clamp(38px, 6vw, 86px);
+  font-weight:800px;
+  line-height:.88;
+  letter-spacing:-.04em;
+  text-shadow:0 0 18px rgba(255,255,255,.38), 0 0 34px rgba(218,178,78,.22);
+}
+
+.era-badge{
+  display:inline-flex;
+  align-items:center;
+  min-height:30px;
+  padding:5px 10px;
+  border:1px solid rgba(247,216,121,.5);
+  border-radius:999px;
+  color:#fff;
+  background:rgba(218,178,78,.12);
+  font-size:14px;
+}
+
+#selectedTitle{
+  margin:6px 0 16px;
+  color:#fff;
+  font-size:clamp(22px, 2.1vw, 34px);
+  line-height:1.15;
+  text-shadow:0 0 12px rgba(255,255,255,.25);
+}
+
+.photo-link{
+  position:relative;
+  display:block;
+  width:100%;
+  min-height:320px;
+  padding:0;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:20px;
+  overflow:hidden;
+  color:#fff;
+  background:rgba(0,0,0,.78);
+  box-shadow:inset 0 0 32px rgba(255,255,255,.04);
+}
+
+.photo-link img{
+  width:100%;
+  height:100%;
+  min-height:320px;
+  object-fit:contain;
+}
+
+.photo-link span{
+  position:absolute;
+  right:12px;
+  bottom:12px;
+  padding:7px 12px;
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:999px;
+  background:rgba(0,0,0,.7);
+  color:#fff;
+  font-size:13px;
+}
+
+.photo-link.empty::before{
+  content:attr(data-placeholder);
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:rgba(255,255,255,.72);
+}
+
+.right-area{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.visual-title-box{
+  position:relative;
+  overflow:hidden;
+  min-height:104px;
+  padding:16px 18px;
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:24px;
+  background:linear-gradient(135deg, rgba(10,10,10,.96), rgba(0,0,0,.9));
+  box-shadow:var(--shadow), inset 0 0 30px rgba(218,178,78,.06);
+}
+
+.visual-title-box::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(100deg, transparent, rgba(255,255,255,.18), transparent);
+  transform:translateX(-120%);
+  animation:visualSweep 4.8s linear infinite;
+}
+
+@keyframes visualSweep{
+  to{ transform:translateX(120%); }
+}
+
+#visualTitle{
+  color:#fff;
+  font-size:clamp(34px, 5vw, 76px);
+  font-weight:900;
+  line-height:.9;
+  letter-spacing:.04em;
+  text-shadow:0 0 18px rgba(255,255,255,.4), 0 0 30px rgba(218,178,78,.24);
+}
+
+.visual-title-box p{
+  margin:8px 0 0;
+  color:rgba(255,255,255,.76);
+}
+
+.luxury-rotate{
+  animation:luxuryPulse .75s ease;
+}
+
+@keyframes luxuryPulse{
+  0%{ box-shadow:var(--shadow), inset 0 0 18px rgba(218,178,78,.04); }
+  50%{ box-shadow:0 0 34px rgba(218,178,78,.28), var(--shadow); }
+  100%{ box-shadow:var(--shadow), inset 0 0 30px rgba(218,178,78,.06); }
+}
+
+.editor-panel{
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:18px;
+  background:rgba(0,0,0,.64);
+  color:#fff;
+  overflow:hidden;
+}
+
+.editor-panel summary{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:12px 14px;
+  cursor:pointer;
+}
+
+.editor-panel small{
+  color:rgba(255,255,255,.68);
+}
+
+.editor-grid{
+  display:grid;
+  grid-template-columns:180px 1fr;
+  gap:12px;
+  padding:0 14px 14px;
+}
+
+.editor-grid label{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  color:rgba(255,255,255,.82);
+  font-size:13px;
+}
+
+.editor-text-label{
+  grid-column:1 / -1;
+}
+
+.editor-buttons{
+  grid-column:1 / -1;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.editor-note{
+  margin:0;
+  padding:0 14px 14px;
+  color:rgba(255,255,255,.62);
+  font-size:12px;
+}
+
+input,
+select,
+textarea{
+  width:100%;
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:12px;
+  color:#fff;
+  background:rgba(0,0,0,.76);
+  padding:9px 10px;
+}
+
+textarea{
+  resize:vertical;
+}
+
+.event-grid{
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0, 1fr));
+  gap:14px;
+}
+
+.event-grid article{
+  min-width:0;
+  min-height:360px;
+  padding:14px;
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:22px;
+  background:linear-gradient(180deg, rgba(9,9,9,.92), rgba(0,0,0,.86));
+  box-shadow:0 14px 34px rgba(0,0,0,.48), inset 0 0 24px rgba(255,255,255,.035);
+}
+
+.article-content{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.content-text{
+  margin:0;
+  color:#f2f5fa;
+  font-size:clamp(14px, .95vw, 16px);
+  line-height:1.72;
+  text-shadow:0 1px 2px rgba(0,0,0,.7);
+}
+
+.empty-content{
+  color:rgba(255,255,255,.56);
+}
+
+.image-block{
+  margin:0;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:16px;
+  background:rgba(255,255,255,.05);
+}
+
+.info-photo{
+  width:100%;
+  height:auto;
+  object-fit:cover;
+}
+
+.image-block figcaption{
+  padding:6px 8px;
+  color:rgba(255,255,255,.68);
+  font-size:12px;
+}
+
+.image-missing{
+  padding:12px;
+  color:#fff;
+  font-size:12px;
+}
+
+/* ===== 車走行アニメーション：JSのクラスに合わせる ===== */
+.rav4-runner{
+  position:absolute;
+  z-index:6;
+  top:var(--rav4-top);
+  left:0;
+  width:var(--runner-width);
+  max-width:260px;
+  pointer-events:none;
+  transform:translateX(calc(100vw + 180px));
+  opacity:0;
+}
+
+.rav4-runner img{
+  width:100%;
+  height:auto;
+  filter:drop-shadow(0 18px 18px rgba(0,0,0,.55));
+}
+
+.rav4-speed-light{
+  position:absolute;
+  top:48%;
+  right:68%;
+  width:150px;
+  height:14px;
+  border-radius:999px;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,.62), transparent);
+  filter:blur(3px);
+  opacity:.8;
+}
+
+.rav4-runner.is-running{
+  animation:runnerPass 3.5s ease-in-out both;
+}
+
+@keyframes runnerPass{
+  0%{ transform:translateX(calc(100vw + 190px)); opacity:0; }
+  8%{ opacity:1; }
+  86%{ opacity:1; }
+  100%{ transform:translateX(calc(-1 * var(--runner-width) - 210px)); opacity:0; }
+}
+
+.all-cars-parade{
+  position:absolute;
+  inset:0;
+  z-index:7;
+  pointer-events:none;
+  overflow:hidden;
+}
+
+.all-cars-parade__car{
+  position:absolute;
+  top:var(--parade-lane);
+  left:0;
+  width:var(--parade-width);
+  opacity:0;
+  transform:translateX(calc(100vw + 260px));
+  animation:paradePass 4.1s ease-in-out var(--parade-delay) both;
+}
+
+.all-cars-parade__car img{
+  width:60%;
+  height:auto;
+  filter:drop-shadow(0 18px 18px rgba(0,0,0,.55));
+}
+
+@keyframes paradePass{
+  0%{ transform:translateX(calc(100vw + 260px)); opacity:0; }
+  9%{ opacity:1; }
+  84%{ opacity:1; }
+  100%{ transform:translateX(-420px); opacity:0; }
+}
+
+@media (max-width:1100px){
+  .header{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .header-actions{
+    justify-content:flex-start;
+  }
+
+  .main-card{
+    grid-template-columns:1fr;
+  }
+
+  .event-grid{
+    grid-template-columns:1fr;
+  }
+
+  .photo-link,
+  .photo-link img{
+    min-height:260px;
+  }
+}
+
+@media (max-width:640px){
+  .page{
+    width:min(100% - 20px, 1500px);
+    padding-top:12px;
+  }
+
+  .title-area{
+    align-items:flex-start;
+  }
+
+  .mark,
+  .toyota-mark{
+    width:58px;
+    height:38px;
+  }
+
+  .archive-logo{
+    width:72px;
+    height:72px;
+  }
+
+  .speed-control,
+  .play-control{
+    width:100%;
+    flex-wrap:wrap;
+  }
+
+  .timeline-frame{
+    height:164px;
+  }
+
+  .year-node{
+    flex-basis:108px;
+    width:108px;
+  }
+
+  .editor-grid{
+    grid-template-columns:1fr;
+  }
+}
+/* トヨタマークから右へ流れるゴールド光を太く・広く戻す */
+.header{
   position: relative;
   overflow: hidden;
-  transform-origin: center;
-  will-change: transform, box-shadow, filter;
 }
 
-.visual-title-box::after {
+.header::after{
   content: "";
   position: absolute;
-  inset: -30%;
+  left: 90px;
+  right: 0;
+  top: 50%;
+  height: 80px;
+  transform: translateY(-50%);
   pointer-events: none;
-  opacity: 0;
+
   background: linear-gradient(
-    115deg,
-    transparent 0%,
-    transparent 36%,
-    rgba(255, 236, 170, .12) 44%,
-    rgba(255, 215, 94, .62) 50%,
-    rgba(255, 244, 206, .18) 56%,
-    transparent 66%,
-    transparent 100%
+    90deg,
+    rgba(218,178,78,0),
+    rgba(218,178,78,.18),
+    rgba(255,230,150,.45),
+    rgba(218,178,78,.18),
+    rgba(218,178,78,0)
   );
-  transform: translateX(-62%) rotate(8deg);
+
+  filter: blur(18px);
+  opacity: .95;
+  animation: headerGoldFlow 4.8s linear infinite;
 }
 
-.luxury-rotate {
-  animation: luxuryGoldGlow 2.1s ease-in-out;
-}
-
-.luxury-rotate::after {
-  animation: luxuryGoldSweep 2.1s ease-in-out;
-}
-
-.luxury-rotate #visualTitle {
-  animation: luxuryGoldText 2.1s ease-in-out;
-}
-
-@keyframes luxuryGoldGlow {
-  0% {
-    transform: scale(1);
-    box-shadow: inset 0 0 34px rgba(216, 183, 106, .06);
-    filter: brightness(1);
+@keyframes headerGoldFlow{
+  0%{
+    transform: translate(-100%, -50%);
   }
-
-  38% {
-    transform: scale(1.018);
-    box-shadow:
-      inset 0 0 40px rgba(255, 226, 140, .18),
-      0 0 24px rgba(216, 183, 106, .52),
-      0 0 62px rgba(216, 183, 106, .26);
-    filter: brightness(1.18);
-  }
-
-  100% {
-    transform: scale(1);
-    box-shadow: inset 0 0 34px rgba(216, 183, 106, .06);
-    filter: brightness(1);
+  100%{
+    transform: translate(100%, -50%);
   }
 }
-
-@keyframes luxuryGoldSweep {
-  0% {
-    opacity: 0;
-    transform: translateX(-62%) rotate(8deg);
-  }
-
-  24% {
-    opacity: 1;
-  }
-
-  62% {
-    opacity: .92;
-    transform: translateX(62%) rotate(8deg);
-  }
-
-  100% {
-    opacity: 0;
-    transform: translateX(88%) rotate(8deg);
-  }
-}
-
-@keyframes luxuryGoldText {
-  0% {
-    filter: drop-shadow(0 0 0 rgba(216, 183, 106, 0));
-  }
-
-  42% {
-    filter:
-      drop-shadow(0 0 10px rgba(255, 226, 140, .76))
-      drop-shadow(0 0 24px rgba(216, 183, 106, .42));
-  }
-
-  100% {
-    filter: drop-shadow(0 0 0 rgba(216, 183, 106, 0));
-  }
-}
-
-
-/* ===== 右上：60周年ロゴ =====
-   TAKAOKA PLANT ARCHIVEボタンを削除し、ロゴ画像に差し替え */
-.archive-logo {
-  flex: 0 0 auto;
-  width: clamp(54px, 5.2vw, 82px);
-  height: clamp(54px, 5.2vw, 82px);
-  object-fit: contain;
-  display: block;
-  filter: drop-shadow(0 10px 22px rgba(0, 0, 0, .55))
-          drop-shadow(0 0 10px rgba(120, 231, 255, .22));
-}
-
-.archive-logo:hover {
+/* センター選択中の年表カードをコンテナごと光らせる */
+.year-node.is-active,
+.year-node.active,
+.year-node.selected {
+  background:
+    radial-gradient(circle at center,
+      rgba(255, 230, 150, 0.38),
+      rgba(255, 190, 60, 0.18) 45%,
+      rgba(0, 0, 0, 0.85) 100%);
+  box-shadow:
+    0 0 25px rgba(255, 210, 90, 0.65),
+    0 0 55px rgba(255, 180, 40, 0.45),
+    inset 0 0 28px rgba(255, 220, 120, 0.35);
+  filter: brightness(1.22);
   transform: scale(1.04);
 }
 
 
-/* ===== 右上ロゴ：通常時ゆっくり発光 ===== */
-.archive-logo {
-  border-radius: 16px !important;
-  padding: 4px !important;
-  background: rgba(255, 255, 255, .045) !important;
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, .16),
-    0 10px 22px rgba(0, 0, 0, .55),
-    0 0 10px rgba(120, 231, 255, .20) !important;
-  animation: archiveLogoGlow 5.2s ease-in-out infinite;
-  transition: transform .25s ease, filter .25s ease, box-shadow .25s ease;
+/* =========================================================
+   ADDコンテナ置き換え：背景だけ流し、車はコンテナ内で隊列合流
+   ========================================================= */
+
+.drive-stage{
+  position:relative;
+  min-height:180px;
+  height:180px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:24px;
+  background:#111;
+  box-shadow:var(--shadow), inset 0 0 30px rgba(218,178,78,.06);
+  isolation:isolate;
 }
 
-.archive-logo:hover {
-  transform: scale(1.05);
+.drive-bg{
+  position:absolute;
+  inset:0;
+  width:220%;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.03), rgba(0,0,0,.22)),
+    url("images/drive/old-to-modern-cityscape.jpg") repeat-x center 52% / auto 100%;
+  animation:driveBgMove 18s linear infinite;
+  z-index:1;
+}
+
+/* 車が左向きなので、背景は左→右へ流します */
+@keyframes driveBgMove{
+  from{ transform:translateX(-50%); }
+  to{ transform:translateX(0); }
+}
+
+
+.drive-cars{
+  position:absolute;
+  inset:0;
+  z-index:4;
+  pointer-events:none;
+}
+
+.drive-car-slot{
+  position:absolute;
+  bottom:13px;
+  left:var(--slot-left);
+  opacity:0;
+  transform:translateX(230px);
+}
+
+.drive-car{
+  display:block;
+  width:100%;
+  height:auto;
   filter:
-    drop-shadow(0 12px 24px rgba(0, 0, 0, .62))
-    drop-shadow(0 0 16px rgba(120, 231, 255, .45));
+    drop-shadow(0 14px 14px rgba(0,0,0,.55))
+    drop-shadow(0 3px 2px rgba(0,0,0,.42));
 }
 
-@keyframes archiveLogoGlow {
-  0%, 100% {
-    transform: scale(1);
-    filter:
-      drop-shadow(0 10px 22px rgba(0, 0, 0, .55))
-      drop-shadow(0 0 8px rgba(120, 231, 255, .18));
-    box-shadow:
-      0 0 0 1px rgba(255, 255, 255, .14),
-      0 10px 22px rgba(0, 0, 0, .55),
-      0 0 10px rgba(120, 231, 255, .18);
-  }
-
-  50% {
-    transform: scale(1.035);
-    filter:
-      drop-shadow(0 12px 26px rgba(0, 0, 0, .62))
-      drop-shadow(0 0 18px rgba(120, 231, 255, .52))
-      drop-shadow(0 0 24px rgba(216, 183, 106, .34));
-    box-shadow:
-      0 0 0 1px rgba(255, 255, 255, .24),
-      0 12px 28px rgba(0, 0, 0, .6),
-      0 0 18px rgba(120, 231, 255, .42),
-      0 0 30px rgba(216, 183, 106, .24);
-  }
+.car-slot-1966{
+  --slot-left:5%;
+  width:clamp(110px, 13vw, 170px);
+  opacity:1;
+  transform:translateX(0);
+  animation:driveFloat .48s ease-in-out infinite alternate;
 }
 
+.car-slot-1970{ --slot-left:18%; width:clamp(108px, 12.5vw, 165px); }
+.car-slot-1980{ --slot-left:31%; width:clamp(104px, 12vw, 158px); }
+.car-slot-1990{ --slot-left:44%; width:clamp(100px, 11.5vw, 150px); }
+.car-slot-2000{ --slot-left:57%; width:clamp(78px, 9vw, 116px); }
+.car-slot-2010{ --slot-left:68%; width:clamp(112px, 13vw, 174px); }
+.car-slot-2020{ --slot-left:81%; width:clamp(112px, 13vw, 178px); }
 
-/* ===== 追加：2026年から1966年へ戻る時の全車パレード ===== */
-.all-cars-parade {
-  position: absolute;
-  inset: 0;
-  z-index: 9;
-  overflow: hidden;
-  pointer-events: none;
+.drive-stage.show-1970 .car-slot-1970,
+.drive-stage.show-1980 .car-slot-1980,
+.drive-stage.show-1990 .car-slot-1990,
+.drive-stage.show-2000 .car-slot-2000,
+.drive-stage.show-2010 .car-slot-2010,
+.drive-stage.show-2020 .car-slot-2020{
+  opacity:1;
+  transform:translateX(0);
+  animation:
+    driveJoinWithCenterStop 3.1s ease-in-out both,
+    driveFloat .48s ease-in-out 3.1s infinite alternate;
 }
 
-.all-cars-parade__car {
-  position: absolute;
-  top: var(--parade-lane, 42px);
-  left: 0;
-  width: var(--parade-width, clamp(190px, 19vw, 320px));
-  height: clamp(66px, 7vw, 116px);
-  opacity: 0;
-  transform: translateX(calc(100vw + 130%));
-  filter: drop-shadow(0 13px 16px rgba(0, 0, 0, .68));
-  animation: allCarsParadeDrive 4.8s cubic-bezier(.22, .74, .28, 1) var(--parade-delay, 0s) forwards;
-}
-
-.all-cars-parade__car img {
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: contain;
-  user-select: none;
-}
-
-@keyframes allCarsParadeDrive {
-  0% {
-    transform: translateX(calc(100vw + 130%)) scale(.92);
-    opacity: 0;
+/* 右から走り込み、年表中央で約0.8秒停止してから所定位置へ移動 */
+@keyframes driveJoinWithCenterStop{
+  0%{
+    left:calc(100% + 40px);
+    opacity:0;
+    transform:translateX(0);
   }
-
-  7% {
-    opacity: 1;
+  10%{
+    opacity:1;
   }
-
-  88% {
-    opacity: 1;
+  42%{
+    left:50%;
+    opacity:1;
+    transform:translateX(-50%);
   }
-
-  100% {
-    transform: translateX(-145%) scale(1.02);
-    opacity: 0;
+  68%{
+    left:50%;
+    opacity:1;
+    transform:translateX(-50%);
+  }
+  100%{
+    left:var(--slot-left);
+    opacity:1;
+    transform:translateX(0);
   }
 }
 
-@media (max-width: 760px) {
-  .all-cars-parade__car {
-    height: 72px;
+@keyframes driveFloat{
+  from{ translate:0 0; }
+  to{ translate:0 -2px; }
+}
+
+@media (max-width:900px){
+  .drive-stage{
+    height:150px;
+    min-height:150px;
   }
+  .car-slot-1966{ --slot-left:3%; }
+  .car-slot-1970{ --slot-left:18%; }
+  .car-slot-1980{ --slot-left:33%; }
+  .car-slot-1990{ --slot-left:48%; }
+  .car-slot-2000{ --slot-left:61%; }
+  .car-slot-2010{ --slot-left:72%; }
+  .car-slot-2020{ --slot-left:82%; }
+}
+
+
+/* run-carを年表と同じ横幅の独立コンテナにする */
+.drive-stage-full{
+  width:100%;
+  margin-bottom:18px;
 }

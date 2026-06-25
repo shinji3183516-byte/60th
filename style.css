@@ -678,13 +678,15 @@ textarea{
 }
 
 .rav4-runner.is-running{
-  animation:runnerPass 3.5s ease-in-out both;
+  animation:runnerPass 4s ease-in-out both;
 }
 
 @keyframes runnerPass{
   0%{ transform:translateX(calc(100vw + 190px)); opacity:0; }
   8%{ opacity:1; }
-  86%{ opacity:1; }
+  43%{ transform:translateX(calc(50vw - 50%)); opacity:1; }
+  55.5%{ transform:translateX(calc(50vw - 50%)); opacity:1; }
+  88%{ opacity:1; }
   100%{ transform:translateX(calc(-1 * var(--runner-width) - 210px)); opacity:0; }
 }
 
@@ -703,7 +705,7 @@ textarea{
   width:var(--parade-width);
   opacity:0;
   transform:translateX(calc(100vw + 260px));
-  animation:paradePass 4.1s ease-in-out var(--parade-delay) both;
+  animation:paradePass 4.5s ease-in-out var(--parade-delay) both;
 }
 
 .all-cars-parade__car img{
@@ -715,7 +717,9 @@ textarea{
 @keyframes paradePass{
   0%{ transform:translateX(calc(100vw + 260px)); opacity:0; }
   9%{ opacity:1; }
-  84%{ opacity:1; }
+  42%{ transform:translateX(calc(50vw - 50%)); opacity:1; }
+  53.1%{ transform:translateX(calc(50vw - 50%)); opacity:1; }
+  86%{ opacity:1; }
   100%{ transform:translateX(-420px); opacity:0; }
 }
 
@@ -906,7 +910,12 @@ textarea{
 }
 
 .car-slot-1970{ --slot-left:18%; width:clamp(108px, 12.5vw, 165px); }
-.car-slot-1980{ --slot-left:31%; width:clamp(104px, 12vw, 158px); }
+.car-slot-1980{
+  --slot-left:31%;
+  width:clamp(104px, 12vw, 158px);
+  /* 画像下側の透明余白を補正し、レビンのタイヤ位置を他車と合わせる */
+  bottom:0;
+}
 .car-slot-1990{ --slot-left:44%; width:clamp(100px, 11.5vw, 150px); }
 .car-slot-2000{ --slot-left:57%; width:clamp(78px, 9vw, 116px); }
 .car-slot-2010{ --slot-left:68%; width:clamp(112px, 13vw, 174px); }
@@ -925,7 +934,7 @@ textarea{
     driveFloat .48s ease-in-out 3.1s infinite alternate;
 }
 
-/* 右から走り込み、年表中央で約0.8秒停止してから所定位置へ移動 */
+/* 右から走り込み、中央で約0.5秒停止してから所定位置へ移動 */
 @keyframes driveJoinWithCenterStop{
   0%{
     left:calc(100% + 40px);
@@ -940,7 +949,7 @@ textarea{
     opacity:1;
     transform:translateX(-50%);
   }
-  68%{
+  58%{
     left:50%;
     opacity:1;
     transform:translateX(-50%);
@@ -976,4 +985,75 @@ textarea{
 .drive-stage-full{
   width:100%;
   margin-bottom:18px;
+}
+
+
+/* =========================================================
+   2026 → 1966 周回演出
+   run-car内の全車が一斉退出し、初代カローラが先頭へ戻る
+   ========================================================= */
+.drive-stage.is-loop-reset .drive-car-slot{
+  opacity:1 !important;
+  animation:driveFleetExit 1.2s cubic-bezier(.45,0,.75,.35) both !important;
+}
+
+.drive-stage.is-loop-reset .car-slot-1966{
+  animation:
+    driveFleetExit 1.2s cubic-bezier(.45,0,.75,.35) both,
+    corollaReturnToLead 1.75s cubic-bezier(.22,.72,.25,1) 1.55s both,
+    driveFloat .48s ease-in-out 3.3s infinite alternate !important;
+}
+
+/* 現在の隊列位置から、全車が左側へ一斉に走り抜けます */
+@keyframes driveFleetExit{
+  0%{
+    left:var(--slot-left);
+    opacity:1;
+    transform:translateX(0);
+  }
+  82%{
+    opacity:1;
+  }
+  100%{
+    left:-28%;
+    opacity:0;
+    transform:translateX(-180px);
+  }
+}
+
+/* 初代カローラが右側から走り、先頭位置で停止します */
+@keyframes corollaReturnToLead{
+  0%{
+    left:calc(100% + 80px);
+    opacity:0;
+    transform:translateX(0);
+  }
+  12%{
+    opacity:1;
+  }
+  72%{
+    left:5%;
+    opacity:1;
+    transform:translateX(0);
+  }
+  88%{
+    left:5.8%;
+    opacity:1;
+    transform:translateX(0);
+  }
+  100%{
+    left:5%;
+    opacity:1;
+    transform:translateX(0);
+  }
+}
+
+@media (max-width:900px){
+  @keyframes corollaReturnToLead{
+    0%{ left:calc(100% + 60px); opacity:0; transform:translateX(0); }
+    12%{ opacity:1; }
+    72%{ left:3%; opacity:1; transform:translateX(0); }
+    88%{ left:3.8%; opacity:1; transform:translateX(0); }
+    100%{ left:3%; opacity:1; transform:translateX(0); }
+  }
 }

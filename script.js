@@ -888,6 +888,8 @@ let hoverPaused = false;
 let activeIndex = 0;
 let localAdditions = loadLocalAdditions();
 let allCarsParadeRunning = false;
+let centerHoldUntil = 0;
+const CENTER_HOLD_MS = 1000;
 
 const speedMap = {
   verySlow: 0.1,
@@ -1228,6 +1230,9 @@ function updateSelectedByCenter() {
     activeIndex = newIndex;
     showData(activeIndex);
 
+    // 年表カードがセンターへ到達したら、約1秒停止します。
+    centerHoldUntil = performance.now() + CENTER_HOLD_MS;
+
     // 2026年から1966年へ戻る瞬間に、歴代の全車を時間差で走らせます。
     if (previousIndex === timelineData.length - 1 && newIndex === 0) {
       runAllCarsParade();
@@ -1259,8 +1264,10 @@ function isPaused() {
   return manualPaused || hoverPaused;
 }
 
-function animate() {
-  if (!isPaused()) {
+function animate(currentTime) {
+  const centerHolding = currentTime < centerHoldUntil;
+
+  if (!isPaused() && !centerHolding) {
     offset -= speed;
     keepEndlessLoop();
     timelineTrack.style.transform = "translateX(" + offset + "px)";
@@ -1459,44 +1466,34 @@ function runRav4Once() {
   runner.classList.add("is-running");
 }
 
-// 2026年から1966年へ戻る際に、年代別の全車を年表帯へ走らせます。
+// 2026年から1966年へ戻る際に、run-car内の全車が一斉に走り抜け、
+// 最後に初代カローラだけが右側から戻って先頭位置で停止します。
 function runAllCarsParade() {
-  if (!timelineFrame || allCarsParadeRunning || isPaused()) return;
+  const driveStage = document.getElementById("driveStage");
+  if (!driveStage || allCarsParadeRunning || isPaused()) return;
 
   allCarsParadeRunning = true;
 
-  const normalRunner = timelineFrame.querySelector(".rav4-runner");
+  // 年表上を走る通常車は、この演出中だけ止めます。
+  const normalRunner = timelineFrame
+    ? timelineFrame.querySelector(".rav4-runner")
+    : null;
+
   if (normalRunner) {
     normalRunner.classList.remove("is-running");
   }
 
-  const paradeLayer = document.createElement("div");
-  paradeLayer.className = "all-cars-parade";
-  paradeLayer.setAttribute("aria-hidden", "true");
+  // 同じアニメーションを次の周回でも確実に再実行します。
+  driveStage.classList.remove("is-loop-reset");
+  void driveStage.offsetWidth;
+  driveStage.classList.add("is-loop-reset");
 
-  ERA_RUNNER_CARS.forEach(function(carConfig, index) {
-    const runner = document.createElement("div");
-    runner.className = "all-cars-parade__car";
-    runner.style.setProperty("--parade-delay", (index * 0.42) + "s");
-    runner.style.setProperty("--parade-lane", (22 + (index % 3) * 25) + "px");
-    runner.style.setProperty("--parade-width", carConfig.width || "clamp(190px, 19vw, 320px)");
-
-    const image = document.createElement("img");
-    image.src = carConfig.src;
-    image.alt = carConfig.alt || "";
-    image.draggable = false;
-
-    runner.appendChild(image);
-    paradeLayer.appendChild(runner);
-  });
-
-  timelineFrame.appendChild(paradeLayer);
-
-  // 最後の車が走り終えたあと、レイヤーを削除して通常走行へ戻します。
+  // 全車退出＋初代カローラ再登場が終わったら、1966年の通常表示へ戻します。
   window.setTimeout(function() {
-    paradeLayer.remove();
+    driveStage.classList.remove("is-loop-reset");
     allCarsParadeRunning = false;
-  }, 7600);
+    updateDriveStage(getCurrentItem());
+  }, 3900);
 }
 
 function scheduleRav4Run() {

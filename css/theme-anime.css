@@ -1,0 +1,404 @@
+/* =========================================================
+   DESIGN THEME 04
+   HAND-DRAWN FOREST WONDERLAND
+   やさしい手描きアニメ・森・木漏れ日・風の気配
+   HTML / JavaScript は変更せず、既存CSSを上書きします。
+   ========================================================= */
+
+:root{
+  --bg:#eef4dc;
+  --bg2:#dce9c8;
+  --panel:rgba(255,252,235,.9);
+  --panel2:rgba(245,239,214,.86);
+  --line:rgba(83,107,72,.26);
+  --line2:rgba(188,145,91,.34);
+  --text:#314334;
+  --soft:#536857;
+  --muted:#7d8d7b;
+  --gold:#c79352;
+  --gold2:#e6bd78;
+  --red:#c86f5a;
+  --shadow:0 18px 42px rgba(62,79,54,.18);
+}
+
+html{
+  background:#e7efd5;
+}
+
+body{
+  color:var(--text);
+  font-family:"Hiragino Maru Gothic ProN","Yu Gothic","Noto Sans JP",system-ui,sans-serif;
+  background:
+    radial-gradient(circle at 14% 12%, rgba(255,249,198,.72), transparent 24%),
+    radial-gradient(circle at 84% 18%, rgba(190,220,196,.58), transparent 28%),
+    radial-gradient(circle at 50% 86%, rgba(223,196,147,.20), transparent 32%),
+    linear-gradient(180deg,#edf5df 0%,#e7efd5 38%,#f3ead3 100%);
+}
+
+body::before{
+  background:
+    radial-gradient(circle at 10% 20%, rgba(255,255,255,.72) 0 2px, transparent 3px),
+    radial-gradient(circle at 78% 28%, rgba(255,255,255,.58) 0 1.5px, transparent 2.5px),
+    radial-gradient(circle at 32% 76%, rgba(255,244,190,.46) 0 2px, transparent 3px),
+    repeating-linear-gradient(112deg, rgba(96,121,86,.025) 0 1px, transparent 1px 7px);
+  background-size:180px 180px,220px 220px,260px 260px,auto;
+  opacity:.65;
+  animation:wonderDust 18s ease-in-out infinite alternate;
+}
+
+body::after{
+  content:"";
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  height:150px;
+  pointer-events:none;
+  z-index:-1;
+  background:
+    radial-gradient(ellipse at 8% 100%, rgba(91,125,77,.24) 0 34%, transparent 35%),
+    radial-gradient(ellipse at 28% 100%, rgba(113,143,91,.20) 0 28%, transparent 29%),
+    radial-gradient(ellipse at 58% 100%, rgba(80,112,70,.18) 0 32%, transparent 33%),
+    radial-gradient(ellipse at 84% 100%, rgba(121,147,94,.22) 0 30%, transparent 31%);
+}
+
+@keyframes wonderDust{
+  from{ transform:translate3d(-8px,-3px,0); }
+  to{ transform:translate3d(10px,5px,0); }
+}
+
+.page{
+  width:min(1500px,calc(100% - 32px));
+}
+
+.header,
+.timeline-frame,
+.left-panel,
+.visual-title-box,
+.event-grid article,
+.editor-panel{
+  border-color:rgba(94,119,82,.28);
+  background:
+    linear-gradient(180deg,rgba(255,253,241,.94),rgba(245,239,216,.9));
+  box-shadow:
+    0 16px 36px rgba(76,91,66,.16),
+    inset 0 0 0 1px rgba(255,255,255,.65),
+    inset 0 0 28px rgba(206,223,180,.22);
+}
+
+.header{
+  border-radius:28px 18px 30px 20px;
+  position:relative;
+}
+
+.header::before{
+  content:"";
+  position:absolute;
+  width:72px;
+  height:34px;
+  right:130px;
+  top:-10px;
+  border-radius:60% 40% 55% 45%;
+  background:rgba(111,151,91,.34);
+  transform:rotate(-7deg);
+  filter:blur(.2px);
+}
+
+.title-area::after{
+  height:3px;
+  background:linear-gradient(90deg,transparent,rgba(255,247,180,.95),rgba(255,255,255,.95),transparent);
+  box-shadow:0 0 8px rgba(255,244,170,.8),0 0 22px rgba(190,218,150,.5);
+}
+
+.mark,
+.toyota-mark{
+  border-radius:14px 18px 12px 16px;
+  border-color:rgba(102,127,92,.28);
+  box-shadow:0 8px 20px rgba(70,88,62,.16);
+}
+
+h1{
+  color:#304637;
+  text-shadow:0 2px 0 rgba(255,255,255,.82),0 0 18px rgba(164,191,132,.28);
+}
+
+h1 span{
+  color:#8c6e49;
+}
+
+.speed-button,
+.control-button,
+.editor-buttons button,
+.header-uploader summary{
+  color:#3b513f;
+  border-color:rgba(97,126,87,.34);
+  background:linear-gradient(180deg,#fffdf0,#e8efd8);
+  box-shadow:0 7px 16px rgba(75,94,67,.14),inset 0 1px 0 rgba(255,255,255,.9);
+}
+
+.speed-button:hover,
+.control-button:hover,
+.speed-button.active,
+.control-button.active,
+.editor-buttons button:hover{
+  color:#2f4934;
+  border-color:rgba(93,137,78,.58);
+  background:linear-gradient(180deg,#fffbe1,#dcebc7);
+  box-shadow:0 0 0 3px rgba(171,207,145,.18),0 10px 20px rgba(77,100,67,.16);
+}
+
+.archive-logo{
+  background:rgba(255,255,255,.52);
+  box-shadow:0 7px 20px rgba(72,91,63,.15);
+}
+
+.timeline-frame{
+  border-radius:34px 20px 32px 24px;
+  background:
+    radial-gradient(circle at 12% 12%,rgba(255,250,190,.52),transparent 28%),
+    linear-gradient(180deg,rgba(245,250,229,.96),rgba(228,239,207,.94));
+}
+
+.timeline-frame::before{
+  background:linear-gradient(100deg,transparent 0%,rgba(255,255,255,.76) 48%,transparent 58%);
+  opacity:.7;
+  animation:softSunSweep 7.5s ease-in-out infinite;
+}
+
+@keyframes softSunSweep{
+  0%{ transform:translateX(-115%); opacity:0; }
+  22%{ opacity:.72; }
+  75%{ opacity:.72; }
+  100%{ transform:translateX(115%); opacity:0; }
+}
+
+.center-line{
+  width:3px;
+  background:linear-gradient(180deg,transparent,#d3ae6b,#fff5b6,#d3ae6b,transparent);
+  box-shadow:0 0 12px rgba(226,190,103,.55);
+}
+
+.timeline-track{
+  gap:20px;
+}
+
+.year-node{
+  border-color:rgba(84,118,76,.28);
+  border-radius:30px 18px 32px 20px;
+  color:#34483a;
+  background:
+    radial-gradient(circle at 24% 18%,rgba(255,255,255,.9),transparent 26%),
+    linear-gradient(150deg,#fefbe9,#e2eccb);
+  box-shadow:0 10px 22px rgba(68,89,60,.15),inset 0 0 0 1px rgba(255,255,255,.68);
+  transform-origin:50% 100%;
+  animation:leafCardBreathe 5.6s ease-in-out infinite;
+}
+
+.year-node:nth-child(3n+2){
+  border-radius:18px 30px 20px 32px;
+  background:linear-gradient(150deg,#fff4df,#e6efd5);
+  animation-delay:-1.5s;
+}
+
+.year-node:nth-child(3n){
+  border-radius:32px 20px 26px 18px;
+  background:linear-gradient(150deg,#f3f1df,#d9ead7);
+  animation-delay:-3s;
+}
+
+.year-node::before{
+  content:"";
+  position:absolute;
+  left:13px;
+  top:13px;
+  width:10px;
+  height:18px;
+  border-radius:100% 0 100% 0;
+  background:rgba(96,141,78,.34);
+  transform:rotate(-32deg);
+}
+
+.year-node::after{
+  content:"";
+  position:absolute;
+  right:11px;
+  bottom:9px;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#f0c7b4;
+  box-shadow:-8px 2px 0 #f7df9f,3px -7px 0 #d7b9d5;
+  opacity:.76;
+}
+
+@keyframes leafCardBreathe{
+  0%,100%{ transform:translateY(0) rotate(-.25deg); }
+  50%{ transform:translateY(-3px) rotate(.35deg); }
+}
+
+.year-node.active{
+  border-color:rgba(179,136,73,.52);
+  background:
+    radial-gradient(circle at 24% 20%,rgba(255,255,255,.96),transparent 28%),
+    linear-gradient(150deg,#fff9d8,#d9edc5);
+  box-shadow:0 0 0 4px rgba(255,244,178,.34),0 14px 30px rgba(85,105,70,.2);
+  animation:activeWonder 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes activeWonder{
+  from{ transform:translateY(-2px) rotate(-.3deg) scale(1.01); }
+  to{ transform:translateY(-5px) rotate(.3deg) scale(1.025); }
+}
+
+.year-node .era,
+.year-node .wheel,
+.year-node .wheel strong{
+  color:#384c3e;
+  text-shadow:none;
+}
+
+.node-photo{
+  border-radius:14px 18px 13px 17px;
+  background:rgba(255,255,255,.48);
+  color:#748273;
+  box-shadow:inset 0 0 0 1px rgba(84,111,77,.16);
+}
+
+.pause-note{
+  color:#637262;
+}
+
+.left-panel{
+  border-radius:32px 20px 28px 24px;
+}
+
+.label{
+  color:#8f744f;
+}
+
+.big-year{
+  color:#36503d;
+  text-shadow:0 3px 0 rgba(255,255,255,.8),0 0 22px rgba(169,199,144,.28);
+}
+
+.era-badge{
+  color:#4b604d;
+  border-color:rgba(118,147,102,.36);
+  background:rgba(225,238,205,.72);
+}
+
+#selectedTitle{
+  color:#374d3c;
+  text-shadow:none;
+}
+
+.photo-link{
+  border-color:rgba(95,120,84,.28);
+  border-radius:28px 18px 30px 20px;
+  background:#f5f0dc;
+  box-shadow:inset 0 0 28px rgba(172,197,145,.18),0 12px 26px rgba(77,94,66,.13);
+}
+
+.photo-link img,
+.info-photo{
+  filter:saturate(.92) contrast(.96) sepia(.04);
+}
+
+.photo-link span{
+  color:#34483a;
+  border-color:rgba(85,112,77,.26);
+  background:rgba(255,252,231,.86);
+}
+
+.event-grid article{
+  position:relative;
+  border-radius:28px 18px 32px 20px;
+  overflow:hidden;
+}
+
+.event-grid article:nth-child(2){
+  border-radius:20px 30px 18px 34px;
+}
+
+.event-grid article:nth-child(3){
+  border-radius:34px 20px 28px 18px;
+}
+
+.event-grid article::before{
+  content:"";
+  position:absolute;
+  width:46px;
+  height:20px;
+  right:16px;
+  top:12px;
+  border-radius:65% 35% 65% 35%;
+  background:rgba(113,151,92,.18);
+  transform:rotate(12deg);
+}
+
+.content-text{
+  color:#3f5243;
+  text-shadow:none;
+}
+
+.image-block{
+  border-color:rgba(98,124,87,.24);
+  border-radius:18px 13px 20px 15px;
+  background:rgba(255,255,255,.42);
+}
+
+.image-block figcaption,
+.editor-panel small,
+.editor-note{
+  color:#728070;
+}
+
+input,
+select,
+textarea{
+  color:#3b4e3d;
+  border-color:rgba(94,122,84,.3);
+  background:rgba(255,253,238,.9);
+}
+
+.rav4-runner img{
+  filter:drop-shadow(0 14px 12px rgba(60,76,53,.28));
+}
+
+.rav4-speed-light{
+  background:linear-gradient(90deg,transparent,rgba(255,245,180,.68),transparent);
+  opacity:.62;
+}
+
+.drive-stage{
+  border-color:rgba(91,114,81,.25);
+  box-shadow:0 14px 30px rgba(68,84,59,.15);
+}
+
+.opening-page__shade{
+  background:
+    linear-gradient(180deg,rgba(55,79,58,.16),rgba(22,39,28,.34)),
+    radial-gradient(circle at 50% 38%,transparent 0 30%,rgba(26,49,33,.18) 72%);
+}
+
+.opening-start-button{
+  border-color:rgba(229,244,218,.72);
+  color:#294332;
+  background:linear-gradient(180deg,rgba(255,253,220,.96),rgba(199,224,174,.94));
+  box-shadow:0 12px 28px rgba(25,48,31,.2),inset 0 1px 0 rgba(255,255,255,.9);
+}
+
+.opening-controls__caption,
+.opening-meter__readout{
+  color:#f7f7e8;
+  text-shadow:0 2px 8px rgba(24,43,29,.42);
+}
+
+@media (prefers-reduced-motion:reduce){
+  body::before,
+  .timeline-frame::before,
+  .year-node,
+  .year-node.active{
+    animation:none !important;
+  }
+}

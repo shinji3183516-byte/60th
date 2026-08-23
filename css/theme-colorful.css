@@ -1,0 +1,583 @@
+/* =========================================================
+   DESIGN 02 : COLORFUL MAGIC
+   パステルアンブレラと踊るシルエットの年表テーマ
+   HTML / JavaScriptの変更不要。style.css として差し替えて使用。
+   ========================================================= */
+
+:root{
+  --bg:#fff9fb;
+  --bg2:#f7fbff;
+  --panel:rgba(255,255,255,.84);
+  --panel2:rgba(255,255,255,.72);
+  --line:rgba(122,108,148,.18);
+  --line2:rgba(151,125,175,.26);
+  --text:#4d465a;
+  --soft:#655d72;
+  --muted:#837a90;
+  --gold:#caa6c9;
+  --gold2:#efd6a8;
+  --red:#d991a9;
+  --shadow:0 20px 48px rgba(105,88,125,.18);
+
+  --pastel-pink:#f2b8c6;
+  --pastel-rose:#e7a9bb;
+  --pastel-peach:#f4c6ae;
+  --pastel-apricot:#f3d2a9;
+  --pastel-yellow:#f1e1a8;
+  --pastel-mint:#bfe0cf;
+  --pastel-green:#cfe4bb;
+  --pastel-aqua:#b9dfe1;
+  --pastel-blue:#bfd1ea;
+  --pastel-lilac:#d2c2e8;
+  --pastel-lavender:#cbb6dc;
+  --pastel-white:#fffdfb;
+  --ink:#51485d;
+}
+
+html{
+  background:#fbf8ff;
+}
+
+body{
+  color:var(--text);
+  background:
+    radial-gradient(circle at 8% 10%, rgba(242,184,198,.38), transparent 24%),
+    radial-gradient(circle at 90% 12%, rgba(185,223,225,.42), transparent 27%),
+    radial-gradient(circle at 78% 78%, rgba(210,194,232,.34), transparent 28%),
+    radial-gradient(circle at 18% 82%, rgba(243,210,169,.33), transparent 26%),
+    linear-gradient(145deg, #fffafc 0%, #f7fbff 47%, #fffaf5 100%);
+  overflow-x:hidden;
+}
+
+/* 紙吹雪のような淡い粒 */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:-2;
+  opacity:.46;
+  background-image:
+    radial-gradient(circle, rgba(242,184,198,.8) 0 2px, transparent 2.5px),
+    radial-gradient(circle, rgba(185,223,225,.8) 0 2px, transparent 2.5px),
+    radial-gradient(circle, rgba(210,194,232,.75) 0 1.8px, transparent 2.3px),
+    radial-gradient(circle, rgba(243,210,169,.75) 0 1.7px, transparent 2.2px);
+  background-size:140px 140px, 190px 190px, 115px 115px, 165px 165px;
+  background-position:0 0, 55px 35px, 28px 72px, 95px 10px;
+  animation:magicConfetti 22s linear infinite;
+}
+
+@keyframes magicConfetti{
+  from{ transform:translateY(-20px) translateX(0); }
+  50%{ transform:translateY(12px) translateX(12px); }
+  to{ transform:translateY(-20px) translateX(0); }
+}
+
+body::after{
+  content:"";
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  height:165px;
+  pointer-events:none;
+  z-index:-1;
+  opacity:.24;
+  background-repeat:repeat-x;
+  background-size:410px 165px;
+  background-position:center bottom;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 410 165'%3E%3Cg fill='none' stroke='%23877a91' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M48 56 Q82 15 116 56 Q99 47 82 56 Q65 47 48 56Z' fill='%23f2b8c6' stroke='%23b88ca0'/%3E%3Cpath d='M82 56v48q0 18 15 18'/%3E%3Ccircle cx='82' cy='87' r='7' fill='%23877a91' stroke='none'/%3E%3Cpath d='M82 94l-14 23m14-23 15 22m-15-14-16-3m16 3 15-9'/%3E%3Cpath d='M185 54 Q220 12 255 54 Q237 45 220 54 Q202 45 185 54Z' fill='%23b9dfe1' stroke='%238ebdc3'/%3E%3Cpath d='M220 54v47q0 18 15 18'/%3E%3Ccircle cx='220' cy='86' r='7' fill='%23877a91' stroke='none'/%3E%3Cpath d='M220 93l-15 23m15-23 17 20m-17-10-18-9m18 9 15 3'/%3E%3Cpath d='M305 58 Q340 18 375 58 Q357 49 340 58 Q322 49 305 58Z' fill='%23d2c2e8' stroke='%23aa96c4'/%3E%3Cpath d='M340 58v45q0 18 15 18'/%3E%3Ccircle cx='340' cy='89' r='7' fill='%23877a91' stroke='none'/%3E%3Cpath d='M340 96l-17 22m17-22 14 24m-14-12-18 5m18-5 14-13'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.page{
+  width:min(1540px, calc(100% - 30px));
+  padding-top:22px;
+}
+
+.header{
+  position:relative;
+  overflow:visible;
+  border:1px solid rgba(144,124,165,.18);
+  border-radius:30px 30px 24px 24px;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.93), rgba(255,248,252,.83)),
+    linear-gradient(90deg, var(--pastel-pink), var(--pastel-aqua));
+  box-shadow:var(--shadow), inset 0 0 35px rgba(255,255,255,.7);
+}
+
+.header::before,
+.header::after{
+  position:absolute;
+  top:-20px;
+  z-index:3;
+  font-size:42px;
+  filter:drop-shadow(0 8px 12px rgba(102,85,122,.14));
+  animation:umbrellaFloat 4.5s ease-in-out infinite;
+}
+
+.header::before{
+  content:"☂";
+  left:18px;
+  color:var(--pastel-pink);
+  transform:rotate(-12deg);
+}
+
+.header::after{
+  content:"☂";
+  right:25px;
+  color:var(--pastel-aqua);
+  animation-delay:-2.1s;
+  transform:rotate(11deg);
+}
+
+@keyframes umbrellaFloat{
+  0%,100%{ translate:0 0; }
+  50%{ translate:0 -7px; }
+}
+
+.title-area::after{
+  height:5px;
+  background:linear-gradient(90deg,
+    transparent,
+    rgba(242,184,198,.8),
+    rgba(243,210,169,.82),
+    rgba(185,223,225,.84),
+    rgba(210,194,232,.82),
+    transparent);
+  box-shadow:0 0 13px rgba(210,194,232,.52);
+}
+
+.mark,
+.toyota-mark{
+  border-color:rgba(124,108,145,.18);
+  background:rgba(255,255,255,.9);
+  box-shadow:0 10px 24px rgba(102,86,122,.14);
+}
+
+h1{
+  color:var(--ink);
+  text-shadow:0 2px 0 rgba(255,255,255,.9);
+}
+
+h1 span{
+  color:#a985a9;
+}
+
+.speed-button,
+.control-button,
+.editor-buttons button,
+.opening-start-button{
+  color:var(--ink);
+  border:1px solid rgba(116,100,137,.18);
+  background:linear-gradient(180deg, rgba(255,255,255,.96), rgba(248,240,250,.9));
+  box-shadow:0 7px 18px rgba(103,86,123,.12), inset 0 1px 0 rgba(255,255,255,.9);
+}
+
+.speed-button:nth-child(1){ background:linear-gradient(180deg,#fff,#f7e8ef); }
+.speed-button:nth-child(2){ background:linear-gradient(180deg,#fff,#edf5e6); }
+.speed-button:nth-child(3){ background:linear-gradient(180deg,#fff,#eaf3f6); }
+
+.speed-button.active,
+.control-button.active,
+.editor-buttons button:hover,
+.speed-button:hover,
+.control-button:hover{
+  color:#4f4559;
+  border-color:rgba(164,132,172,.48);
+  box-shadow:0 0 0 4px rgba(210,194,232,.18), 0 10px 22px rgba(103,86,123,.14);
+  transform:translateY(-1px);
+}
+
+.archive-logo{
+  background:rgba(255,255,255,.72);
+  box-shadow:0 9px 24px rgba(104,87,124,.13), 0 0 0 5px rgba(255,255,255,.48);
+}
+
+/* ===== 傘が並ぶ年表ステージ ===== */
+.timeline-frame{
+  height:205px;
+  overflow:visible;
+  border:1px solid rgba(132,113,153,.16);
+  border-radius:34px;
+  background:
+    radial-gradient(circle at 15% 5%, rgba(242,184,198,.31), transparent 25%),
+    radial-gradient(circle at 82% 10%, rgba(185,223,225,.34), transparent 27%),
+    linear-gradient(180deg, rgba(255,255,255,.90), rgba(250,246,253,.84));
+  box-shadow:var(--shadow), inset 0 0 42px rgba(255,255,255,.74);
+}
+
+.timeline-frame::before{
+  opacity:.62;
+  background:linear-gradient(100deg,
+    transparent 0%,
+    rgba(242,184,198,.18) 28%,
+    rgba(255,255,255,.82) 48%,
+    rgba(185,223,225,.18) 68%,
+    transparent 100%);
+}
+
+.timeline-frame::after{
+  content:"✦  colorful magic  ✦";
+  position:absolute;
+  left:50%;
+  bottom:10px;
+  transform:translateX(-50%);
+  color:rgba(118,99,139,.46);
+  font-size:12px;
+  letter-spacing:.28em;
+  white-space:nowrap;
+}
+
+.center-line{
+  top:16px;
+  bottom:42px;
+  width:3px;
+  border-radius:999px;
+  background:linear-gradient(180deg,
+    transparent,
+    var(--pastel-pink),
+    var(--pastel-yellow),
+    var(--pastel-aqua),
+    var(--pastel-lilac),
+    transparent);
+  box-shadow:0 0 16px rgba(190,164,208,.48);
+}
+
+.track-mask{
+  inset:15px 18px 38px;
+  overflow:hidden;
+  padding-top:4px;
+}
+
+.timeline-track{
+  gap:24px;
+  height:145px;
+  align-items:flex-start;
+}
+
+/* 年表カード＝傘の天蓋 */
+.year-node{
+  --umbrella-color:var(--pastel-pink);
+  --umbrella-color-2:#f8dbe3;
+  --dance-tilt:-2deg;
+  position:relative;
+  isolation:isolate;
+  flex:0 0 132px;
+  width:132px;
+  height:122px;
+  padding:15px 12px 10px;
+  border:1px solid rgba(111,96,129,.14);
+  border-radius:68px 68px 25px 25px / 43px 43px 25px 25px;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 32% 18%, rgba(255,255,255,.75), transparent 20%),
+    linear-gradient(145deg, var(--umbrella-color-2), var(--umbrella-color));
+  box-shadow:
+    0 12px 26px rgba(96,78,116,.16),
+    inset 0 2px 0 rgba(255,255,255,.72),
+    inset 0 -12px 20px rgba(128,98,144,.06);
+  transform-origin:50% 100%;
+  animation:umbrellaDance 5.2s ease-in-out infinite;
+}
+
+.year-node::before{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  left:50%;
+  bottom:-29px;
+  width:3px;
+  height:37px;
+  border-radius:999px;
+  background:#8d8097;
+  transform:translateX(-50%);
+  box-shadow:0 1px 0 rgba(255,255,255,.6);
+}
+
+.year-node::after{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  left:50%;
+  bottom:-36px;
+  width:17px;
+  height:14px;
+  border:3px solid #8d8097;
+  border-top:0;
+  border-left:0;
+  border-radius:0 0 13px 0;
+  transform:translateX(-2px);
+}
+
+@keyframes umbrellaDance{
+  0%,100%{ transform:rotate(calc(var(--dance-tilt) - 1deg)) translateY(2px); }
+  25%{ transform:rotate(calc(var(--dance-tilt) + 2deg)) translateY(-4px); }
+  50%{ transform:rotate(calc(var(--dance-tilt) - 2deg)) translateY(1px); }
+  75%{ transform:rotate(calc(var(--dance-tilt) + 1deg)) translateY(-3px); }
+}
+
+.year-node:nth-child(6n+1){ --umbrella-color:#f2b8c6; --umbrella-color-2:#f9dde4; --dance-tilt:-3deg; }
+.year-node:nth-child(6n+2){ --umbrella-color:#f3d2a9; --umbrella-color-2:#faead4; --dance-tilt:2deg; animation-delay:-.8s; }
+.year-node:nth-child(6n+3){ --umbrella-color:#bfe0cf; --umbrella-color-2:#e0f1e8; --dance-tilt:-1deg; animation-delay:-1.6s; }
+.year-node:nth-child(6n+4){ --umbrella-color:#b9dfe1; --umbrella-color-2:#ddf1f2; --dance-tilt:3deg; animation-delay:-2.4s; }
+.year-node:nth-child(6n+5){ --umbrella-color:#bfd1ea; --umbrella-color-2:#e1eaf6; --dance-tilt:-2deg; animation-delay:-3.2s; }
+.year-node:nth-child(6n+6){ --umbrella-color:#d2c2e8; --umbrella-color-2:#ebe3f5; --dance-tilt:1deg; animation-delay:-4s; }
+
+.year-node:hover{
+  animation-play-state:paused;
+  transform:translateY(-7px) rotate(0deg) scale(1.03);
+  box-shadow:0 18px 34px rgba(96,78,116,.21), 0 0 0 5px rgba(255,255,255,.58);
+}
+
+.year-node.active{
+  border-color:rgba(125,101,147,.34);
+  transform:translateY(-8px) rotate(0deg) scale(1.07);
+  animation:activeUmbrella 2.5s ease-in-out infinite;
+  box-shadow:
+    0 0 0 5px rgba(255,255,255,.75),
+    0 0 0 10px rgba(210,194,232,.20),
+    0 18px 38px rgba(99,80,120,.22);
+}
+
+@keyframes activeUmbrella{
+  0%,100%{ transform:translateY(-8px) rotate(-1deg) scale(1.07); }
+  50%{ transform:translateY(-13px) rotate(1deg) scale(1.08); }
+}
+
+.year-node .era{
+  color:rgba(77,70,90,.72);
+  font-weight:600;
+}
+
+.year-node .wheel strong{
+  color:#51485d;
+  text-shadow:0 1px 0 rgba(255,255,255,.8);
+}
+
+.node-photo{
+  width:82px;
+  height:43px;
+  border:2px solid rgba(255,255,255,.68);
+  border-radius:50% 50% 18px 18px / 42% 42% 18px 18px;
+  background:rgba(255,255,255,.42);
+  box-shadow:0 5px 12px rgba(93,75,112,.12);
+}
+
+.pause-note{
+  bottom:-3px;
+  color:rgba(85,75,98,.66);
+  font-size:12px;
+}
+
+/* ===== 走行背景の額縁 ===== */
+.drive-stage{
+  border-radius:28px;
+  border:1px solid rgba(126,109,148,.17);
+  box-shadow:0 17px 38px rgba(96,78,116,.17), 0 0 0 6px rgba(255,255,255,.52);
+}
+
+/* ===== メイン情報カード ===== */
+.main-card{
+  gap:20px;
+}
+
+.left-panel,
+.event-grid article,
+.visual-title-box,
+.editor-panel,
+.header-uploader-menu{
+  border-color:rgba(123,105,145,.17);
+  background:
+    radial-gradient(circle at 8% 5%, rgba(255,255,255,.88), transparent 28%),
+    linear-gradient(155deg, rgba(255,255,255,.91), rgba(250,245,252,.79));
+  color:var(--ink);
+  box-shadow:0 16px 34px rgba(95,77,114,.14), inset 0 0 28px rgba(255,255,255,.62);
+}
+
+.left-panel{
+  position:relative;
+  overflow:visible;
+  border-radius:42px 24px 42px 24px;
+}
+
+.left-panel::before{
+  content:"☂";
+  position:absolute;
+  right:20px;
+  top:-28px;
+  color:var(--pastel-lilac);
+  font-size:52px;
+  transform:rotate(13deg);
+  filter:drop-shadow(0 8px 12px rgba(94,77,112,.13));
+  animation:umbrellaFloat 4s ease-in-out infinite;
+}
+
+.label{
+  color:#a37f9f;
+}
+
+.big-year,
+#selectedTitle,
+#visualTitle{
+  color:#54495e;
+  text-shadow:0 2px 0 rgba(255,255,255,.9);
+}
+
+.era-badge{
+  border-color:rgba(171,138,175,.32);
+  color:#62566d;
+  background:linear-gradient(90deg, rgba(242,184,198,.30), rgba(210,194,232,.30));
+}
+
+.photo-link{
+  border-color:rgba(120,102,141,.18);
+  border-radius:46px 22px 46px 22px;
+  background:rgba(255,255,255,.58);
+  box-shadow:inset 0 0 32px rgba(188,167,204,.12), 0 12px 28px rgba(97,80,116,.10);
+}
+
+.photo-link span{
+  border-color:rgba(115,98,135,.20);
+  background:rgba(255,255,255,.82);
+  color:#5a5065;
+}
+
+.event-grid{
+  gap:16px;
+}
+
+.event-grid article{
+  position:relative;
+  overflow:visible;
+  border-radius:34px 20px 34px 20px;
+  transition:transform .28s ease, box-shadow .28s ease;
+}
+
+.event-grid article:nth-child(1){
+  background:linear-gradient(155deg, rgba(255,255,255,.94), rgba(249,229,236,.76));
+}
+.event-grid article:nth-child(2){
+  background:linear-gradient(155deg, rgba(255,255,255,.94), rgba(228,242,234,.78));
+}
+.event-grid article:nth-child(3){
+  background:linear-gradient(155deg, rgba(255,255,255,.94), rgba(230,236,247,.80));
+}
+
+.event-grid article::before{
+  position:absolute;
+  right:13px;
+  top:-20px;
+  font-size:39px;
+  filter:drop-shadow(0 7px 10px rgba(100,82,120,.12));
+  transform-origin:50% 100%;
+  animation:cardUmbrellaDance 4.1s ease-in-out infinite;
+}
+
+.event-grid article:nth-child(1)::before{ content:"☂"; color:var(--pastel-pink); }
+.event-grid article:nth-child(2)::before{ content:"☂"; color:var(--pastel-mint); animation-delay:-1.3s; }
+.event-grid article:nth-child(3)::before{ content:"☂"; color:var(--pastel-blue); animation-delay:-2.6s; }
+
+@keyframes cardUmbrellaDance{
+  0%,100%{ transform:rotate(-8deg) translateY(0); }
+  50%{ transform:rotate(9deg) translateY(-6px); }
+}
+
+.event-grid article:hover{
+  transform:translateY(-5px) rotate(.2deg);
+  box-shadow:0 21px 40px rgba(95,77,114,.18), 0 0 0 5px rgba(255,255,255,.52);
+}
+
+.content-text{
+  color:#5e5468;
+  text-shadow:none;
+}
+
+.image-block{
+  border:2px solid rgba(255,255,255,.7);
+  border-radius:28px 16px 28px 16px;
+  background:rgba(255,255,255,.52);
+  box-shadow:0 8px 20px rgba(91,74,109,.10);
+}
+
+.image-block figcaption,
+.editor-panel small,
+.editor-note{
+  color:rgba(82,72,95,.67);
+}
+
+input,
+select,
+textarea{
+  border-color:rgba(117,99,137,.20);
+  color:#544a5f;
+  background:rgba(255,255,255,.78);
+}
+
+/* タイマーもキャンディのようなパステルに */
+.cycle-timer{
+  border-color:rgba(119,101,139,.18);
+  color:#5b5066;
+  background:linear-gradient(90deg, rgba(249,222,229,.8), rgba(224,241,242,.82));
+  box-shadow:0 7px 18px rgba(97,79,116,.11);
+}
+
+/* オープニングも同じ世界観に統一 */
+.opening-page{
+  background-color:#fbf8ff;
+}
+
+.opening-page__shade{
+  background:
+    radial-gradient(circle at 18% 20%, rgba(242,184,198,.26), transparent 30%),
+    radial-gradient(circle at 82% 18%, rgba(185,223,225,.28), transparent 32%),
+    linear-gradient(180deg, rgba(255,250,253,.15), rgba(241,235,247,.32));
+}
+
+.opening-controls{
+  color:#fff;
+  filter:drop-shadow(0 12px 20px rgba(70,55,87,.25));
+}
+
+.opening-start-button{
+  background:linear-gradient(90deg, rgba(242,184,198,.93), rgba(243,210,169,.94), rgba(185,223,225,.93), rgba(210,194,232,.93));
+  color:#4d4358;
+  border-color:rgba(255,255,255,.62);
+}
+
+.opening-meter__progress{
+  stroke:url(#openingMeterGradient);
+}
+
+/* 車のライトを白〜淡い虹色に */
+.rav4-speed-light{
+  background:linear-gradient(90deg,
+    transparent,
+    rgba(242,184,198,.30),
+    rgba(255,255,255,.82),
+    rgba(185,223,225,.33),
+    transparent);
+  opacity:.68;
+}
+
+/* 動きを苦手とする端末では装飾だけ停止 */
+@media (prefers-reduced-motion: reduce){
+  body::before,
+  .header::before,
+  .header::after,
+  .left-panel::before,
+  .year-node,
+  .year-node.active,
+  .event-grid article::before{
+    animation:none !important;
+  }
+}
+
+@media (max-width:900px){
+  .timeline-frame{ height:198px; }
+  .year-node{ flex-basis:122px; width:122px; }
+  .event-grid article::before{ font-size:32px; }
+}
+
+/* =========================================================
+   END : COLORFUL MAGIC
+   ========================================================= */

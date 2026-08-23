@@ -1,0 +1,1537 @@
+@charset "UTF-8";
+
+/* ============================================================
+   TAKAOKA PLANT 60th ANNIVERSARY TIMELINE
+   BLUEPRINT THEME
+   既存ロゴ画像は変更・加工しない
+   - images/factory/toyotamark.jpg
+   - images/factory/60thLOGO.png
+   ============================================================ */
+
+:root {
+  --bp-bg: #04172d;
+  --bp-bg-deep: #020d1b;
+  --bp-panel: rgba(5, 31, 59, 0.92);
+  --bp-panel-strong: rgba(3, 20, 39, 0.97);
+  --bp-line: rgba(128, 220, 255, 0.38);
+  --bp-line-strong: rgba(168, 235, 255, 0.82);
+  --bp-text: #e8f8ff;
+  --bp-muted: #9bc9dc;
+  --bp-cyan: #58d8ff;
+  --bp-green: #92de76;
+  --bp-yellow: #ffd04d;
+  --bp-shadow: rgba(0, 0, 0, 0.48);
+}
+
+/* 全体 */
+html,
+body {
+  background:
+    linear-gradient(rgba(90, 180, 220, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(90, 180, 220, 0.045) 1px, transparent 1px),
+    linear-gradient(rgba(90, 180, 220, 0.10) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(90, 180, 220, 0.10) 1px, transparent 1px),
+    var(--bp-bg-deep);
+  background-size: 12px 12px, 12px 12px, 60px 60px, 60px 60px, auto;
+  color: var(--bp-text);
+  font-family: "Arial Narrow", "Roboto Condensed", "Noto Sans JP", sans-serif;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, transparent 0 49.8%, rgba(100, 215, 255, 0.035) 50%, transparent 50.2%),
+    linear-gradient(transparent 0 49.8%, rgba(100, 215, 255, 0.035) 50%, transparent 50.2%);
+  background-size: 240px 240px;
+  z-index: 9999;
+}
+
+/* オープニング */
+.opening-page {
+  background:
+    linear-gradient(rgba(88, 215, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(88, 215, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(rgba(88, 215, 255, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(88, 215, 255, 0.12) 1px, transparent 1px),
+    linear-gradient(135deg, rgba(2, 12, 24, 0.38), rgba(4, 23, 45, 0.78)),
+    url("../images/opening/top-page.jpg") center / cover no-repeat;
+  background-size: 12px 12px, 12px 12px, 60px 60px, 60px 60px, auto, cover;
+}
+
+.opening-page__shade {
+  background:
+    linear-gradient(90deg, rgba(1, 10, 20, 0.42), rgba(1, 10, 20, 0.15), rgba(1, 10, 20, 0.48)),
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.015) 0 1px, transparent 1px 4px);
+}
+
+.opening-controls {
+  border: 1px solid var(--bp-line-strong);
+  border-radius: 0;
+  background:
+    linear-gradient(135deg, rgba(88, 216, 255, 0.08), transparent 36%),
+    rgba(2, 17, 34, 0.90);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.04),
+    0 0 30px rgba(88, 216, 255, 0.15),
+    0 18px 42px rgba(0,0,0,0.55);
+}
+
+.opening-controls::before,
+.opening-controls::after {
+  content: "";
+  position: absolute;
+  width: 42px;
+  height: 42px;
+  pointer-events: none;
+}
+.opening-controls::before {
+  top: -1px;
+  left: -1px;
+  border-top: 3px solid var(--bp-cyan);
+  border-left: 3px solid var(--bp-cyan);
+}
+.opening-controls::after {
+  right: -1px;
+  bottom: -1px;
+  border-right: 3px solid var(--bp-cyan);
+  border-bottom: 3px solid var(--bp-cyan);
+}
+
+.opening-meter__track {
+  stroke: rgba(146, 216, 241, 0.25);
+}
+.opening-meter__progress {
+  stroke: var(--bp-cyan);
+  filter: drop-shadow(0 0 5px rgba(88,216,255,0.65));
+}
+.opening-meter__ticks line {
+  stroke: rgba(198, 239, 255, 0.72);
+}
+.opening-meter__needle line,
+.opening-meter__needle circle {
+  stroke: var(--bp-yellow);
+  fill: var(--bp-yellow);
+}
+.opening-meter__readout strong {
+  color: var(--bp-cyan);
+  text-shadow: 0 0 10px rgba(88,216,255,0.6);
+}
+.opening-meter__readout span,
+.opening-controls__caption {
+  color: var(--bp-muted);
+  letter-spacing: 0.18em;
+}
+
+.opening-start-button {
+  border: 1px solid var(--bp-line-strong);
+  border-radius: 0;
+  color: var(--bp-text);
+  background:
+    linear-gradient(90deg, rgba(88,216,255,0.16), rgba(88,216,255,0.04)),
+    rgba(3, 27, 51, 0.92);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.05),
+    0 0 18px rgba(88,216,255,0.12);
+}
+.opening-start-button:hover {
+  border-color: var(--bp-yellow);
+  color: var(--bp-yellow);
+  background:
+    linear-gradient(90deg, rgba(255,208,77,0.16), rgba(255,208,77,0.04)),
+    rgba(3, 27, 51, 0.96);
+}
+
+.opening-theme-picker {
+  border-top: 1px solid rgba(127, 221, 255, 0.28);
+}
+.opening-theme-picker__title {
+  color: var(--bp-muted);
+  letter-spacing: 0.16em;
+}
+.theme-select-button {
+  border-radius: 0;
+  border: 1px solid rgba(147, 220, 246, 0.28);
+  color: var(--bp-muted);
+  background: rgba(3, 23, 43, 0.76);
+}
+.theme-select-button:hover,
+.theme-select-button.active,
+.theme-select-button.is-active,
+.theme-select-button[aria-pressed="true"] {
+  color: var(--bp-yellow);
+  border-color: var(--bp-yellow);
+  box-shadow: 0 0 12px rgba(255,208,77,0.18);
+}
+
+/* ヘッダー */
+.header {
+  border: 1px solid var(--bp-line);
+  border-radius: 0;
+  background:
+    linear-gradient(90deg, rgba(88,216,255,0.07), transparent 28%),
+    var(--bp-panel-strong);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.025),
+    0 12px 28px var(--bp-shadow);
+}
+
+.title-area {
+  position: relative;
+}
+.title-area::after {
+  content: "PROJECT : TAKAOKA PLANT HISTORY  /  DWG TYPE : TIMELINE SYSTEM  /  SCALE : 1/1";
+  display: block;
+  margin-top: 4px;
+  color: var(--bp-muted);
+  font-size: 10px;
+  letter-spacing: 0.11em;
+}
+
+.title-area h1 {
+  color: var(--bp-text);
+  letter-spacing: 0.06em;
+}
+.title-area h1 span {
+  color: var(--bp-muted);
+}
+
+/* ロゴ画像は既存ファイルをそのまま表示 */
+.mark {
+  object-fit: contain;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+  opacity: 1 !important;
+}
+.archive-logo {
+  object-fit: contain;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+  opacity: 1 !important;
+  background: transparent !important;
+}
+
+/* ヘッダー操作 */
+.header-actions button,
+.header-actions summary,
+.speed-button,
+.control-button {
+  border-radius: 0 !important;
+  border: 1px solid rgba(139, 217, 246, 0.34) !important;
+  color: var(--bp-text) !important;
+  background:
+    linear-gradient(180deg, rgba(88,216,255,0.07), transparent),
+    rgba(4, 28, 52, 0.94) !important;
+  box-shadow: none !important;
+}
+.header-actions button:hover,
+.header-actions summary:hover,
+.speed-button:hover,
+.control-button:hover {
+  border-color: var(--bp-cyan) !important;
+  color: var(--bp-cyan) !important;
+}
+.speed-button.active {
+  color: var(--bp-yellow) !important;
+  border-color: var(--bp-yellow) !important;
+  box-shadow: inset 3px 0 0 var(--bp-yellow) !important;
+}
+.cycle-timer {
+  border-radius: 0;
+  border: 1px solid rgba(139, 217, 246, 0.30);
+  background: rgba(3, 24, 46, 0.92);
+}
+.cycle-timer-label,
+.cycle-timer-unit {
+  color: var(--bp-muted);
+}
+#cycleRemainingSeconds {
+  color: var(--bp-cyan);
+}
+
+/* 年表本体 */
+.timeline-frame {
+  position: relative;
+  border: 1px solid var(--bp-line-strong);
+  border-radius: 0;
+  background:
+    linear-gradient(rgba(95, 201, 239, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(95, 201, 239, 0.04) 1px, transparent 1px),
+    linear-gradient(rgba(95, 201, 239, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(95, 201, 239, 0.09) 1px, transparent 1px),
+    rgba(3, 23, 44, 0.94);
+  background-size: 10px 10px, 10px 10px, 50px 50px, 50px 50px, auto;
+  box-shadow: 0 14px 30px var(--bp-shadow);
+}
+
+.timeline-frame::before {
+  content: "TIMELINE DRAWING / 年表図面   DWG NO. TKK-TL-1966-2026   REV.00";
+  position: absolute;
+  top: 10px;
+  left: 18px;
+  z-index: 10;
+  color: var(--bp-muted);
+  font-size: 10px;
+  letter-spacing: 0.09em;
+  pointer-events: none;
+}
+
+.timeline-frame::after {
+  content: "PAST  ←────────────────────────  60 YEARS  ────────────────────────→  FUTURE";
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  transform: translateX(-50%);
+  width: calc(100% - 44px);
+  text-align: center;
+  color: rgba(184, 230, 247, 0.70);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  pointer-events: none;
+}
+
+.center-line {
+  width: 1px;
+  background: var(--bp-yellow);
+  box-shadow: 0 0 10px rgba(255,208,77,0.55);
+}
+.center-line::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -7px;
+  transform: translateX(-50%);
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-bottom: 12px solid var(--bp-yellow);
+}
+
+/* 年度カード */
+.year-node {
+  position: relative;
+  border-radius: 0 !important;
+  border: 1px solid rgba(162, 225, 249, 0.46) !important;
+  background:
+    linear-gradient(135deg, rgba(88,216,255,0.08), transparent 28%),
+    rgba(3, 27, 51, 0.86) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.025),
+    0 10px 20px rgba(0,0,0,0.28) !important;
+}
+.year-node::before,
+.year-node::after {
+  content: "";
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  pointer-events: none;
+}
+.year-node::before {
+  top: -1px;
+  left: -1px;
+  border-top: 2px solid var(--bp-cyan);
+  border-left: 2px solid var(--bp-cyan);
+}
+.year-node::after {
+  right: -1px;
+  bottom: -1px;
+  border-right: 2px solid var(--bp-cyan);
+  border-bottom: 2px solid var(--bp-cyan);
+}
+.year-node.active {
+  border-color: var(--bp-yellow) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,208,77,0.20),
+    0 0 22px rgba(255,208,77,0.16) !important;
+}
+.year-node.active::before,
+.year-node.active::after {
+  border-color: var(--bp-yellow);
+}
+
+.year-node .wheel {
+  border-radius: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.year-node .wheel::before {
+  display: none !important;
+}
+.year-node .wheel strong {
+  color: var(--bp-text);
+  font-family: "Arial Narrow", "Roboto Condensed", sans-serif;
+  letter-spacing: 0.07em;
+  text-shadow: none;
+}
+.year-node.active .wheel strong {
+  color: var(--bp-yellow);
+}
+
+.pause-note {
+  color: var(--bp-muted);
+}
+
+/* 走行ステージ */
+.drive-stage {
+  border: 1px solid var(--bp-line);
+  border-radius: 0;
+  box-shadow: 0 14px 30px var(--bp-shadow);
+}
+.drive-stage::before {
+  content: "RUN-CAR SIMULATION / VEHICLE MOTION VIEW";
+  position: absolute;
+  top: 8px;
+  left: 14px;
+  z-index: 20;
+  color: rgba(215, 243, 255, 0.86);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  background: rgba(2, 15, 29, 0.70);
+  padding: 4px 7px;
+  border: 1px solid rgba(128, 220, 255, 0.28);
+}
+.drive-stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(88,216,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(88,216,255,0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  mix-blend-mode: screen;
+}
+
+/* メインカード */
+.main-card {
+  border: 1px solid var(--bp-line-strong) !important;
+  border-radius: 0 !important;
+  background:
+    linear-gradient(rgba(91, 201, 239, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(91, 201, 239, 0.035) 1px, transparent 1px),
+    var(--bp-panel-strong) !important;
+  background-size: 12px 12px, 12px 12px, auto !important;
+  box-shadow: 0 18px 38px var(--bp-shadow) !important;
+}
+
+.left-panel {
+  border-right: 1px solid var(--bp-line);
+}
+.label {
+  color: var(--bp-muted);
+  letter-spacing: 0.16em;
+}
+.big-year {
+  color: var(--bp-text);
+  font-family: "Arial Narrow", "Roboto Condensed", sans-serif;
+  letter-spacing: 0.06em;
+}
+.era-badge {
+  border-radius: 0;
+  border: 1px solid rgba(133, 217, 247, 0.40);
+  color: var(--bp-cyan);
+  background: rgba(4, 28, 52, 0.82);
+}
+#selectedTitle {
+  color: var(--bp-text);
+}
+.photo-link {
+  border-radius: 0;
+  border: 1px solid rgba(133, 217, 247, 0.42);
+  background: rgba(3, 23, 43, 0.90);
+}
+.photo-link:hover {
+  border-color: var(--bp-yellow);
+}
+.photo-link span {
+  color: var(--bp-muted);
+}
+
+/* 3情報カード */
+.event-grid > article {
+  position: relative;
+  border-radius: 0 !important;
+  border: 1px solid rgba(133, 217, 247, 0.36) !important;
+  background:
+    linear-gradient(135deg, rgba(88,216,255,0.06), transparent 32%),
+    rgba(4, 28, 52, 0.90) !important;
+  box-shadow: none !important;
+}
+
+.event-grid > article::before {
+  display: block;
+  padding: 8px 11px;
+  border-bottom: 1px solid currentColor;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+.event-grid > article:nth-child(1) {
+  color: var(--bp-cyan);
+}
+.event-grid > article:nth-child(1)::before {
+  content: "01 / CAR INTRODUCTION / 車紹介";
+}
+.event-grid > article:nth-child(2) {
+  color: var(--bp-green);
+  border-color: rgba(146,222,118,0.48) !important;
+}
+.event-grid > article:nth-child(2)::before {
+  content: "02 / PLANT EVENTS / 工場の出来事";
+}
+.event-grid > article:nth-child(3) {
+  color: var(--bp-yellow);
+  border-color: rgba(255,208,77,0.50) !important;
+}
+.event-grid > article:nth-child(3)::before {
+  content: "03 / SOCIETY EVENTS / 社会の出来事";
+}
+
+.article-content {
+  color: var(--bp-text);
+}
+.article-content img,
+#mainPhoto {
+  border-radius: 0 !important;
+  border: 1px solid rgba(183, 232, 250, 0.36);
+  filter: saturate(0.88) contrast(1.04);
+}
+.article-content h3,
+.article-content h4,
+.article-content strong {
+  color: inherit;
+}
+.article-content p,
+.article-content li {
+  color: var(--bp-text);
+}
+
+/* アップローダー */
+.header-uploader-menu {
+  border-radius: 0;
+  border: 1px solid var(--bp-line-strong);
+  background: var(--bp-panel-strong);
+}
+.editor-grid input,
+.editor-grid select,
+.editor-grid textarea {
+  border-radius: 0;
+  border: 1px solid rgba(133, 217, 247, 0.40);
+  color: var(--bp-text);
+  background: rgba(2, 16, 31, 0.92);
+}
+.editor-note,
+.header-uploader-topline small {
+  color: var(--bp-muted);
+}
+
+/* スクロールバー */
+* {
+  scrollbar-color: rgba(88,216,255,0.42) rgba(2,14,28,0.7);
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-track {
+  background: rgba(2,14,28,0.72);
+}
+*::-webkit-scrollbar-thumb {
+  border: 2px solid rgba(2,14,28,0.72);
+  border-radius: 0;
+  background: rgba(88,216,255,0.44);
+}
+
+/* 小画面 */
+@media (max-width: 1100px) {
+  .title-area::after,
+  .timeline-frame::before,
+  .timeline-frame::after,
+  .drive-stage::before {
+    display: none;
+  }
+}
+
+/* 動きは控えめ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+/* ============================================================
+   BLUEPRINT VER.2
+   「青いテーマ」から「図面管理画面」へ深化
+   ============================================================ */
+
+/* 全体CAD感を強化 */
+html,
+body {
+  background:
+    linear-gradient(rgba(96, 210, 248, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(96, 210, 248, 0.035) 1px, transparent 1px),
+    linear-gradient(rgba(96, 210, 248, 0.085) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(96, 210, 248, 0.085) 1px, transparent 1px),
+    linear-gradient(rgba(96, 210, 248, 0.15) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(96, 210, 248, 0.15) 1px, transparent 1px),
+    radial-gradient(circle at center, #082442 0%, #04172d 48%, #020d1b 100%);
+  background-size:
+    8px 8px,
+    8px 8px,
+    40px 40px,
+    40px 40px,
+    200px 200px,
+    200px 200px,
+    auto;
+}
+
+/* 画面四隅の図面基準マーカー */
+.page {
+  position: relative;
+}
+.page::before,
+.page::after {
+  content: "";
+  position: fixed;
+  width: 72px;
+  height: 72px;
+  z-index: 2;
+  pointer-events: none;
+  opacity: .65;
+}
+.page::before {
+  left: 8px;
+  top: 8px;
+  border-left: 1px solid var(--bp-cyan);
+  border-top: 1px solid var(--bp-cyan);
+  background:
+    linear-gradient(90deg, transparent 49%, var(--bp-cyan) 50%, transparent 51%) center / 100% 1px no-repeat,
+    linear-gradient(transparent 49%, var(--bp-cyan) 50%, transparent 51%) center / 1px 100% no-repeat;
+}
+.page::after {
+  right: 8px;
+  bottom: 8px;
+  border-right: 1px solid var(--bp-cyan);
+  border-bottom: 1px solid var(--bp-cyan);
+  background:
+    linear-gradient(90deg, transparent 49%, var(--bp-cyan) 50%, transparent 51%) center / 100% 1px no-repeat,
+    linear-gradient(transparent 49%, var(--bp-cyan) 50%, transparent 51%) center / 1px 100% no-repeat;
+}
+
+/* ヘッダーを図面表題欄風に */
+.header {
+  display: grid;
+  grid-template-columns: minmax(420px, 1fr) auto;
+  align-items: stretch;
+  min-height: 112px;
+}
+.title-area {
+  padding-right: 18px;
+  border-right: 1px solid var(--bp-line);
+}
+.title-area::before {
+  content: "DRAWING TITLE";
+  display: block;
+  margin-bottom: 3px;
+  color: var(--bp-cyan);
+  font-size: 9px;
+  letter-spacing: .18em;
+}
+.title-area::after {
+  content:
+    "PROJECT : TAKAOKA PLANT HISTORY  /  DWG TYPE : TIMELINE SYSTEM  /  SCALE : 1/1  /  UNIT : YEAR";
+  display: block;
+  margin-top: 5px;
+  padding-top: 5px;
+  border-top: 1px solid rgba(128,220,255,.24);
+  color: var(--bp-muted);
+  font-size: 9px;
+  letter-spacing: .10em;
+}
+.header-actions {
+  position: relative;
+}
+.header-actions::before {
+  content: "OPERATION PANEL / DWG-OP-01";
+  position: absolute;
+  top: -17px;
+  right: 0;
+  color: var(--bp-muted);
+  font-size: 8px;
+  letter-spacing: .12em;
+}
+
+/* 年表フレームを本格図面枠へ */
+.timeline-frame {
+  padding-top: 36px;
+  padding-bottom: 34px;
+  outline: 1px solid rgba(128,220,255,.18);
+  outline-offset: -7px;
+}
+.timeline-frame::before {
+  content:
+    "TIMELINE DRAWING / 年表図面    DWG NO. TKK-TL-1966-2026    REV.00    SHEET 01/01";
+  top: 11px;
+  left: 18px;
+  right: 18px;
+  padding-bottom: 7px;
+  border-bottom: 1px solid rgba(128,220,255,.28);
+}
+.timeline-frame::after {
+  content:
+    "PAST   ←───────────────  DIMENSION : 60 YEARS  ───────────────→   FUTURE";
+  bottom: 10px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(128,220,255,.28);
+}
+
+/* 年代カードを図面管理票へ */
+.year-node {
+  min-height: 148px;
+  padding: 12px 10px 14px !important;
+  overflow: hidden;
+}
+.year-node::before {
+  width: 22px;
+  height: 22px;
+}
+.year-node::after {
+  width: 22px;
+  height: 22px;
+}
+.year-node .wheel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  margin-top: 27px;
+  border-top: 1px solid rgba(128,220,255,.24) !important;
+  border-bottom: 1px solid rgba(128,220,255,.24) !important;
+}
+.year-node .wheel::after {
+  content: "DWG YEAR";
+  position: absolute;
+  left: 0;
+  top: -21px;
+  color: var(--bp-muted);
+  font-size: 8px;
+  letter-spacing: .16em;
+}
+.year-node .wheel strong {
+  font-size: clamp(24px, 2vw, 34px);
+}
+.year-node > span,
+.year-node > small,
+.year-node > p {
+  letter-spacing: .06em;
+}
+.year-node > small:last-child::after {
+  content: "   /   REV.00";
+  color: var(--bp-muted);
+}
+.year-node.active::marker {
+  content: "";
+}
+.year-node.active {
+  background:
+    linear-gradient(135deg, rgba(255,208,77,.10), transparent 30%),
+    rgba(3,27,51,.92) !important;
+}
+.year-node.active .wheel::after {
+  color: var(--bp-yellow);
+}
+
+/* 図面番号を各カード下に付与 */
+.year-node {
+  counter-increment: bp-card;
+}
+.timeline-track {
+  counter-reset: bp-card;
+}
+.year-node::selection {
+  background: transparent;
+}
+
+/* カード内部に図面管理ラベルを擬似生成 */
+.year-node .wheel + * {
+  position: relative;
+}
+.year-node .wheel + *::before {
+  content: "DWG NO. TKK-YR-" counter(bp-card, decimal-leading-zero);
+  display: block;
+  margin-bottom: 3px;
+  color: var(--bp-muted);
+  font-size: 7px;
+  letter-spacing: .11em;
+}
+
+/* 年表中央線を寸法基準線へ */
+.center-line {
+  width: 2px;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      var(--bp-yellow) 0 8px,
+      transparent 8px 13px
+    );
+}
+.center-line::after {
+  content: "DATUM";
+  position: absolute;
+  left: 50%;
+  bottom: 8px;
+  transform: translateX(-50%) rotate(-90deg);
+  color: var(--bp-yellow);
+  font-size: 8px;
+  letter-spacing: .14em;
+}
+
+/* RUN-CARをシミュレーション図枠へ */
+.drive-stage {
+  outline: 1px solid rgba(128,220,255,.18);
+  outline-offset: -7px;
+}
+.drive-stage::before {
+  content:
+    "FIG-A / RUN-CAR SIMULATION / VEHICLE MOTION VIEW / SCALE NTS";
+  top: 10px;
+  left: 14px;
+}
+.drive-stage::after {
+  background:
+    linear-gradient(rgba(88,216,255,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(88,216,255,.035) 1px, transparent 1px),
+    linear-gradient(90deg, transparent 49.8%, rgba(88,216,255,.18) 50%, transparent 50.2%),
+    linear-gradient(transparent 49.8%, rgba(88,216,255,.18) 50%, transparent 50.2%);
+  background-size: 40px 40px, 40px 40px, 100% 100%, 100% 100%;
+}
+
+/* メインカードを図面表題欄＋図面セクションへ */
+.main-card {
+  position: relative;
+  padding-top: 38px !important;
+  outline: 1px solid rgba(128,220,255,.18);
+  outline-offset: -7px;
+}
+.main-card::before {
+  content:
+    "DETAIL DRAWING / SELECTED YEAR INFORMATION    DWG NO. TKK-DTL-001    REV.00";
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  top: 11px;
+  padding-bottom: 7px;
+  border-bottom: 1px solid rgba(128,220,255,.28);
+  color: var(--bp-muted);
+  font-size: 9px;
+  letter-spacing: .10em;
+}
+.main-card::after {
+  content:
+    "DRAWN BY : TAKAOKA PLANT    CHECKED BY : 60TH PROJECT    APPROVED BY : MANAGEMENT";
+  position: absolute;
+  right: 18px;
+  bottom: 8px;
+  color: rgba(155,201,220,.72);
+  font-size: 7px;
+  letter-spacing: .08em;
+}
+
+/* 左パネルを選択年度の表題欄へ */
+.left-panel {
+  position: relative;
+  padding-top: 36px !important;
+}
+.left-panel::before {
+  content: "TITLE BLOCK / SELECTED YEAR";
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  color: var(--bp-cyan);
+  font-size: 8px;
+  letter-spacing: .16em;
+}
+.left-panel::after {
+  content: "DWG NO. TKK-YEAR-DETAIL   REV.00";
+  display: block;
+  margin-top: 10px;
+  padding-top: 7px;
+  border-top: 1px solid rgba(128,220,255,.22);
+  color: var(--bp-muted);
+  font-size: 8px;
+  letter-spacing: .10em;
+}
+.year-line {
+  border-top: 1px solid rgba(128,220,255,.22);
+  border-bottom: 1px solid rgba(128,220,255,.22);
+  padding: 8px 0;
+}
+
+/* 写真を図面FIG管理へ */
+.photo-link {
+  position: relative;
+  padding-top: 28px !important;
+}
+.photo-link::before {
+  content: "FIG-00 / MAIN REFERENCE IMAGE";
+  position: absolute;
+  top: 7px;
+  left: 10px;
+  color: var(--bp-muted);
+  font-size: 8px;
+  letter-spacing: .13em;
+}
+.photo-link::after {
+  content: "NTS";
+  position: absolute;
+  right: 10px;
+  top: 7px;
+  color: var(--bp-muted);
+  font-size: 8px;
+  letter-spacing: .12em;
+}
+
+/* 3情報カードを図面セクションへ */
+.event-grid > article {
+  padding-top: 0 !important;
+  outline: 1px solid rgba(128,220,255,.12);
+  outline-offset: -6px;
+}
+.event-grid > article::before {
+  padding: 10px 11px 9px;
+  background:
+    linear-gradient(90deg, rgba(88,216,255,.09), transparent 62%);
+}
+.event-grid > article::after {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: var(--bp-muted);
+  font-size: 8px;
+  letter-spacing: .12em;
+}
+.event-grid > article:nth-child(1)::after {
+  content: "FIG-01";
+}
+.event-grid > article:nth-child(2)::after {
+  content: "FIG-02";
+}
+.event-grid > article:nth-child(3)::after {
+  content: "FIG-03";
+}
+.article-content {
+  position: relative;
+  padding: 12px !important;
+}
+.article-content::before {
+  content: "NOTE";
+  display: block;
+  margin-bottom: 8px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid currentColor;
+  color: inherit;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: .16em;
+}
+.article-content img {
+  position: relative;
+  padding: 3px;
+  background: rgba(2,14,28,.86);
+}
+
+/* 図面寸法線風アクセント */
+.event-grid {
+  position: relative;
+}
+.event-grid::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -10px;
+  height: 1px;
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0,
+      var(--bp-line-strong) 2%,
+      var(--bp-line-strong) 98%,
+      transparent 100%
+    );
+}
+.event-grid::after {
+  content: "3 SECTIONS / INFORMATION MODULE";
+  position: absolute;
+  top: -19px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0 8px;
+  background: var(--bp-bg);
+  color: var(--bp-muted);
+  font-size: 7px;
+  letter-spacing: .13em;
+}
+
+/* ボタン類をCADツールバー化 */
+.header-actions button,
+.header-actions summary,
+.speed-button,
+.control-button {
+  position: relative;
+  min-height: 44px;
+}
+.header-actions button::after,
+.speed-button::after,
+.control-button::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  right: 5px;
+  bottom: 4px;
+  height: 1px;
+  background: rgba(128,220,255,.20);
+}
+.speed-button.active::after {
+  background: var(--bp-yellow);
+  box-shadow: 0 0 5px rgba(255,208,77,.5);
+}
+
+/* 60周年ロゴは原画像のまま、図面枠だけ付ける */
+.archive-logo {
+  padding: 4px;
+  border: 1px solid rgba(128,220,255,.42);
+  outline: 1px solid rgba(128,220,255,.12);
+  outline-offset: 3px;
+}
+.mark {
+  padding: 3px;
+  border: 1px solid rgba(128,220,255,.32);
+}
+
+/* 大型モニター向け視認性 */
+@media (min-width: 1500px) {
+  .timeline-frame::before,
+  .timeline-frame::after,
+  .main-card::before {
+    font-size: 11px;
+  }
+  .event-grid > article::before {
+    font-size: 11px;
+  }
+}
+
+
+/* ============================================================
+   BLUEPRINT VER.2.1
+   下段4エリア・写真優先レイアウト
+   ============================================================ */
+
+.main-card {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+  gap: 10px !important;
+  grid-template-columns: minmax(360px, 1.05fr) minmax(0, 2.95fr) !important;
+}
+
+.main-card::before,
+.main-card::after {
+  display: none !important;
+}
+
+.main-card .left-panel {
+  padding: 12px !important;
+  min-width: 0;
+  border-right: 1px solid var(--bp-line);
+}
+
+.main-card .left-panel::before,
+.main-card .left-panel::after {
+  display: none !important;
+}
+
+.main-card .label {
+  margin: 0 0 4px !important;
+}
+
+.main-card .year-line {
+  padding: 4px 0 6px !important;
+  margin-bottom: 4px !important;
+}
+
+.main-card #selectedTitle {
+  margin: 4px 0 8px !important;
+}
+
+/* メイン写真を最優先 */
+.main-card .photo-link {
+  position: relative;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 310px !important;
+  padding: 8px !important;
+  box-sizing: border-box;
+}
+
+.main-card .photo-link::before,
+.main-card .photo-link::after {
+  display: none !important;
+}
+
+.main-card #mainPhoto {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 290px;
+  max-height: none !important;
+  object-fit: contain;
+}
+
+.main-card .photo-link > span {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  z-index: 3;
+  padding: 5px 9px;
+  background: rgba(2, 14, 28, 0.78);
+  border: 1px solid rgba(128,220,255,.32);
+  font-size: 12px;
+}
+
+/* 右側3カードの面積を維持 */
+.main-card .right-area {
+  min-width: 0;
+  padding: 0 !important;
+}
+
+.main-card .event-grid {
+  height: 100%;
+  gap: 10px !important;
+  grid-template-columns: repeat(3, minmax(250px, 1fr)) !important;
+}
+
+.main-card .event-grid::before,
+.main-card .event-grid::after {
+  display: none !important;
+}
+
+.main-card .event-grid > article {
+  min-width: 0;
+  min-height: 100%;
+  padding: 0 !important;
+}
+
+.main-card .event-grid > article::before {
+  padding: 7px 9px !important;
+  font-size: 9px !important;
+  line-height: 1.15;
+}
+
+.main-card .event-grid > article::after {
+  display: none !important;
+}
+
+/* NOTE装飾を削除 */
+.main-card .article-content::before {
+  display: none !important;
+  content: none !important;
+}
+
+.main-card .article-content {
+  padding: 8px !important;
+  height: calc(100% - 34px);
+  box-sizing: border-box;
+  overflow: auto;
+}
+
+/* 3カード内の画像を拡大 */
+.main-card .article-content img {
+  display: block;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 170px;
+  max-height: 240px !important;
+  margin: 0 0 8px !important;
+  padding: 0 !important;
+  object-fit: contain;
+  background: #fff;
+}
+
+.main-card .article-content p,
+.main-card .article-content ul,
+.main-card .article-content ol {
+  margin-top: 6px !important;
+  margin-bottom: 6px !important;
+}
+
+@media (min-width: 1400px) {
+  .main-card .photo-link {
+    min-height: 360px !important;
+  }
+
+  .main-card #mainPhoto {
+    min-height: 340px;
+  }
+
+  .main-card .article-content img {
+    min-height: 190px;
+    max-height: 270px !important;
+  }
+}
+
+@media (max-width: 1200px) {
+  .main-card {
+    grid-template-columns: minmax(320px, 1fr) minmax(760px, 3fr) !important;
+    overflow-x: auto;
+  }
+
+  .main-card .event-grid {
+    min-width: 760px;
+  }
+}
+
+
+/* ============================================================
+   BLUEPRINT VER.2.2
+   写真主役・CADワークスペース完成版
+   ============================================================ */
+
+/* 背景：CADワークスペースらしい補助線・円弧・基準マーク */
+body {
+  position: relative;
+  background:
+    radial-gradient(circle at 10% 18%, transparent 0 58px, rgba(88,216,255,.10) 59px 60px, transparent 61px),
+    radial-gradient(circle at 88% 76%, transparent 0 84px, rgba(88,216,255,.08) 85px 86px, transparent 87px),
+    linear-gradient(34deg, transparent 0 49.7%, rgba(88,216,255,.045) 50%, transparent 50.3%),
+    linear-gradient(124deg, transparent 0 49.7%, rgba(88,216,255,.035) 50%, transparent 50.3%),
+    linear-gradient(rgba(96,210,248,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(96,210,248,.035) 1px, transparent 1px),
+    linear-gradient(rgba(96,210,248,.085) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(96,210,248,.085) 1px, transparent 1px),
+    radial-gradient(circle at center, #082442 0%, #04172d 48%, #020d1b 100%) !important;
+  background-size:
+    420px 420px,
+    520px 520px,
+    700px 700px,
+    760px 760px,
+    8px 8px,
+    8px 8px,
+    40px 40px,
+    40px 40px,
+    auto !important;
+}
+
+/* 画面全体のCAD十字カーソル */
+body::after {
+  content: "";
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  width: 90px;
+  height: 90px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 0;
+  opacity: .07;
+  background:
+    linear-gradient(90deg, transparent 49%, var(--bp-cyan) 50%, transparent 51%),
+    linear-gradient(transparent 49%, var(--bp-cyan) 50%, transparent 51%);
+}
+
+/* ヘッダーを整理。過剰な文字を削除 */
+.title-area::before {
+  content: "PROJECT / TAKAOKA PLANT TIMELINE";
+}
+.title-area::after {
+  content: "TAKAOKA PLANT 60th ANNIVERSARY / 1966-2026";
+}
+.header-actions::before {
+  content: "CONTROL PANEL";
+}
+
+/* 年表全体の高さを約20%削減 */
+.timeline-frame {
+  padding-top: 26px !important;
+  padding-bottom: 22px !important;
+  min-height: 0 !important;
+}
+
+.timeline-frame::before {
+  content: "TIMELINE / 1966-2026";
+  top: 8px;
+  padding-bottom: 4px;
+}
+
+.timeline-frame::after {
+  content: "PAST  ←────────────  60 YEARS  ────────────→  FUTURE";
+  bottom: 6px;
+  padding-top: 4px;
+}
+
+/* 年代カード：情報を年度・元号・タイトルに限定 */
+.year-node {
+  min-height: 112px !important;
+  padding: 10px 8px !important;
+  overflow: hidden !important;
+}
+
+.year-node .wheel {
+  margin-top: 12px !important;
+  min-height: 42px !important;
+  border-top: 0 !important;
+  border-bottom: 1px solid rgba(128,220,255,.20) !important;
+}
+
+.year-node .wheel::after {
+  display: none !important;
+}
+
+.year-node .wheel strong {
+  font-size: clamp(22px, 1.8vw, 30px) !important;
+  line-height: 1 !important;
+}
+
+.year-node .wheel + *::before {
+  display: none !important;
+  content: none !important;
+}
+
+.year-node > small:last-child::after {
+  display: none !important;
+  content: none !important;
+}
+
+.year-node > span,
+.year-node > small,
+.year-node > p {
+  margin-top: 3px !important;
+  margin-bottom: 0 !important;
+  line-height: 1.15 !important;
+}
+
+/* 重なっていたDWG YEAR等を完全削除 */
+.year-node [class*="dwg"],
+.year-node [data-label*="DWG"] {
+  display: none !important;
+}
+
+/* RUN-CARの装飾は最小限 */
+.drive-stage::before {
+  content: "RUN-CAR VIEW";
+  top: 8px;
+  left: 10px;
+  font-size: 8px;
+  padding: 3px 6px;
+}
+
+/* 下段4エリアを均等化し、写真を主役に */
+.main-card {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  align-items: stretch !important;
+  gap: 10px !important;
+  padding: 10px !important;
+  min-height: 420px;
+}
+
+/* 既存の2カラム構造を4カラムへ展開 */
+.main-card .left-panel {
+  grid-column: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 10px !important;
+}
+
+.main-card .right-area {
+  grid-column: 2 / 5;
+  min-width: 0;
+  padding: 0 !important;
+}
+
+.main-card .event-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  height: 100%;
+  gap: 10px !important;
+}
+
+/* 年度・タイトルを圧縮 */
+.main-card .label {
+  font-size: 9px !important;
+  margin: 0 0 2px !important;
+}
+
+.main-card .year-line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 2px 0 4px !important;
+  margin: 0 0 3px !important;
+}
+
+.main-card .big-year {
+  font-size: clamp(38px, 4vw, 62px) !important;
+  line-height: .95 !important;
+}
+
+.main-card .era-badge {
+  flex: 0 0 auto;
+  font-size: 10px !important;
+  padding: 4px 7px !important;
+}
+
+.main-card #selectedTitle {
+  font-size: clamp(18px, 1.5vw, 26px) !important;
+  margin: 3px 0 7px !important;
+  line-height: 1.1 !important;
+}
+
+/* メイン写真はカード面積の大半を占める */
+.main-card .photo-link {
+  flex: 1 1 auto;
+  min-height: 320px !important;
+  height: auto !important;
+  padding: 8px !important;
+  margin: 0 !important;
+}
+
+.main-card #mainPhoto {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 300px !important;
+  max-height: none !important;
+  object-fit: contain !important;
+}
+
+/* 右3カード：写真優先、見出し最小限 */
+.main-card .event-grid > article {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 100%;
+  overflow: hidden;
+}
+
+.main-card .event-grid > article::before {
+  flex: 0 0 auto;
+  padding: 7px 9px !important;
+  font-size: 9px !important;
+  line-height: 1.1 !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* NOTEなど装飾は完全削除 */
+.main-card .article-content::before,
+.main-card .article-content::after,
+.main-card .event-grid::before,
+.main-card .event-grid::after,
+.main-card .event-grid > article::after {
+  display: none !important;
+  content: none !important;
+}
+
+.main-card .article-content {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: auto !important;
+  min-height: 0;
+  padding: 8px !important;
+  overflow-y: auto;
+}
+
+/* 右3カードの画像サイズを統一 */
+.main-card .article-content img {
+  display: block;
+  width: 100% !important;
+  height: 190px !important;
+  min-height: 190px !important;
+  max-height: 190px !important;
+  margin: 0 !important;
+  object-fit: contain !important;
+  background: #fff;
+}
+
+/* 画像欠落メッセージを小型化 */
+.main-card .article-content > p:first-child,
+.main-card .article-content .image-error,
+.main-card .article-content [class*="error"] {
+  font-size: 10px !important;
+  line-height: 1.2 !important;
+  padding: 5px 7px !important;
+  margin: 0 !important;
+  border-radius: 4px !important;
+  opacity: .75;
+}
+
+/* 本文は残すが写真を圧迫しない */
+.main-card .article-content p,
+.main-card .article-content li {
+  font-size: 13px !important;
+  line-height: 1.45 !important;
+}
+
+.main-card .article-content ul,
+.main-card .article-content ol {
+  margin: 4px 0 !important;
+  padding-left: 18px !important;
+}
+
+/* 大型画面 */
+@media (min-width: 1500px) {
+  .main-card {
+    min-height: 470px;
+  }
+
+  .main-card .photo-link {
+    min-height: 370px !important;
+  }
+
+  .main-card #mainPhoto {
+    min-height: 350px !important;
+  }
+
+  .main-card .article-content img {
+    height: 215px !important;
+    min-height: 215px !important;
+    max-height: 215px !important;
+  }
+}
+
+/* 幅が狭い場合も4エリアを潰さず横スクロール */
+@media (max-width: 1180px) {
+  .main-card {
+    grid-template-columns: repeat(4, minmax(280px, 1fr)) !important;
+    overflow-x: auto;
+  }
+
+  .main-card .right-area {
+    min-width: 870px;
+  }
+}
+
+
+/* Header compact patch */
+.title-area::before{display:none!important;content:none!important;}
+.title-area{padding-top:4px!important;padding-bottom:4px!important;min-height:auto!important;}
+.header,.page-header,.header-area{padding-top:4px!important;padding-bottom:4px!important;min-height:auto!important;}
+.timeline-frame{margin-top:0!important;padding-top:8px!important;}
+.timeline-frame::before{top:2px!important;}
+.main-card{margin-top:8px!important;min-height:500px!important;}

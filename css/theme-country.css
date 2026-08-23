@@ -1,0 +1,377 @@
+/* =========================================================
+   DESIGN THEME: COUNTRY - WESTERN & ROUGH WOOD EDITION (FIXED v3)
+   荒野のウェスタン・ロード、板張り、鉄のボルト留め仕様（完全修正版）
+   - run-carエリアの釘を完全に排除
+   - ヘッダーの文字はみ出しを確実に解消（コンパクト化）
+   - 下段コンテナの紹介文サイズを強制縮小（Excel設定の影響を完全に回避）
+   ========================================================= */
+
+:root{
+  --bg:#1f1611;
+  --bg2:#140e0a;
+  --panel:rgba(247, 240, 227, 0.95);
+  --panel2:rgba(235, 224, 204, 0.92);
+  --line:rgba(166, 105, 52, 0.45);
+  --line2:rgba(204, 115, 38, 0.7);
+  --text:#261d15;
+  --soft:#4a382b;
+  --muted:#7a624d;
+  --gold:#c27827;
+  --gold2:#e69533;
+  --red:#a83c2a;
+  --shadow:0 22px 55px rgba(10, 7, 5, 0.65);
+  --excel-content-font-size: 13px !important;
+  --excel-title-font-size: 24px !important;
+}
+
+html{
+  background:#140e0a;
+}
+
+body{
+  color:var(--text);
+  font-family:"American Typewriter", "Georgia", "Courier New", serif;
+  background:
+    radial-gradient(circle at 10% 15%, rgba(204, 115, 38, 0.22), transparent 40%),
+    radial-gradient(circle at 90% 85%, rgba(41, 115, 117, 0.18), transparent 45%),
+    linear-gradient(180deg, #2e2118 0%, #1f1611 50%, #100b08 100%);
+}
+
+/* 荒野の砂塵エフェクト */
+body::before{
+  background:
+    radial-gradient(circle at 15% 25%, rgba(255,255,255,.35) 0 1.5px, transparent 2px),
+    radial-gradient(circle at 85% 20%, rgba(255,230,180,.3) 0 2px, transparent 2.5px),
+    repeating-linear-gradient(30deg, rgba(194,120,39,.04) 0 1px, transparent 1px 16px);
+  background-size:260px 260px, 320px 320px, auto;
+  opacity:.45;
+  animation:countryDust 25s ease-in-out infinite alternate;
+}
+
+@keyframes countryDust{
+  from{ transform:translate3d(-12px, -6px, 0); }
+  to{ transform:translate3d(14px, 10px, 0); }
+}
+
+.page{
+  width:min(1500px, calc(100% - 32px));
+}
+
+/* =========================================================
+   共通：四隅を金属ボルト（釘）で留めた木板パネル風
+   ========================================================= */
+.header,
+.timeline-frame,
+.left-panel,
+.visual-title-box,
+.event-grid article,
+.editor-panel{
+  position: relative;
+  border-color: rgba(166, 105, 52, 0.6);
+  background:
+    linear-gradient(180deg, rgba(250, 243, 230, 0.96) 0%, rgba(237, 224, 202, 0.94) 100%);
+  box-shadow:
+    0 16px 40px rgba(10, 7, 5, 0.5),
+    inset 0 0 0 2px rgba(255, 255, 255, 0.7),
+    inset 0 0 25px rgba(194, 120, 39, 0.12);
+  border-radius: 14px;
+}
+
+/* コンテナの四隅に打たれた「黒鉄のボルト（釘）」 */
+.header::before,
+.header::after,
+.timeline-frame::before,
+.timeline-frame::after,
+.left-panel::before,
+.left-panel::after,
+.visual-title-box::before,
+.visual-title-box::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #555, #111);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.8), inset 0 1px 1px rgba(255,255,255,0.3);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.header::before { top: 8px; left: 8px; }
+.header::after { top: 8px; right: 8px; }
+.timeline-frame::before { top: 10px; left: 10px; }
+.timeline-frame::after { top: 10px; right: 10px; }
+.left-panel::before { top: 12px; left: 12px; }
+.left-panel::after { top: 12px; right: 12px; }
+.visual-title-box::before { top: 10px; left: 10px; }
+.visual-title-box::after { top: 10px; right: 10px; }
+
+
+/* =========================================================
+   ヘッダー：西部の酒場・ロードサイドの看板風（文字はみ出し完全解消）
+   ========================================================= */
+.header{
+  border: 3px double rgba(166, 105, 52, 0.8);
+  background: linear-gradient(135deg, #f7efe2 0%, #e3d0ad 100%);
+  box-shadow: 0 20px 45px rgba(0,0,0,0.6), inset 0 0 20px rgba(194,120,39,0.2);
+  padding: 12px 16px !important;
+}
+
+.title-area{
+  gap: 10px !important;
+}
+
+.title-area::after{
+  display: none !important; /* はみ出しの原因になる中央の光線を消去 */
+}
+
+.mark,
+.toyota-mark{
+  width: 60px !important;
+  height: 38px !important;
+  border-radius: 8px;
+  border: 2px solid var(--gold);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+h1{
+  color: #261d15 !important;
+  font-family: "American Typewriter", Georgia, serif !important;
+  font-size: clamp(15px, 1.8vw, 24px) !important;
+  line-height: 1.15 !important;
+  letter-spacing: .02em !important;
+  text-shadow: 0 1px 2px rgba(255,255,255,0.9) !important;
+  white-space: nowrap !important;
+}
+
+h1 span{
+  display: block !important;
+  color: var(--red) !important;
+  letter-spacing: .1em !important;
+  font-weight: bold !important;
+  font-size: 0.45em !important;
+  margin-bottom: 2px !important;
+}
+
+.header-actions{
+  gap: 8px !important;
+}
+
+/* ボタン・コントロール：ヴィンテージの木製・金属プレート風 */
+.speed-button,
+.control-button,
+.editor-buttons button,
+.header-uploader summary{
+  color: #3b2e23;
+  border: 2px solid rgba(166, 105, 52, 0.6);
+  border-radius: 8px;
+  background: linear-gradient(180deg, #fbf7ee, #d9c4a3);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.8);
+  font-family: "American Typewriter", serif;
+  font-weight: bold;
+  font-size: 12px !important;
+  padding: 6px 10px !important;
+  min-height: 32px !important;
+}
+
+.speed-button:hover,
+.control-button:hover,
+.speed-button.active,
+.control-button.active,
+.editor-buttons button:hover{
+  color: #140e0a;
+  border-color: var(--gold2);
+  background: linear-gradient(180deg, #fff4df, #c99c58);
+  box-shadow: 0 0 15px rgba(230,149,51,0.5);
+}
+
+.archive-logo{
+  width: 72px !important;
+  height: 72px !important;
+  border-radius: 8px;
+  border: 2px solid var(--gold);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+
+/* =========================================================
+   年表フレーム＆タイムライン
+   ========================================================= */
+.timeline-frame{
+  border: 3px solid rgba(166, 105, 52, 0.7);
+  background: 
+    radial-gradient(circle at 50% 50%, rgba(194,120,39,0.15), transparent 70%),
+    linear-gradient(180deg, #241a13 0%, #150f0b 100%);
+}
+
+.center-line{
+  width: 4px;
+  background: linear-gradient(180deg, transparent, var(--gold2), #fff, var(--gold2), transparent);
+  box-shadow: 0 0 12px var(--gold2);
+}
+
+.year-node{
+  border: 2px solid rgba(166, 105, 52, 0.6);
+  border-radius: 10px;
+  color: #261d15;
+  background: linear-gradient(135deg, #fef9ef, #d6c1a0);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.4), inset 0 0 10px rgba(255,255,255,0.6);
+}
+
+.year-node.active{
+  border-color: #fff;
+  background: linear-gradient(135deg, #fff4df, #d49a45);
+  box-shadow: 0 0 22px rgba(230,149,51,0.8), 0 8px 22px rgba(0,0,0,0.5);
+  transform: scale(1.06);
+}
+
+.year-node .era,
+.year-node .wheel strong{
+  color: #261d15;
+}
+
+.node-photo{
+  border-radius: 6px;
+  border: 1px solid rgba(166, 105, 52, 0.5);
+  background: #1f1611;
+}
+
+.pause-note{
+  color: rgba(255,255,255,0.8);
+}
+
+
+/* =========================================================
+   一番下の背景：板を打ち付けたようなウエスタン・ウッドステージ（釘完全に排除）
+   ========================================================= */
+.drive-stage{
+  position: relative;
+  border: 3px solid rgba(166, 105, 52, 0.8) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.7), inset 0 0 30px rgba(0,0,0,0.8) !important;
+  background: 
+    repeating-linear-gradient(
+      180deg,
+      transparent 0px,
+      transparent 32px,
+      rgba(10, 7, 5, 0.85) 33px,
+      rgba(10, 7, 5, 0.85) 35px
+    ),
+    linear-gradient(
+      180deg,
+      #3d2a1d 0%,
+      #2b1c12 32px,
+      #352418 33px,
+      #24180f 65px,
+      #302015 66px,
+      #1f140c 100%
+    ) !important;
+}
+
+/* 釘を完全に削除（強制打ち消し） */
+.drive-stage::before,
+.drive-stage::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+
+/* =========================================================
+   メインカード＆下段コンテナ（紹介文サイズを強制縮小）
+   ========================================================= */
+.left-panel{
+  border-radius: 16px;
+  border: 2px solid rgba(166, 105, 52, 0.6);
+}
+
+.label{
+  color: var(--gold2);
+  font-weight: bold;
+  letter-spacing: .2em;
+}
+
+.big-year{
+  color: #261d15;
+  text-shadow: 0 2px 4px rgba(255,255,255,0.8), 0 0 20px rgba(194,120,39,0.4);
+}
+
+.era-badge{
+  color: #261d15;
+  border: 1px solid var(--gold);
+  background: rgba(194, 120, 39, 0.2);
+  font-weight: bold;
+}
+
+.photo-link{
+  border: 2px solid rgba(166, 105, 52, 0.7);
+  border-radius: 12px;
+  background: #140e0a;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
+}
+
+.photo-link span{
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.4);
+  background: rgba(0,0,0,0.8);
+  font-family: "American Typewriter", serif;
+}
+
+.event-grid article{
+  border: 2px solid rgba(166, 105, 52, 0.6);
+  border-radius: 16px;
+  position: relative;
+}
+
+.event-grid article::before,
+.event-grid article::after {
+  content: "";
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #555, #111);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.8);
+  z-index: 10;
+  pointer-events: none;
+}
+.event-grid article::before { top: 8px; left: 8px; }
+.event-grid article::after { top: 8px; right: 8px; }
+
+/* 下段コンテナの紹介文サイズを強制的に 12px〜13px にスリム化（Excel設定の22px等を完全上書き） */
+.content-text{
+  color: #261d15 !important;
+  font-size: 12.5px !important;
+  line-height: 1.4 !important;
+}
+
+.image-block{
+  border: 1px solid rgba(166, 105, 52, 0.5);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.7);
+}
+
+.image-block figcaption,
+.editor-panel small,
+.editor-note{
+  color: #634d3c;
+}
+
+input,
+select,
+textarea{
+  color: #261d15;
+  border: 1px solid rgba(166, 105, 52, 0.7);
+  border-radius: 6px;
+  background: rgba(255,252,245,0.95);
+}
+
+.opening-start-button{
+  border: 2px solid var(--gold2);
+  color: #fff;
+  background: linear-gradient(90deg, #964b18, #1a4f52);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  font-family: "American Typewriter", serif;
+}

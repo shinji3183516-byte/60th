@@ -1,0 +1,4250 @@
+/* =========================================================
+   高岡工場 60th Anniversary Timeline
+   黒背景・白文字 強調版 CSS
+   ※ JSの光の流れ・車の走行アクションは変更不要
+   ※ このファイルを style.css として使ってください
+   ========================================================= */
+
+:root{
+  --bg:#000;
+  --bg2:#050505;
+  --panel:rgba(8,10,14,.88);
+  --panel2:rgba(0,0,0,.76);
+  --line:rgba(255,255,255,.16);
+  --line2:rgba(218,178,78,.38);
+  --text:#fff;
+  --soft:#e9edf4;
+  --muted:#aeb6c4;
+  --gold:#dab24e;
+  --gold2:#f7d879;
+  --red:#d71920;
+  --shadow:0 18px 46px rgba(0,0,0,.62);
+  --runner-width:clamp(160px, 15vw, 260px);
+  --rav4-top:24px;
+  /* ヘッドライトだけの高さ。JS側の lightTop で車種ごとに上書きします。 */
+  --runner-light-top:48%;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  min-height:100%;
+  background:#000;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--text);
+  font-family:"Segoe UI", "Noto Sans JP", system-ui, sans-serif;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(85,85,85,.22), transparent 34%),
+    radial-gradient(circle at 12% 22%, rgba(218,178,78,.13), transparent 32%),
+    linear-gradient(180deg, #070707 0%, #000 48%, #020202 100%);
+  overflow-x:hidden;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg, transparent, rgba(255,255,255,.035), transparent),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.025) 0 1px, transparent 1px 120px);
+  opacity:.55;
+  animation:bgFlow 12s linear infinite;
+}
+
+@keyframes bgFlow{
+  from{ transform:translateX(-120px); }
+  to{ transform:translateX(120px); }
+}
+
+button,
+input,
+select,
+textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+img{
+  max-width:100%;
+  display:block;
+}
+
+.page{
+  width:min(1500px, calc(100% - 32px));
+  margin:0 auto;
+  padding:24px 0 36px;
+}
+
+.header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  margin-bottom:18px;
+  padding:16px 18px;
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:22px;
+  background:linear-gradient(135deg, rgba(12,12,12,.94), rgba(0,0,0,.82));
+  box-shadow:var(--shadow), inset 0 0 30px rgba(218,178,78,.06);
+}
+
+.title-area{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  min-width:0;
+  overflow:hidden;
+  border-radius:14px;
+}
+
+/* トヨタマークから右へ流れるゴールドの光 */
+.title-area::after{
+  content:"";
+  position:absolute;
+  left:74px;
+  top:50%;
+  width:46%;
+  height:2px;
+  pointer-events:none;
+  border-radius:999px;
+  background:linear-gradient(90deg,
+    rgba(247,216,121,0),
+    rgba(247,216,121,.95),
+    rgba(255,255,255,.72),
+    rgba(247,216,121,0)
+  );
+  box-shadow:
+    0 0 8px rgba(247,216,121,.95),
+    0 0 18px rgba(218,178,78,.62);
+  transform:translateY(-50%) translateX(-105%);
+  animation:toyotaGoldFlow 4.2s linear infinite;
+  z-index:1;
+}
+
+.title-area > *{
+  position:relative;
+  z-index:2;
+}
+
+@keyframes toyotaGoldFlow{
+  0%{ transform:translateY(-50%) translateX(-115%); opacity:0; }
+  12%{ opacity:1; }
+  72%{ opacity:1; }
+  100%{ transform:translateY(-50%) translateX(235%); opacity:0; }
+}
+
+.mark,
+.toyota-mark{
+  width:78px;
+  height:48px;
+  object-fit:cover;
+  object-position:center;
+  flex:0 0 auto;
+  border:1px solid rgba(255,255,255,.35);
+  border-radius:8px;
+  background:#fff;
+  box-shadow:0 0 0 1px rgba(216,183,106,.22), 0 12px 28px rgba(0,0,0,.45);
+}
+
+h1{
+  margin:0;
+  font-size:clamp(22px, 3vw, 46px);
+  line-height:1.02;
+  letter-spacing:.04em;
+  color:#fff;
+  text-shadow:0 0 10px rgba(255,255,255,.3), 0 0 24px rgba(218,178,78,.22);
+}
+
+h1 span{
+  display:block;
+  margin-bottom:4px;
+  color:var(--gold2);
+  font-size:.46em;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+
+.header-actions{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+.speed-control,
+.play-control{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.speed-button,
+.control-button,
+.editor-buttons button{
+  min-height:36px;
+  padding:8px 14px;
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:999px;
+  color:#fff;
+  background:linear-gradient(180deg, rgba(35,35,35,.94), rgba(0,0,0,.9));
+  box-shadow:inset 0 0 16px rgba(255,255,255,.04), 0 8px 20px rgba(0,0,0,.35);
+}
+
+.speed-button.active,
+.control-button.active,
+.editor-buttons button:hover{
+  border-color:rgba(247,216,121,.72);
+  color:#fff;
+  box-shadow:0 0 18px rgba(218,178,78,.28), inset 0 0 14px rgba(218,178,78,.12);
+}
+
+.archive-logo{
+  width:92px;
+  height:92px;
+  object-fit:contain;
+  border-radius:16px;
+  background:rgba(255,255,255,.05);
+  box-shadow:0 0 20px rgba(218,178,78,.2);
+}
+
+.timeline-frame{
+  position:relative;
+  height:178px;
+  overflow:hidden;
+  margin-bottom:18px;
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:24px;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.94), rgba(4,4,4,.94)),
+    radial-gradient(circle at center, rgba(218,178,78,.16), transparent 50%);
+  box-shadow:var(--shadow), inset 0 0 42px rgba(255,255,255,.035);
+}
+
+.timeline-frame::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(90deg, transparent 0%, rgba(255,255,255,.14) 48%, transparent 56%);
+  opacity:.42;
+  animation:lightSweep 5.2s linear infinite;
+}
+
+@keyframes lightSweep{
+  from{ transform:translateX(-100%); }
+  to{ transform:translateX(100%); }
+}
+
+.center-line{
+  position:absolute;
+  left:50%;
+  top:12px;
+  bottom:34px;
+  width:2px;
+  transform:translateX(-50%);
+  background:linear-gradient(180deg, transparent, var(--gold2), transparent);
+  box-shadow:0 0 18px rgba(247,216,121,.75);
+  z-index:4;
+}
+
+.track-mask{
+  position:absolute;
+  inset:18px 18px 42px;
+  overflow:hidden;
+}
+
+.timeline-track{
+  position:absolute;
+  left:0;
+  top:0;
+  display:flex;
+  align-items:flex-start;
+  gap:18px;
+  height:112px;
+  will-change:transform;
+}
+
+.year-node{
+  position:relative;
+  display:grid;
+  grid-template-rows:auto 44px 52px;
+  justify-items:center;
+  align-items:center;
+  flex:0 0 122px;
+  width:122px;
+  height:112px;
+  padding:7px 8px;
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:18px;
+  color:#fff;
+  background:linear-gradient(180deg, rgba(28,28,28,.92), rgba(0,0,0,.94));
+  box-shadow:0 8px 24px rgba(0,0,0,.46), inset 0 0 18px rgba(255,255,255,.04);
+}
+
+.year-node.active{
+  border-color:rgba(247,216,121,.75);
+  box-shadow:0 0 24px rgba(218,178,78,.36), inset 0 0 18px rgba(218,178,78,.12);
+}
+
+.year-node .era{
+  color:#d9dfeb;
+  font-size:12px;
+  line-height:1.1;
+}
+
+.year-node .wheel{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  color:#fff;
+}
+
+.year-node .wheel strong{
+  display:block;
+  max-width:100%;
+  color:#fff;
+  font-size:clamp(16px, 1.4vw, 22px);
+  line-height:1;
+  white-space:normal;
+  text-align:center;
+  overflow-wrap:anywhere;
+  text-shadow:0 0 8px rgba(255,255,255,.35);
+}
+
+.node-photo{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:86px;
+  height:46px;
+  border-radius:10px;
+  overflow:hidden;
+  background:rgba(255,255,255,.06);
+  color:rgba(255,255,255,.58);
+  font-size:10px;
+}
+
+.node-photo img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.pause-note{
+  position:absolute;
+  left:50%;
+  bottom:9px;
+  transform:translateX(-50%);
+  margin:0;
+  width:max-content;
+  max-width:calc(100% - 32px);
+  color:rgba(255,255,255,.78);
+  font-size:13px;
+  text-align:center;
+  z-index:5;
+}
+
+.main-card{
+  display:grid;
+  grid-template-columns:minmax(310px, .86fr) minmax(520px, 1.6fr);
+  gap:18px;
+  align-items:stretch;
+}
+
+.left-panel,
+.right-area{
+  min-width:0;
+}
+
+.left-panel{
+  padding:20px;
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:24px;
+  background:linear-gradient(180deg, rgba(10,10,10,.94), rgba(0,0,0,.88));
+  box-shadow:var(--shadow), inset 0 0 42px rgba(218,178,78,.06);
+}
+
+.label{
+  margin:0 0 8px;
+  color:var(--gold2);
+  font-size:12px;
+  letter-spacing:.18em;
+}
+
+.year-line{
+  display:flex;
+  align-items:flex-end;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom:8px;
+}
+
+.big-year{
+  color:#fff;
+  font-size:clamp(38px, 6vw, 86px);
+  font-weight:800;
+  line-height:.88;
+  letter-spacing:-.04em;
+  text-shadow:0 0 18px rgba(255,255,255,.38), 0 0 34px rgba(218,178,78,.22);
+}
+
+.era-badge{
+  display:inline-flex;
+  align-items:center;
+  min-height:30px;
+  padding:5px 10px;
+  border:1px solid rgba(247,216,121,.5);
+  border-radius:999px;
+  color:#fff;
+  background:rgba(218,178,78,.12);
+  font-size:14px;
+}
+
+#selectedTitle{
+  margin:6px 0 16px;
+  color:#fff;
+  font-size:clamp(22px, 2.1vw, 34px);
+  line-height:1.15;
+  text-shadow:0 0 12px rgba(255,255,255,.25);
+}
+
+.photo-link{
+  position:relative;
+  display:block;
+  width:100%;
+  min-height:320px;
+  padding:0;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:20px;
+  overflow:hidden;
+  color:#fff;
+  background:rgba(0,0,0,.78);
+  box-shadow:inset 0 0 32px rgba(255,255,255,.04);
+}
+
+.photo-link img{
+  width:100%;
+  height:100%;
+  min-height:320px;
+  object-fit:contain;
+}
+
+.photo-link span{
+  position:absolute;
+  right:12px;
+  bottom:12px;
+  padding:7px 12px;
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:999px;
+  background:rgba(0,0,0,.7);
+  color:#fff;
+  font-size:13px;
+}
+
+.photo-link.empty::before{
+  content:attr(data-placeholder);
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:rgba(255,255,255,.72);
+}
+
+.right-area{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.visual-title-box{
+  position:relative;
+  overflow:hidden;
+  min-height:104px;
+  padding:16px 18px;
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:24px;
+  background:linear-gradient(135deg, rgba(10,10,10,.96), rgba(0,0,0,.9));
+  box-shadow:var(--shadow), inset 0 0 30px rgba(218,178,78,.06);
+}
+
+.visual-title-box::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(100deg, transparent, rgba(255,255,255,.18), transparent);
+  transform:translateX(-120%);
+  animation:visualSweep 4.8s linear infinite;
+}
+
+@keyframes visualSweep{
+  to{ transform:translateX(120%); }
+}
+
+#visualTitle{
+  color:#fff;
+  font-size:clamp(34px, 5vw, 76px);
+  font-weight:900;
+  line-height:.9;
+  letter-spacing:.04em;
+  text-shadow:0 0 18px rgba(255,255,255,.4), 0 0 30px rgba(218,178,78,.24);
+}
+
+.visual-title-box p{
+  margin:8px 0 0;
+  color:rgba(255,255,255,.76);
+}
+
+.luxury-rotate{
+  animation:luxuryPulse .75s ease;
+}
+
+@keyframes luxuryPulse{
+  0%{ box-shadow:var(--shadow), inset 0 0 18px rgba(218,178,78,.04); }
+  50%{ box-shadow:0 0 34px rgba(218,178,78,.28), var(--shadow); }
+  100%{ box-shadow:var(--shadow), inset 0 0 30px rgba(218,178,78,.06); }
+}
+
+.editor-panel{
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:18px;
+  background:rgba(0,0,0,.64);
+  color:#fff;
+  overflow:hidden;
+}
+
+.editor-panel summary{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:12px 14px;
+  cursor:pointer;
+}
+
+.editor-panel small{
+  color:rgba(255,255,255,.68);
+}
+
+.editor-grid{
+  display:grid;
+  grid-template-columns:180px 1fr;
+  gap:12px;
+  padding:0 14px 14px;
+}
+
+.editor-grid label{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  color:rgba(255,255,255,.82);
+  font-size:13px;
+}
+
+.editor-text-label{
+  grid-column:1 / -1;
+}
+
+.editor-buttons{
+  grid-column:1 / -1;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.editor-note{
+  margin:0;
+  padding:0 14px 14px;
+  color:rgba(255,255,255,.62);
+  font-size:12px;
+}
+
+input,
+select,
+textarea{
+  width:100%;
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:12px;
+  color:#fff;
+  background:rgba(0,0,0,.76);
+  padding:9px 10px;
+}
+
+textarea{
+  resize:vertical;
+}
+
+.event-grid{
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0, 1fr));
+  gap:14px;
+}
+
+.event-grid article{
+  min-width:0;
+  min-height:360px;
+  padding:14px;
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:22px;
+  background:linear-gradient(180deg, rgba(9,9,9,.92), rgba(0,0,0,.86));
+  box-shadow:0 14px 34px rgba(0,0,0,.48), inset 0 0 24px rgba(255,255,255,.035);
+}
+
+.article-content{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.content-text{
+  margin:0;
+  color:#f2f5fa;
+  font-size:clamp(14px, .95vw, 16px);
+  line-height:1.72;
+  text-shadow:0 1px 2px rgba(0,0,0,.7);
+}
+
+.empty-content{
+  color:rgba(255,255,255,.56);
+}
+
+.image-block{
+  margin:0;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:16px;
+  background:rgba(255,255,255,.05);
+}
+
+.info-photo{
+  width:100%;
+  height:auto;
+  object-fit:cover;
+}
+
+.image-block figcaption{
+  padding:6px 8px;
+  color:rgba(255,255,255,.68);
+  font-size:12px;
+}
+
+.image-missing{
+  padding:12px;
+  color:#fff;
+  font-size:12px;
+}
+
+/* ===== 車走行アニメーション：JSのクラスに合わせる ===== */
+.rav4-runner{
+  --runner-stop-gap:10px;
+  position:absolute;
+  z-index:6;
+  top:var(--rav4-top);
+  /* 年表コンテナの中央線を基準に走行・停止します */
+  left:50%;
+  width:var(--runner-width);
+  max-width:260px;
+  pointer-events:none;
+  transform:translateX(calc(50vw + 180px));
+  opacity:0;
+}
+
+.rav4-runner img{
+  width:100%;
+  height:auto;
+  filter:drop-shadow(0 18px 18px rgba(0,0,0,.55));
+}
+
+/* ヘッドライトの光。
+   topは固定値ではなく、--runner-light-top を使います。
+   JSの ERA_RUNNER_CARS にある lightTop を変えると、ライトだけ上下します。 */
+.rav4-speed-light{
+  position:absolute;
+  top:var(--runner-light-top, 48%);
+  right:68%;
+  width:150px;
+  height:14px;
+  border-radius:999px;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,.62), transparent);
+  filter:blur(3px);
+  opacity:.8;
+}
+
+.rav4-runner.is-running{
+  animation:runnerPass 4s ease-in-out both;
+}
+
+@keyframes runnerPass{
+  /* left:50% を基準にするため、停止時の -50% で車画像の中心が中央線に一致します */
+  0%{ transform:translateX(calc(50vw + 190px)); opacity:0; }
+  8%{ opacity:1; }
+  /* 車は右から左へ走るため、車体の左端（進行方向の先端）を
+     センター線の少し手前で停止させます。 */
+  43%{ transform:translateX(calc(var(--runner-stop-gap, 10px) + var(--runner-stop-offset, 0px))); opacity:1; }
+  55.5%{ transform:translateX(calc(var(--runner-stop-gap, 10px) + var(--runner-stop-offset, 0px))); opacity:1; }
+  88%{ opacity:1; }
+  100%{ transform:translateX(calc(-50vw - 100% - 210px)); opacity:0; }
+}
+
+.all-cars-parade{
+  position:absolute;
+  inset:0;
+  z-index:7;
+  pointer-events:none;
+  overflow:hidden;
+}
+
+.all-cars-parade__car{
+  position:absolute;
+  top:var(--parade-lane);
+  left:0;
+  width:var(--parade-width);
+  opacity:0;
+  transform:translateX(calc(100vw + 260px));
+  animation:paradePass 4.5s ease-in-out var(--parade-delay) both;
+}
+
+.all-cars-parade__car img{
+  width:60%;
+  height:auto;
+  filter:drop-shadow(0 18px 18px rgba(0,0,0,.55));
+}
+
+@keyframes paradePass{
+  0%{ transform:translateX(calc(100vw + 260px)); opacity:0; }
+  9%{ opacity:1; }
+  42%{ transform:translateX(calc(50vw - 50%)); opacity:1; }
+  53.1%{ transform:translateX(calc(50vw - 50%)); opacity:1; }
+  86%{ opacity:1; }
+  100%{ transform:translateX(-420px); opacity:0; }
+}
+
+@media (max-width:1100px){
+  .header{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .header-actions{
+    justify-content:flex-start;
+  }
+
+  .main-card{
+    grid-template-columns:1fr;
+  }
+
+  .event-grid{
+    grid-template-columns:1fr;
+  }
+
+  .photo-link,
+  .photo-link img{
+    min-height:260px;
+  }
+}
+
+@media (max-width:640px){
+  .page{
+    width:min(100% - 20px, 1500px);
+    padding-top:12px;
+  }
+
+  .title-area{
+    align-items:flex-start;
+  }
+
+  .mark,
+  .toyota-mark{
+    width:58px;
+    height:38px;
+  }
+
+  .archive-logo{
+    width:72px;
+    height:72px;
+  }
+
+  .speed-control,
+  .play-control{
+    width:100%;
+    flex-wrap:wrap;
+  }
+
+  .timeline-frame{
+    height:164px;
+  }
+
+  .year-node{
+    flex-basis:108px;
+    width:108px;
+  }
+
+  .editor-grid{
+    grid-template-columns:1fr;
+  }
+}
+/* トヨタマークから右へ流れるゴールド光を太く・広く戻す */
+.header{
+  position: relative;
+  overflow: hidden;
+}
+
+.header::after{
+  content: "";
+  position: absolute;
+  left: 90px;
+  right: 0;
+  top: 50%;
+  height: 80px;
+  transform: translateY(-50%);
+  pointer-events: none;
+
+  background: linear-gradient(
+    90deg,
+    rgba(218,178,78,0),
+    rgba(218,178,78,.18),
+    rgba(255,230,150,.45),
+    rgba(218,178,78,.18),
+    rgba(218,178,78,0)
+  );
+
+  filter: blur(18px);
+  opacity: .95;
+  animation: headerGoldFlow 4.8s linear infinite;
+}
+
+@keyframes headerGoldFlow{
+  0%{
+    transform: translate(-100%, -50%);
+  }
+  100%{
+    transform: translate(100%, -50%);
+  }
+}
+/* センター選択中の年表カードをコンテナごと光らせる */
+.year-node.is-active,
+.year-node.active,
+.year-node.selected {
+  background:
+    radial-gradient(circle at center,
+      rgba(255, 230, 150, 0.38),
+      rgba(255, 190, 60, 0.18) 45%,
+      rgba(0, 0, 0, 0.85) 100%);
+  box-shadow:
+    0 0 25px rgba(255, 210, 90, 0.65),
+    0 0 55px rgba(255, 180, 40, 0.45),
+    inset 0 0 28px rgba(255, 220, 120, 0.35);
+  filter: brightness(1.22);
+  transform: scale(1.04);
+}
+
+
+/* =========================================================
+   ADDコンテナ置き換え：背景だけ流し、車はコンテナ内で隊列合流
+   ========================================================= */
+
+.drive-stage{
+  position:relative;
+  min-height:180px;
+  height:180px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:24px;
+  background:#111;
+  box-shadow:var(--shadow), inset 0 0 30px rgba(218,178,78,.06);
+  isolation:isolate;
+}
+
+.drive-bg{
+  position:absolute;
+  inset:0;
+  width:220%;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.03), rgba(0,0,0,.22)),
+    url("images/drive/old-to-modern-cityscape.jpg") repeat-x center 52% / auto 100%;
+  animation:driveBgMove 18s linear infinite;
+  z-index:1;
+}
+
+/* 車が左向きなので、背景は左→右へ流します */
+@keyframes driveBgMove{
+  from{ transform:translateX(-50%); }
+  to{ transform:translateX(0); }
+}
+
+
+.drive-cars{
+  position:absolute;
+  inset:0;
+  z-index:4;
+  pointer-events:none;
+}
+
+.drive-car-slot{
+  position:absolute;
+  bottom:13px;
+  left:var(--slot-left);
+  opacity:0;
+  transform:translateX(230px);
+}
+
+.drive-car{
+  display:block;
+  width:100%;
+  height:auto;
+  filter:
+    drop-shadow(0 14px 14px rgba(0,0,0,.55))
+    drop-shadow(0 3px 2px rgba(0,0,0,.42));
+}
+
+.car-slot-1966{
+  --slot-left:5%;
+  width:clamp(105px, 10vw, 140px);
+  opacity:1;
+  transform:translateX(0);
+  animation:driveFloat .48s ease-in-out infinite alternate;
+}
+
+.car-slot-1970{ --slot-left:18%; width:clamp(108px, 12.5vw, 165px); }
+.car-slot-1980{
+  --slot-left:31%;
+  width:clamp(108px, 13vw, 165px);
+  /* 画像下側の透明余白を補正し、レビンのタイヤ位置を他車と合わせる */
+  bottom:0;
+}
+.car-slot-1990{ --slot-left:44%; width:clamp(100px, 11.5vw, 145px);bottom:0; }
+.car-slot-2000{ --slot-left:57%; width:clamp(68px, 7.8vw, 100px); }
+.car-slot-2010{ --slot-left:68%; width:clamp(112px, 13vw, 174px); }
+.car-slot-2020{ --slot-left:81%; width:clamp(112px, 13vw, 178px); }
+
+.drive-stage.show-1970 .car-slot-1970,
+.drive-stage.show-1980 .car-slot-1980,
+.drive-stage.show-1990 .car-slot-1990,
+.drive-stage.show-2000 .car-slot-2000,
+.drive-stage.show-2010 .car-slot-2010,
+.drive-stage.show-2020 .car-slot-2020{
+  opacity:1;
+  transform:translateX(0);
+  animation:
+    driveJoinWithCenterStop 3.1s ease-in-out both,
+    driveFloat .48s ease-in-out 3.1s infinite alternate;
+}
+
+/* 右から走り込み、中央で約0.5秒停止してから所定位置へ移動 */
+@keyframes driveJoinWithCenterStop{
+  0%{
+    left:calc(100% + 40px);
+    opacity:0;
+    transform:translateX(0);
+  }
+  10%{
+    opacity:1;
+  }
+  42%{
+    left:50%;
+    opacity:1;
+    transform:translateX(-50%);
+  }
+  58%{
+    left:50%;
+    opacity:1;
+    transform:translateX(-50%);
+  }
+  100%{
+    left:var(--slot-left);
+    opacity:1;
+    transform:translateX(0);
+  }
+}
+
+@keyframes driveFloat{
+  from{ translate:0 0; }
+  to{ translate:0 -2px; }
+}
+
+@media (max-width:900px){
+  .drive-stage{
+    height:150px;
+    min-height:150px;
+  }
+  .car-slot-1966{ --slot-left:3%; }
+  .car-slot-1970{ --slot-left:18%; }
+  .car-slot-1980{ --slot-left:33%; }
+  .car-slot-1990{ --slot-left:48%; }
+  .car-slot-2000{ --slot-left:61%; }
+  .car-slot-2010{ --slot-left:72%; }
+  .car-slot-2020{ --slot-left:82%; }
+}
+
+
+/* run-carを年表と同じ横幅の独立コンテナにする */
+.drive-stage-full{
+  width:100%;
+  margin-bottom:18px;
+}
+
+
+/* =========================================================
+   2026 → 1966 周回演出
+   run-car内の全車が一斉退出し、初代カローラが先頭へ戻る
+   ========================================================= */
+.drive-stage.is-loop-reset .drive-car-slot{
+  opacity:1 !important;
+  animation:driveFleetExit 2.4s cubic-bezier(.32,.02,.58,1) both !important;
+}
+
+.drive-stage.is-loop-reset .car-slot-1966{
+  animation:
+    driveFleetExit 2.4s cubic-bezier(.32,.02,.58,1) both,
+    corollaReturnToLead 3.2s cubic-bezier(.18,.72,.24,1) 2.65s both,
+    driveFloat .48s ease-in-out 5.85s infinite alternate !important;
+}
+
+/* 現在の隊列位置から、全車が左側へ一斉に走り抜けます */
+@keyframes driveFleetExit{
+  0%{
+    left:var(--slot-left);
+    opacity:1;
+    transform:translateX(0);
+  }
+  18%{
+    left:calc(var(--slot-left) - 2%);
+    opacity:1;
+    transform:translateX(-8px);
+  }
+  72%{
+    opacity:1;
+  }
+  100%{
+    left:-28%;
+    opacity:0;
+    transform:translateX(-180px);
+  }
+}
+
+/* 初代カローラが右側から走り、先頭位置で停止します */
+@keyframes corollaReturnToLead{
+  0%{
+    left:calc(100% + 80px);
+    opacity:0;
+    transform:translateX(0);
+  }
+  10%{
+    opacity:1;
+  }
+  62%{
+    left:12%;
+    opacity:1;
+    transform:translateX(0);
+  }
+  82%{
+    left:5.7%;
+    opacity:1;
+    transform:translateX(0);
+  }
+  92%{
+    left:4.8%;
+    opacity:1;
+    transform:translateX(0);
+  }
+  100%{
+    left:5%;
+    opacity:1;
+    transform:translateX(0);
+  }
+}
+
+@media (max-width:900px){
+  @keyframes corollaReturnToLead{
+    0%{ left:calc(100% + 60px); opacity:0; transform:translateX(0); }
+    10%{ opacity:1; }
+    62%{ left:10%; opacity:1; transform:translateX(0); }
+    82%{ left:3.7%; opacity:1; transform:translateX(0); }
+    92%{ left:2.8%; opacity:1; transform:translateX(0); }
+    100%{ left:3%; opacity:1; transform:translateX(0); }
+  }
+}
+
+/* =========================================================
+   大型モニター常設表示：縦方向コンパクト調整
+   年表の説明欄を非表示にし、下段3コンテナを低くする
+   ========================================================= */
+
+/* 年表：178px → 140px */
+.timeline-frame{
+  height:140px;
+  margin-bottom:12px;
+}
+
+/* マウス操作説明は常設モニターでは不要 */
+.pause-note{
+  display:none;
+}
+
+/* 説明欄を消した分、年表カードを縦中央へ寄せる */
+.track-mask{
+  inset:14px 18px 14px;
+}
+
+.center-line{
+  top:8px;
+  bottom:8px;
+}
+
+/* 下段3コンテナ：360px → 245px */
+.event-grid article{
+  min-height:245px;
+  max-height:245px;
+  padding:10px 12px;
+  overflow:hidden;
+}
+
+.event-grid{
+  gap:10px;
+}
+
+.article-content{
+  gap:8px;
+  max-height:205px;
+  overflow:hidden;
+}
+
+.content-text{
+  font-size:clamp(12px, .82vw, 14px);
+  line-height:1.5;
+}
+
+.image-block{
+  max-height:150px;
+}
+
+.info-photo{
+  max-height:150px;
+  object-fit:contain;
+}
+
+/* =========================================================
+   大型モニター調整 v2
+   左メインの年号・タイトルを縮小し、左右の下端を揃える
+   ========================================================= */
+
+.main-card{
+  align-items:stretch;
+}
+
+.left-panel{
+  display:flex;
+  flex-direction:column;
+  height:auto;
+  min-height:0;
+  padding:14px 16px;
+}
+
+.label{
+  margin-bottom:4px;
+  font-size:11px;
+}
+
+.year-line{
+  gap:9px;
+  margin-bottom:4px;
+}
+
+.big-year{
+  font-size:clamp(40px, 4.5vw, 64px);
+  line-height:.9;
+}
+
+.era-badge{
+  min-height:26px;
+  padding:3px 9px;
+  font-size:12px;
+}
+
+#selectedTitle{
+  margin:4px 0 10px;
+  font-size:clamp(18px, 1.65vw, 27px);
+  line-height:1.12;
+}
+
+/* 左の写真枠が残りの高さだけを使い、右側と下端を揃える */
+.photo-link{
+  flex:1 1 auto;
+  min-height:0;
+  height:auto;
+  border-radius:16px;
+}
+
+.photo-link img{
+  width:100%;
+  height:100%;
+  min-height:0;
+  object-fit:contain;
+}
+
+.right-area{
+  min-height:0;
+}
+
+.event-grid{
+  align-items:stretch;
+}
+
+.event-grid article{
+  height:245px;
+  min-height:245px;
+  max-height:245px;
+}
+
+/* =========================================================
+   大型モニター調整 v3
+   左コンテナと右側3コンテナの下端を完全に揃える
+   ========================================================= */
+
+/* 左右の列を同じ高さにする */
+.main-card{
+  align-items:stretch;
+}
+
+.left-panel,
+.right-area{
+  height:100%;
+  min-height:0;
+}
+
+/* 右側は上部の追加欄を除いた残りを3コンテナで埋める */
+.right-area{
+  display:flex;
+  flex-direction:column;
+}
+
+.event-grid{
+  flex:1 1 0;
+  min-height:0;
+  align-items:stretch;
+}
+
+/* 固定245pxを解除し、左側コンテナの下端まで自動拡張 */
+.event-grid article{
+  height:100%;
+  min-height:0;
+  max-height:none;
+  overflow:hidden;
+}
+
+.article-content{
+  height:100%;
+  max-height:none;
+  min-height:0;
+  overflow:hidden;
+}
+
+/* =========================================================
+   大型モニター調整 v4
+   画像サイズに左右されず、左右コンテナの高さを固定
+   小さい画像は写真枠内に余白を残して最大表示
+   ========================================================= */
+
+:root{
+  --main-display-height:clamp(360px, 39vh, 420px);
+}
+
+/* メイン表示領域の高さを先に確定する */
+.main-card{
+  height:var(--main-display-height);
+  min-height:0;
+  align-items:stretch;
+}
+
+/* 左右の外側コンテナは同じ高さを維持 */
+.left-panel,
+.right-area{
+  height:100%;
+  min-height:0;
+  overflow:hidden;
+}
+
+/* 左側は見出し以外の残り全部を写真枠にする */
+.left-panel{
+  display:flex;
+  flex-direction:column;
+}
+
+.photo-link{
+  flex:1 1 0;
+  width:100%;
+  height:0;
+  min-height:0;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#020202;
+}
+
+/* 写真自体は枠いっぱいまで拡大。ただし切り取らない */
+.photo-link img{
+  display:block;
+  width:100%;
+  height:100%;
+  min-height:0;
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;
+  object-position:center;
+}
+
+/* 右側も決められた高さの中だけで構成する */
+.right-area{
+  display:flex;
+  flex-direction:column;
+}
+
+.editor-panel{
+  flex:0 0 auto;
+}
+
+.event-grid{
+  flex:1 1 0;
+  min-height:0;
+  grid-template-rows:minmax(0, 1fr);
+  align-items:stretch;
+}
+
+.event-grid article{
+  height:100%;
+  min-height:0;
+  max-height:none;
+  overflow:hidden;
+}
+
+.article-content{
+  height:100%;
+  min-height:0;
+  overflow:hidden;
+}
+
+/* =========================================================
+   大型モニター調整 v5
+   下段の余白を少し減らす
+   ========================================================= */
+:root{
+  --main-display-height:clamp(335px, 36vh, 390px);
+}
+
+/* 下段コンテナ内部の上下余白もわずかに縮小 */
+.left-panel{
+  padding:16px;
+}
+
+.event-grid article{
+  padding:12px;
+}
+
+.article-content{
+  gap:9px;
+}
+
+/* ページ最下部の余白を縮小 */
+.page{
+  padding-bottom:14px;
+}
+
+
+/* =========================================================
+   v6: アップローダーをヘッダーへ移動
+   右側3コンテナの表示領域を最大化
+   ========================================================= */
+.header{
+  overflow:visible;
+  position:relative;
+  z-index:20;
+}
+
+.header-actions{
+  position:relative;
+  flex-wrap:nowrap;
+}
+
+.header-uploader{
+  position:relative;
+  flex:0 0 auto;
+  z-index:30;
+}
+
+.header-uploader > summary{
+  list-style:none;
+  min-height:36px;
+  padding:8px 14px;
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:999px;
+  color:#fff;
+  background:linear-gradient(180deg, rgba(35,35,35,.94), rgba(0,0,0,.9));
+  box-shadow:inset 0 0 16px rgba(255,255,255,.04), 0 8px 20px rgba(0,0,0,.35);
+  cursor:pointer;
+  white-space:nowrap;
+}
+
+.header-uploader > summary::-webkit-details-marker{
+  display:none;
+}
+
+.header-uploader[open] > summary{
+  border-color:rgba(247,216,121,.72);
+  box-shadow:0 0 18px rgba(218,178,78,.28), inset 0 0 14px rgba(218,178,78,.12);
+}
+
+.header-uploader-menu{
+  position:absolute;
+  top:calc(100% + 12px);
+  left:0;
+  width:min(620px, calc(100vw - 48px));
+  padding:14px;
+  border:1px solid rgba(247,216,121,.4);
+  border-radius:18px;
+  background:rgba(3,3,3,.98);
+  box-shadow:0 24px 60px rgba(0,0,0,.78), inset 0 0 24px rgba(218,178,78,.06);
+}
+
+.header-uploader-topline{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:14px;
+  margin-bottom:12px;
+}
+
+.header-uploader-topline small{
+  color:rgba(255,255,255,.68);
+}
+
+.header-uploader .editor-grid{
+  padding:0;
+}
+
+.header-uploader .editor-note{
+  padding:10px 0 0;
+}
+
+/* 旧アップローダー分の高さを完全に削除 */
+.right-area{
+  gap:0;
+}
+
+.right-area > .editor-panel{
+  display:none !important;
+}
+
+.event-grid{
+  flex:1 1 100%;
+  height:100%;
+}
+
+@media (max-width:1100px){
+  .header-actions{
+    flex-wrap:wrap;
+  }
+
+  .header-uploader-menu{
+    left:auto;
+    right:0;
+  }
+}
+
+/* =========================================================
+   v7: 下段コンテナ外側の余白を縮小
+   コンテナ内部と表示高さは維持
+   ========================================================= */
+
+/* run-carエリアと下段表示の間隔 */
+.drive-stage-full{
+  margin-bottom:10px;
+}
+
+/* 左メインと右3コンテナ群の間隔 */
+.main-card{
+  gap:10px;
+}
+
+/* 右側3コンテナ同士の間隔 */
+.event-grid{
+  gap:9px;
+}
+
+/* 画面最下部の余白 */
+.page{
+  padding-bottom:6px;
+}
+
+/* =========================================================
+   v8: run-carエリアを低くし、下段表示領域を拡大
+   ========================================================= */
+
+/* run-carの空の余白を減らす */
+.drive-stage,
+.drive-stage-full{
+  height:145px;
+  min-height:145px;
+}
+
+/* 背景の見える位置を少し下げ、道路と車を残す */
+.drive-bg{
+  background-position:center 58%;
+}
+
+/* 車は従来の接地位置を維持 */
+.drive-car-slot{
+  bottom:8px;
+}
+
+.car-slot-1980{
+  bottom:0;
+}
+
+/* run-carで減らした高さを下段へ移す */
+:root{
+  --main-display-height:clamp(370px, 40vh, 430px);
+}
+
+@media (max-width:900px){
+  .drive-stage,
+  .drive-stage-full{
+    height:130px;
+    min-height:130px;
+  }
+}
+
+/* =========================================================
+   v9: ヘッダーを右ロゴの高さに合わせ、下段外側余白を最小化
+   ========================================================= */
+
+/* 右端ロゴとほぼ同じ高さのコンパクトなヘッダー */
+.header{
+  height:96px;
+  min-height:96px;
+  padding:2px 12px;
+  margin-bottom:6px;
+  align-items:center;
+}
+
+.archive-logo{
+  width:88px;
+  height:88px;
+  flex:0 0 88px;
+}
+
+/* タイトルがヘッダー内に確実に収まるよう微調整 */
+h1{
+  font-size:clamp(22px, 2.75vw, 42px);
+  line-height:.98;
+}
+
+h1 span{
+  margin-bottom:2px;
+}
+
+/* 下段コンテナ外側の余白を限界近くまで縮小 */
+.drive-stage-full{
+  margin-bottom:4px;
+}
+
+.main-card{
+  gap:5px;
+}
+
+.event-grid{
+  gap:5px;
+}
+
+.page{
+  padding-bottom:0;
+}
+
+/* コンテナ内部の外周余白も少しだけ詰める */
+.left-panel{
+  padding:12px;
+}
+
+.event-grid article{
+  padding:9px;
+}
+
+.article-content{
+  gap:6px;
+}
+
+/* =========================================================
+   v10: run-car背景に奥行き・立体感を追加
+   既存の背景移動と車のアニメーションは維持
+   ========================================================= */
+
+.drive-bg{
+  /* 遠景は少し明るく、下側へ向かって陰影を強くする */
+  background:
+    linear-gradient(
+      180deg,
+      rgba(120,190,235,.08) 0%,
+      rgba(255,255,255,0) 38%,
+      rgba(0,0,0,.08) 70%,
+      rgba(0,0,0,.30) 100%
+    ),
+    url("images/drive/old-to-modern-cityscape.jpg") repeat-x center 58% / auto 100%;
+
+  /* わずかに拡大し、平面的に見える余白を抑える */
+  transform-origin:center bottom;
+  filter:
+    saturate(1.04)
+    contrast(1.06)
+    brightness(.98);
+}
+
+/* 遠景の空気遠近法：上側に薄い霞を追加 */
+.drive-bg::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(205,232,248,.16) 0%,
+      rgba(205,232,248,.06) 42%,
+      rgba(255,255,255,0) 68%
+    );
+  z-index:1;
+}
+
+/* 手前側の陰影：建物の足元と車の接地感を強化 */
+.drive-bg::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:42%;
+  pointer-events:none;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0,0,0,0) 0%,
+      rgba(0,0,0,.08) 42%,
+      rgba(0,0,0,.28) 100%
+    );
+  box-shadow:inset 0 -18px 28px rgba(0,0,0,.18);
+  z-index:2;
+}
+
+/* 背景の陰影より車を確実に前面へ表示 */
+.drive-cars{
+  z-index:5;
+}
+
+/* 車の下に柔らかい接地影を追加して浮遊感を抑える */
+.drive-car-slot::after{
+  content:"";
+  position:absolute;
+  left:14%;
+  right:12%;
+  bottom:-2px;
+  height:10px;
+  border-radius:50%;
+  background:rgba(0,0,0,.34);
+  filter:blur(5px);
+  transform:scaleX(.92);
+  z-index:-1;
+}
+
+/* =========================================================
+   v11: CSS崩れ修正版
+   後半の固定高さ指定と既存レスポンシブ指定の競合を解消
+   ========================================================= */
+
+.drive-bg{
+  overflow:hidden;
+}
+
+@media (max-width:1100px){
+  .header{
+    height:auto;
+    min-height:96px;
+    padding:8px 12px;
+    align-items:flex-start;
+  }
+
+  .header-actions{
+    width:100%;
+    justify-content:flex-start;
+    flex-wrap:wrap;
+  }
+
+  .main-card{
+    height:auto;
+    min-height:0;
+    grid-template-columns:1fr;
+  }
+
+  .left-panel,
+  .right-area{
+    height:auto;
+    min-height:0;
+    overflow:visible;
+  }
+
+  .photo-link{
+    height:300px;
+    min-height:300px;
+    flex:none;
+  }
+
+  .photo-link img{
+    min-height:0;
+  }
+
+  .event-grid{
+    height:auto;
+    grid-template-columns:1fr;
+    grid-template-rows:auto;
+  }
+
+  .event-grid article{
+    height:auto;
+    min-height:245px;
+    max-height:none;
+  }
+
+  .article-content{
+    height:auto;
+    max-height:none;
+    overflow:visible;
+  }
+}
+
+@media (max-width:640px){
+  .header{
+    min-height:0;
+  }
+
+  .header-uploader-menu{
+    left:0;
+    right:auto;
+    width:calc(100vw - 40px);
+  }
+
+  .photo-link{
+    height:250px;
+    min-height:250px;
+  }
+
+  .main-card{
+    gap:8px;
+  }
+
+  .event-grid{
+    gap:8px;
+  }
+}
+
+/* =========================================================
+   v12: 天候・昼夜変化
+   30秒ごとに切替、5秒かけて自然に変化
+   ========================================================= */
+
+.drive-stage{
+  background:#8fc7e8;
+}
+
+/* 天候レイヤー全体 */
+.weather-effects{
+  position:absolute;
+  inset:0;
+  z-index:3;
+  overflow:hidden;
+  pointer-events:none;
+  border-radius:inherit;
+}
+
+/* すべて5秒でゆっくり変化 */
+.drive-bg,
+.weather-effects,
+.weather-clouds,
+.weather-rain,
+.weather-night-lights,
+.drive-car{
+  transition:
+    filter 5s ease,
+    opacity 5s ease,
+    background 5s ease,
+    box-shadow 5s ease;
+}
+
+/* 雲 */
+.weather-clouds{
+  position:absolute;
+  inset:-20% -30%;
+  opacity:0;
+  background:
+    radial-gradient(ellipse at 15% 35%, rgba(235,240,245,.82) 0 10%, transparent 11%),
+    radial-gradient(ellipse at 30% 28%, rgba(215,222,230,.78) 0 13%, transparent 14%),
+    radial-gradient(ellipse at 48% 38%, rgba(225,230,236,.80) 0 12%, transparent 13%),
+    radial-gradient(ellipse at 70% 26%, rgba(205,212,220,.78) 0 14%, transparent 15%),
+    radial-gradient(ellipse at 88% 36%, rgba(225,230,236,.82) 0 11%, transparent 12%);
+  filter:blur(7px);
+  transform:translateX(-4%);
+  animation:weatherCloudMove 24s linear infinite;
+}
+
+@keyframes weatherCloudMove{
+  from{ transform:translateX(-8%); }
+  to{ transform:translateX(8%); }
+}
+
+/* 雨 */
+.weather-rain{
+  position:absolute;
+  inset:-35% -20%;
+  opacity:0;
+  background-image:
+    repeating-linear-gradient(
+      112deg,
+      transparent 0 13px,
+      rgba(210,230,245,.62) 14px 15px,
+      transparent 16px 27px
+    );
+  background-size:34px 34px;
+  animation:weatherRainFall .65s linear infinite;
+}
+
+@keyframes weatherRainFall{
+  from{ transform:translate3d(-20px,-35px,0); }
+  to{ transform:translate3d(20px,35px,0); }
+}
+
+/* 夜の街明かり
+   不自然な点状ライトは廃止し、薄い夜色だけを重ねる */
+.weather-night-lights{
+  position:absolute;
+  inset:0;
+  opacity:0;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(8,18,42,.08) 0%,
+      rgba(5,12,30,.18) 58%,
+      rgba(2,6,18,.32) 100%
+    );
+  mix-blend-mode:normal;
+  box-shadow:none;
+}
+
+/* 晴れ */
+.drive-stage.sunny .drive-bg{
+  filter:saturate(1.14) contrast(1.06) brightness(1.08);
+}
+
+.drive-stage.sunny .weather-clouds,
+.drive-stage.sunny .weather-rain,
+.drive-stage.sunny .weather-night-lights{
+  opacity:0;
+}
+
+/* 曇り */
+.drive-stage.cloudy .drive-bg{
+  filter:saturate(.72) contrast(.96) brightness(.82);
+}
+
+.drive-stage.cloudy .weather-clouds{
+  opacity:.72;
+}
+
+.drive-stage.cloudy .weather-rain,
+.drive-stage.cloudy .weather-night-lights{
+  opacity:0;
+}
+
+/* 雨 */
+.drive-stage.rainy .drive-bg{
+  filter:saturate(.58) contrast(.94) brightness(.67) hue-rotate(6deg);
+}
+
+.drive-stage.rainy .weather-clouds{
+  opacity:.88;
+}
+
+.drive-stage.rainy .weather-rain{
+  opacity:.80;
+}
+
+.drive-stage.rainy .weather-night-lights{
+  opacity:0;
+}
+
+/* 夜 */
+.drive-stage.night .drive-bg{
+  filter:saturate(.62) contrast(1.08) brightness(.38) hue-rotate(12deg);
+}
+
+.drive-stage.night .weather-clouds{
+  opacity:.22;
+}
+
+.drive-stage.night .weather-rain{
+  opacity:0;
+}
+
+.drive-stage.night .weather-night-lights{
+  opacity:.42;
+}
+
+/* 夜間は車体全体を発光させず、少し暗くするだけ */
+.drive-stage.night .drive-car{
+  filter:
+    brightness(.72)
+    drop-shadow(0 14px 14px rgba(0,0,0,.72));
+}
+
+/* 左向きの車の前方に、ヘッドライト風の光を追加 */
+.drive-car-slot::before{
+  content:"";
+  position:absolute;
+  left:-42%;
+  bottom:18%;
+  width:58%;
+  height:28%;
+  pointer-events:none;
+  opacity:0;
+  z-index:-1;
+  transform:skewX(-10deg);
+  transform-origin:right center;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(255,248,205,0) 0%,
+      rgba(255,244,185,.12) 42%,
+      rgba(255,241,165,.42) 78%,
+      rgba(255,250,220,.88) 100%
+    );
+  clip-path:polygon(0 18%, 100% 40%, 100% 60%, 0 82%);
+  filter:blur(3px);
+  transition:opacity 5s ease;
+}
+
+/* 夜だけヘッドライトを点灯 */
+.drive-stage.night .drive-car-slot::before{
+  opacity:.88;
+}
+
+/* 各車でライト位置を微調整 */
+.car-slot-1966::before{ bottom:20%; left:-39%; width:54%; }
+.car-slot-1970::before{ bottom:21%; left:-40%; width:55%; }
+.car-slot-1980::before{ bottom:26%; left:-38%; width:53%; }
+.car-slot-1990::before{ bottom:23%; left:-40%; width:55%; }
+.car-slot-2000::before{ bottom:28%; left:-38%; width:54%; }
+.car-slot-2010::before{ bottom:24%; left:-41%; width:56%; }
+.car-slot-2020::before{ bottom:25%; left:-42%; width:57%; }
+
+/* 雨天時の路面反射 */
+.drive-stage.rainy::after,
+.drive-stage.night::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:34%;
+  z-index:4;
+  pointer-events:none;
+  opacity:.55;
+  background:
+    linear-gradient(
+      180deg,
+      transparent,
+      rgba(120,170,210,.14) 45%,
+      rgba(255,220,130,.12) 100%
+    );
+  filter:blur(2px);
+  transition:opacity 5s ease;
+}
+
+
+/* =========================================================
+   v13: 雨演出を停止
+   ========================================================= */
+.weather-rain{
+  display:none !important;
+}
+
+.drive-stage.rainy .weather-rain{
+  opacity:0 !important;
+}
+
+.drive-stage.rainy::after{
+  display:none !important;
+}
+
+/* v14: 街の人工的な点灯表現を削除し、自然な夜色へ調整 */
+
+
+/* =========================================================
+   v13: RUN-CAR 年代別背景（1960〜2020年代）
+   年代が切り替わるたびに2枚の背景をクロスフェード
+   ========================================================= */
+.drive-bg{
+  inset:0;
+  width:220%;
+  background:none !important;
+  animation:driveBgMove 22s linear infinite;
+  filter:none !important;
+  overflow:hidden;
+}
+
+.drive-bg::before,
+.drive-bg::after{
+  content:none !important;
+}
+
+.era-bg-layer{
+  position:absolute;
+  inset:0;
+  opacity:0;
+
+  /* 画像1枚をRUN-CARの表示幅に近づけ、細かい繰り返しを防ぐ */
+  background-repeat:repeat-x;
+  background-position:center 63%;
+  background-size:50% auto;
+
+  transition:opacity 1.8s ease-in-out, filter 5s ease;
+  will-change:opacity;
+}
+
+.era-bg-layer.is-visible{
+  opacity:1;
+}
+
+/* 1960年代のモノクロ背景を含め、各画像本来の色調を保つ */
+.drive-stage.sunny .era-bg-layer{
+  filter:saturate(1.04) contrast(1.04) brightness(1.03);
+}
+
+.drive-stage.cloudy .era-bg-layer{
+  filter:saturate(.76) contrast(.96) brightness(.84);
+}
+
+.drive-stage.rainy .era-bg-layer{
+  filter:saturate(.62) contrast(.94) brightness(.70);
+}
+
+.drive-stage.night .era-bg-layer{
+  filter:saturate(.66) contrast(1.06) brightness(.42);
+}
+
+@media (prefers-reduced-motion: reduce){
+  .era-bg-layer{
+    transition:none;
+  }
+}
+
+
+/* =========================================================
+   RUN-CAR 背景確認済み版
+   - 背景画像は 3000x600 の確認済み画像を使用
+   - 道路が上に来るトリミングを防止
+   - repeat-x 廃止
+   - つなぎ目なし
+   - 背景はスローだが分かる程度に動かす
+   - 車を主役にするため背景は少し暗め
+   ========================================================= */
+
+.drive-stage{
+  position:relative;
+  height:180px;
+  min-height:180px;
+  overflow:hidden;
+  background:#111;
+}
+
+.drive-bg{
+  position:absolute !important;
+  inset:0 !important;
+  width:100% !important;
+  height:100% !important;
+  overflow:hidden !important;
+  background:none !important;
+  animation:none !important;
+  transform:none !important;
+  z-index:1 !important;
+}
+
+.drive-bg::before,
+.drive-bg::after{
+  content:none !important;
+  display:none !important;
+}
+
+.era-bg-layer{
+  position:absolute !important;
+  top:0 !important;
+  bottom:0 !important;
+  left:-12% !important;
+  width:124% !important;
+  height:100% !important;
+  opacity:0;
+  background-repeat:no-repeat !important;
+  background-size:100% auto !important;
+  background-position:center 56% !important;
+  transform:translateX(0);
+  animation:runCarVerifiedSlowPan 20s linear infinite alternate;
+  transition:opacity 1.8s ease-in-out !important;
+  will-change:transform, opacity;
+  filter:saturate(.82) contrast(.90) brightness(.82);
+}
+
+.era-bg-layer.is-visible{
+  opacity:1 !important;
+}
+
+@keyframes runCarVerifiedSlowPan{
+  0%{
+    transform:translateX(0);
+  }
+  100%{
+    transform:translateX(-9.5%);
+  }
+}
+
+/* 天候演出は背景確認を邪魔するため非表示 */
+.weather-effects,
+.weather-clouds,
+.weather-rain,
+.weather-night-lights{
+  display:none !important;
+  opacity:0 !important;
+}
+
+/* 車は背景より前面に固定 */
+.drive-cars{
+  position:absolute;
+  inset:0;
+  z-index:4;
+  pointer-events:none;
+}
+
+@media (max-width:900px){
+  .drive-stage{
+    height:150px;
+    min-height:150px;
+  }
+  .era-bg-layer{
+    background-position:center 56% !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .era-bg-layer{
+    animation:none !important;
+  }
+}
+
+
+/* =========================================================
+   RUN-CAR 背景 左→右スロー同期 最終上書き
+   - 右から左へ流れる違和感を防ぐため、背景は必ず左→右へ移動
+   - repeat-xなし、画像1枚を大きめに置いてつなぎ目を出さない
+   - 速度ボタンに合わせて背景速度を変更
+     より遅い：34s / 遅い：24s / 普通：18s
+   ========================================================= */
+
+.drive-stage{
+  --run-bg-pan-duration:34s;
+  position:relative;
+  height:180px;
+  min-height:180px;
+  overflow:hidden;
+  background:#111;
+}
+
+.drive-stage[data-bg-speed="verySlow"]{
+  --run-bg-pan-duration:34s;
+}
+
+.drive-stage[data-bg-speed="slow"]{
+  --run-bg-pan-duration:24s;
+}
+
+.drive-stage[data-bg-speed="normal"]{
+  --run-bg-pan-duration:18s;
+}
+
+.drive-bg{
+  position:absolute !important;
+  inset:0 !important;
+  width:100% !important;
+  height:100% !important;
+  overflow:hidden !important;
+  background:none !important;
+  animation:none !important;
+  transform:none !important;
+  z-index:1 !important;
+}
+
+.drive-bg::before,
+.drive-bg::after{
+  content:none !important;
+  display:none !important;
+}
+
+.era-bg-layer{
+  position:absolute !important;
+  top:0 !important;
+  bottom:0 !important;
+  left:-12% !important;
+  width:124% !important;
+  height:100% !important;
+  opacity:0;
+  background-repeat:no-repeat !important;
+  background-size:100% auto !important;
+  background-position:center 56% !important;
+  transform:translateX(-9.5%);
+  animation:runCarBackgroundLeftToRight var(--run-bg-pan-duration) linear infinite !important;
+  transition:opacity 1.8s ease-in-out !important;
+  will-change:transform, opacity;
+  filter:saturate(.82) contrast(.90) brightness(.82) !important;
+}
+
+.era-bg-layer.is-visible{
+  opacity:1 !important;
+}
+
+@keyframes runCarBackgroundLeftToRight{
+  0%{
+    transform:translateX(-9.5%);
+  }
+  100%{
+    transform:translateX(0);
+  }
+}
+
+/* 天候・雲・雨・夜ライトは背景確認を邪魔するため非表示 */
+.weather-effects,
+.weather-clouds,
+.weather-rain,
+.weather-night-lights{
+  display:none !important;
+  opacity:0 !important;
+}
+
+.drive-cars{
+  position:absolute;
+  inset:0;
+  z-index:4;
+  pointer-events:none;
+}
+
+@media (max-width:900px){
+  .drive-stage{
+    height:150px;
+    min-height:150px;
+  }
+
+  .era-bg-layer{
+    background-position:center 56% !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .era-bg-layer{
+    animation:none !important;
+    transform:translateX(-4%) !important;
+  }
+}
+
+
+/* =========================================================
+   RUN-CAR 背景 左→右 + 1日表現 最終上書き
+   - 背景は必ず左から右へ流す
+   - 背景スピードと1日サイクルを速度ボタンに同期
+     より遅い：34s / 遅い：24s / 普通：18s
+   - 真っ暗にはしない
+   - 明るい時は昼、暗い時は現在より少し暗い程度
+   - フィルターは背景レイヤーだけに適用し、車はぼかさない
+   ========================================================= */
+
+.drive-stage{
+  --run-bg-pan-duration:34s;
+  --run-bg-day-duration:34s;
+  position:relative;
+  height:180px;
+  min-height:180px;
+  overflow:hidden;
+  background:#111;
+}
+
+.drive-stage[data-bg-speed="verySlow"]{
+  --run-bg-pan-duration:34s;
+  --run-bg-day-duration:34s;
+}
+
+.drive-stage[data-bg-speed="slow"]{
+  --run-bg-pan-duration:24s;
+  --run-bg-day-duration:24s;
+}
+
+.drive-stage[data-bg-speed="normal"]{
+  --run-bg-pan-duration:18s;
+  --run-bg-day-duration:18s;
+}
+
+.drive-bg{
+  position:absolute !important;
+  inset:0 !important;
+  width:100% !important;
+  height:100% !important;
+  overflow:hidden !important;
+  background:none !important;
+  animation:none !important;
+  transform:none !important;
+  filter:none !important;
+  z-index:1 !important;
+}
+
+.drive-bg::before,
+.drive-bg::after{
+  content:none !important;
+  display:none !important;
+}
+
+.era-bg-layer{
+  position:absolute !important;
+  top:0 !important;
+  bottom:0 !important;
+  left:-12% !important;
+  width:124% !important;
+  height:100% !important;
+  opacity:0;
+  background-repeat:no-repeat !important;
+  background-size:100% auto !important;
+  background-position:center 56% !important;
+  transform:translateX(-9.5%);
+  transition:opacity 1.8s ease-in-out !important;
+  will-change:transform, opacity, filter;
+
+  animation:
+    runCarBackgroundLeftToRight var(--run-bg-pan-duration) linear infinite,
+    runCarDayCycle var(--run-bg-day-duration) ease-in-out infinite !important;
+}
+
+.era-bg-layer.is-visible{
+  opacity:1 !important;
+}
+
+@keyframes runCarBackgroundLeftToRight{
+  0%{
+    transform:translateX(-9.5%);
+  }
+  100%{
+    transform:translateX(0);
+  }
+}
+
+/* 暗い時間帯でも黒く潰さない。昼はしっかり明るくする。 */
+@keyframes runCarDayCycle{
+  0%{
+    filter:saturate(.72) contrast(.90) brightness(.78);
+  }
+  18%{
+    filter:saturate(.86) contrast(.94) brightness(.92);
+  }
+  38%{
+    filter:saturate(.98) contrast(.98) brightness(1.06);
+  }
+  58%{
+    filter:saturate(.96) contrast(.96) brightness(1.00);
+  }
+  78%{
+    filter:saturate(.78) contrast(.92) brightness(.74);
+  }
+  100%{
+    filter:saturate(.72) contrast(.90) brightness(.78);
+  }
+}
+
+/* 天候・雲・雨・夜ライトは使わない。車を暗くしないため、全体オーバーレイも置かない。 */
+.weather-effects,
+.weather-clouds,
+.weather-rain,
+.weather-night-lights{
+  display:none !important;
+  opacity:0 !important;
+}
+
+/* 車は背景より前面。filterをかけない。 */
+.drive-cars{
+  position:absolute;
+  inset:0;
+  z-index:4;
+  pointer-events:none;
+  filter:none !important;
+}
+
+.drive-car,
+.drive-car-slot{
+  filter:none;
+}
+
+@media (max-width:900px){
+  .drive-stage{
+    height:150px;
+    min-height:150px;
+  }
+
+  .era-bg-layer{
+    background-position:center 56% !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .era-bg-layer{
+    animation:none !important;
+    transform:translateX(-4%) !important;
+    filter:saturate(.9) contrast(.95) brightness(.95) !important;
+  }
+}
+
+
+/* =========================================================
+   RUN-CAR 背景 60秒1日サイクル強調版
+   - 背景は左から右へ流す
+   - つなぎ目より走行感を優先
+   - 1日サイクルは60秒固定
+   - 夜はライトが目立つ暗さ、昼はしっかり明るい
+   - 車には暗さ・ぼかしをかけない
+   ========================================================= */
+
+.drive-stage{
+  --run-bg-pan-duration:60s;
+  --run-bg-day-duration:60s;
+  position:relative;
+  height:180px;
+  min-height:180px;
+  overflow:hidden;
+  background:#111;
+}
+
+.drive-stage[data-bg-speed="verySlow"],
+.drive-stage[data-bg-speed="slow"],
+.drive-stage[data-bg-speed="normal"]{
+  --run-bg-pan-duration:60s;
+  --run-bg-day-duration:60s;
+}
+
+.drive-bg{
+  position:absolute !important;
+  inset:0 !important;
+  width:100% !important;
+  height:100% !important;
+  overflow:hidden !important;
+  background:none !important;
+  animation:none !important;
+  transform:none !important;
+  filter:none !important;
+  z-index:1 !important;
+}
+
+.drive-bg::before,
+.drive-bg::after{
+  content:none !important;
+  display:none !important;
+}
+
+.era-bg-layer{
+  position:absolute !important;
+  top:0 !important;
+  bottom:0 !important;
+  left:-10% !important;
+  width:120% !important;
+  height:100% !important;
+  opacity:0;
+  background-repeat:repeat-x !important;
+  background-size:auto 100% !important;
+  background-position:center 56% !important;
+  transform:translateX(-8%);
+  transition:opacity 1.8s ease-in-out !important;
+  will-change:transform, opacity, filter;
+
+  animation:
+    runCarBackgroundLeftToRight60 var(--run-bg-pan-duration) linear infinite,
+    runCarDayCycleStrong var(--run-bg-day-duration) ease-in-out infinite !important;
+}
+
+.era-bg-layer.is-visible{
+  opacity:1 !important;
+}
+
+/* 左→右：-8% から 0% へ */
+@keyframes runCarBackgroundLeftToRight60{
+  0%{
+    transform:translateX(-8%);
+  }
+  100%{
+    transform:translateX(0);
+  }
+}
+
+/* 60秒を1日と見立てる。暗い時間も真っ黒にはしないが、夜感は強める。 */
+@keyframes runCarDayCycleStrong{
+  0%{
+    filter:saturate(.60) contrast(1.05) brightness(.48);
+  }
+  12%{
+    filter:saturate(.72) contrast(1.00) brightness(.64);
+  }
+  25%{
+    filter:saturate(.95) contrast(1.00) brightness(.98);
+  }
+  42%{
+    filter:saturate(1.08) contrast(1.04) brightness(1.18);
+  }
+  58%{
+    filter:saturate(1.00) contrast(1.02) brightness(1.05);
+  }
+  75%{
+    filter:saturate(.72) contrast(1.04) brightness(.58);
+  }
+  88%{
+    filter:saturate(.58) contrast(1.08) brightness(.42);
+  }
+  100%{
+    filter:saturate(.60) contrast(1.05) brightness(.48);
+  }
+}
+
+/* 夜のライト感。車にはかけず、背景の上だけに薄くのせる。 */
+.drive-bg{
+  --night-opacity:0;
+}
+
+.drive-bg .era-bg-layer.is-visible::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 18% 68%, rgba(255,220,130,.42), transparent 9%),
+    radial-gradient(circle at 34% 62%, rgba(255,230,150,.34), transparent 8%),
+    radial-gradient(circle at 56% 66%, rgba(255,235,170,.32), transparent 8%),
+    radial-gradient(circle at 76% 60%, rgba(255,220,130,.35), transparent 9%),
+    linear-gradient(180deg, rgba(6,12,22,.28), rgba(0,0,0,.16));
+  mix-blend-mode:screen;
+  opacity:.55;
+  animation:runCarNightLights60 var(--run-bg-day-duration) ease-in-out infinite;
+}
+
+@keyframes runCarNightLights60{
+  0%{ opacity:.70; }
+  12%{ opacity:.42; }
+  25%{ opacity:.08; }
+  42%{ opacity:0; }
+  58%{ opacity:.03; }
+  75%{ opacity:.42; }
+  88%{ opacity:.82; }
+  100%{ opacity:.70; }
+}
+
+/* 既存の天候演出は使わない */
+.weather-effects,
+.weather-clouds,
+.weather-rain,
+.weather-night-lights{
+  display:none !important;
+  opacity:0 !important;
+}
+
+/* 車は背景より前面。フィルターをかけない。 */
+.drive-cars{
+  position:absolute;
+  inset:0;
+  z-index:4;
+  pointer-events:none;
+  filter:none !important;
+}
+
+.drive-car,
+.drive-car-slot{
+  filter:none;
+}
+
+@media (max-width:900px){
+  .drive-stage{
+    height:150px;
+    min-height:150px;
+  }
+
+  .era-bg-layer{
+    background-position:center 56% !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .era-bg-layer{
+    animation:none !important;
+    transform:translateX(-4%) !important;
+    filter:saturate(.9) contrast(.95) brightness(.95) !important;
+  }
+}
+
+
+/* =========================================================
+   RUN-CAR 背景 120秒1日サイクル版
+   - 夜：0〜40秒相当、今より暗め
+   - 朝・昼・夕方：40〜120秒相当
+   - モノクロ背景にも明暗変化を適用
+   - 背景だけ変化。車には暗さ・ぼかしをかけない。
+   ========================================================= */
+
+.drive-stage{
+  --run-bg-pan-duration:120s;
+  --run-bg-day-duration:120s;
+}
+
+.drive-stage[data-bg-speed="verySlow"],
+.drive-stage[data-bg-speed="slow"],
+.drive-stage[data-bg-speed="normal"]{
+  --run-bg-pan-duration:120s;
+  --run-bg-day-duration:120s;
+}
+
+.era-bg-layer{
+  animation:
+    runCarBackgroundLeftToRight120 var(--run-bg-pan-duration) linear infinite,
+    runCarDayCycle120 var(--run-bg-day-duration) ease-in-out infinite !important;
+}
+
+/* 左から右へ流す。120秒でゆったり移動。 */
+@keyframes runCarBackgroundLeftToRight120{
+  0%{
+    transform:translateX(-8%);
+  }
+  100%{
+    transform:translateX(0);
+  }
+}
+
+/*
+  120秒の内訳
+  0〜40秒：夜
+  40〜60秒：朝
+  60〜90秒：昼
+  90〜120秒：夕方
+*/
+@keyframes runCarDayCycle120{
+  /* 夜：0〜40秒。真っ黒にはせず、ライトが見える暗さ */
+  0%{
+    filter:saturate(.58) contrast(1.10) brightness(.38);
+  }
+  16.6%{
+    filter:saturate(.62) contrast(1.12) brightness(.34);
+  }
+  33.3%{
+    filter:saturate(.66) contrast(1.08) brightness(.46);
+  }
+
+  /* 朝：40秒以降 */
+  42%{
+    filter:saturate(.82) contrast(.98) brightness(.76);
+  }
+  50%{
+    filter:saturate(.94) contrast(1.00) brightness(.98);
+  }
+
+  /* 昼：しっかり明るい */
+  66%{
+    filter:saturate(1.08) contrast(1.04) brightness(1.20);
+  }
+  75%{
+    filter:saturate(1.04) contrast(1.02) brightness(1.10);
+  }
+
+  /* 夕方：少し落ち着かせる */
+  88%{
+    filter:saturate(.92) contrast(1.00) brightness(.82);
+  }
+  100%{
+    filter:saturate(.58) contrast(1.10) brightness(.38);
+  }
+}
+
+/* 夜のライト感も120秒周期へ変更 */
+.drive-bg .era-bg-layer.is-visible::after{
+  animation:runCarNightLights120 var(--run-bg-day-duration) ease-in-out infinite !important;
+}
+
+@keyframes runCarNightLights120{
+  /* 夜：0〜40秒はライトを目立たせる */
+  0%{ opacity:.88; }
+  16.6%{ opacity:1; }
+  33.3%{ opacity:.68; }
+
+  /* 朝 */
+  42%{ opacity:.30; }
+  50%{ opacity:.08; }
+
+  /* 昼 */
+  66%{ opacity:0; }
+  75%{ opacity:0; }
+
+  /* 夕方 */
+  88%{ opacity:.34; }
+  100%{ opacity:.88; }
+}
+
+/* 1960年代のモノクローム背景にも、明暗変化をそのまま適用 */
+.era-bg-layer[data-era="1960"]{
+  background-blend-mode:normal !important;
+}
+
+/* 車は常にクリアに表示 */
+.drive-cars,
+.drive-car,
+.drive-car-slot{
+  filter:none !important;
+}
+
+
+/* =========================================================
+   RUN-CAR 背景 1980年以降だけ120秒1日サイクル版
+   - 1979年までは昼固定
+   - 1980年以降だけ夜→朝→昼→夕方を120秒で表現
+   - 部分的なライトムラを廃止
+   - 全体の明るさ・コントラスト調整で自然に昼夜を表現
+   - 車には暗さ・ぼかしをかけない
+   ========================================================= */
+
+/* まずライトのムラを完全に消す */
+.drive-bg .era-bg-layer::after,
+.drive-bg .era-bg-layer.is-visible::after{
+  content:none !important;
+  display:none !important;
+  opacity:0 !important;
+  animation:none !important;
+  background:none !important;
+}
+
+/* 全年代共通：背景は左から右へ流す */
+.era-bg-layer{
+  animation:
+    runCarBackgroundLeftToRight120 var(--run-bg-pan-duration) linear infinite !important;
+  filter:saturate(.96) contrast(.96) brightness(1.08) !important;
+}
+
+/* 1960年代・1970年代は昼固定。モノクロも暗くしない */
+.era-bg-layer[data-era="1960"],
+.era-bg-layer[data-era="1970"]{
+  animation:
+    runCarBackgroundLeftToRight120 var(--run-bg-pan-duration) linear infinite !important;
+  filter:saturate(.98) contrast(.95) brightness(1.08) !important;
+}
+
+/* 1980年代以降だけ、120秒の1日サイクルをかける */
+.era-bg-layer[data-era="1980"],
+.era-bg-layer[data-era="1990"],
+.era-bg-layer[data-era="2000"],
+.era-bg-layer[data-era="2010"],
+.era-bg-layer[data-era="2020"]{
+  animation:
+    runCarBackgroundLeftToRight120 var(--run-bg-pan-duration) linear infinite,
+    runCarDayCycleUniform120 var(--run-bg-day-duration) ease-in-out infinite !important;
+}
+
+/*
+  120秒の内訳
+  0〜40秒：夜。暗いが黒潰れしない
+  40〜60秒：朝
+  60〜90秒：昼
+  90〜120秒：夕方
+  ムラが出ないよう、filterのみで全体を変化
+*/
+@keyframes runCarDayCycleUniform120{
+  0%{
+    filter:saturate(.66) contrast(.88) brightness(.50);
+  }
+  16.6%{
+    filter:saturate(.62) contrast(.86) brightness(.44);
+  }
+  33.3%{
+    filter:saturate(.70) contrast(.90) brightness(.56);
+  }
+
+  /* 朝 */
+  42%{
+    filter:saturate(.84) contrast(.94) brightness(.78);
+  }
+  50%{
+    filter:saturate(.94) contrast(.98) brightness(1.00);
+  }
+
+  /* 昼 */
+  66%{
+    filter:saturate(1.04) contrast(1.00) brightness(1.16);
+  }
+  75%{
+    filter:saturate(1.00) contrast(.98) brightness(1.08);
+  }
+
+  /* 夕方 */
+  88%{
+    filter:saturate(.86) contrast(.94) brightness(.78);
+  }
+  100%{
+    filter:saturate(.66) contrast(.88) brightness(.50);
+  }
+}
+
+/* 既存の天候・ライト演出は使わない */
+.weather-effects,
+.weather-clouds,
+.weather-rain,
+.weather-night-lights{
+  display:none !important;
+  opacity:0 !important;
+}
+
+/* 車は常にクリア */
+.drive-cars,
+.drive-car,
+.drive-car-slot{
+  filter:none !important;
+}
+
+
+/* =========================================================
+   RUN-CAR 修正確定版
+   原因対策:
+   1) 背景移動を transform から background-position に変更
+      → 見た目として確実に背景が左から右へ流れる
+   2) 1980年以降だけ昼夜サイクル
+   3) 夜は120秒中40秒しっかり維持
+   4) 部分ライト・ムラ表現は完全削除
+   5) 車には暗さ・ぼかしを絶対にかけない
+   ========================================================= */
+
+.drive-stage{
+  --run-bg-pan-duration:36s;
+  --run-bg-day-duration:120s;
+  position:relative;
+  height:180px;
+  min-height:180px;
+  overflow:hidden;
+  background:#111;
+}
+
+/* 背景の横流れ速度。年表速度に合わせて見た目だけ調整 */
+.drive-stage[data-bg-speed="verySlow"]{
+  --run-bg-pan-duration:52s;
+  --run-bg-day-duration:120s;
+}
+
+.drive-stage[data-bg-speed="slow"]{
+  --run-bg-pan-duration:42s;
+  --run-bg-day-duration:120s;
+}
+
+.drive-stage[data-bg-speed="normal"]{
+  --run-bg-pan-duration:34s;
+  --run-bg-day-duration:120s;
+}
+
+.drive-bg{
+  position:absolute !important;
+  inset:0 !important;
+  width:100% !important;
+  height:100% !important;
+  overflow:hidden !important;
+  background:none !important;
+  animation:none !important;
+  transform:none !important;
+  filter:none !important;
+  z-index:1 !important;
+}
+
+.drive-bg::before,
+.drive-bg::after,
+.drive-bg .era-bg-layer::after,
+.drive-bg .era-bg-layer.is-visible::after{
+  content:none !important;
+  display:none !important;
+  opacity:0 !important;
+  animation:none !important;
+  background:none !important;
+}
+
+/* 背景レイヤー本体 */
+.era-bg-layer{
+  position:absolute !important;
+  inset:0 !important;
+  left:0 !important;
+  width:100% !important;
+  height:100% !important;
+  opacity:0;
+  transform:none !important;
+
+  background-repeat:repeat-x !important;
+  background-size:auto 100% !important;
+  background-position-x:0 !important;
+  background-position-y:56% !important;
+
+  transition:opacity 1.8s ease-in-out !important;
+  will-change:background-position, filter, opacity;
+
+  animation:runCarBgMoveVisibleLeftToRight var(--run-bg-pan-duration) linear infinite !important;
+  filter:saturate(.96) contrast(.96) brightness(1.08) !important;
+}
+
+.era-bg-layer.is-visible{
+  opacity:1 !important;
+}
+
+/* 左→右へ背景が流れる。
+   background-position-x を増やすと、背景画像が右へ動いて見える。 */
+@keyframes runCarBgMoveVisibleLeftToRight{
+  0%{
+    background-position-x:0;
+  }
+  100%{
+    background-position-x:900px;
+  }
+}
+
+/* 1979年までは昼固定 */
+.era-bg-layer[data-era="1960"],
+.era-bg-layer[data-era="1970"]{
+  animation:runCarBgMoveVisibleLeftToRight var(--run-bg-pan-duration) linear infinite !important;
+  filter:saturate(.98) contrast(.96) brightness(1.12) !important;
+}
+
+/* 1980年以降だけ120秒サイクル */
+.era-bg-layer[data-era="1980"],
+.era-bg-layer[data-era="1990"],
+.era-bg-layer[data-era="2000"],
+.era-bg-layer[data-era="2010"],
+.era-bg-layer[data-era="2020"]{
+  animation:
+    runCarBgMoveVisibleLeftToRight var(--run-bg-pan-duration) linear infinite,
+    runCarDayCycleHoldNight120 var(--run-bg-day-duration) linear infinite !important;
+}
+
+/*
+  120秒サイクル
+  0%〜33.333% = 夜を約40秒維持
+  33.333%以降 = 朝→昼→夕方
+  ムラは使わず、全体の filter だけで表現
+*/
+@keyframes runCarDayCycleHoldNight120{
+  /* 夜：40秒。ここは明るくしない */
+  0%{
+    filter:saturate(.58) contrast(.86) brightness(.42);
+  }
+  12%{
+    filter:saturate(.58) contrast(.86) brightness(.40);
+  }
+  24%{
+    filter:saturate(.60) contrast(.87) brightness(.40);
+  }
+  33.333%{
+    filter:saturate(.64) contrast(.88) brightness(.44);
+  }
+
+  /* 朝：40秒を過ぎてから徐々に明るく */
+  45%{
+    filter:saturate(.78) contrast(.92) brightness(.70);
+  }
+  55%{
+    filter:saturate(.92) contrast(.96) brightness(.95);
+  }
+
+  /* 昼：しっかり明るい */
+  68%{
+    filter:saturate(1.06) contrast(1.00) brightness(1.18);
+  }
+  78%{
+    filter:saturate(1.02) contrast(.98) brightness(1.10);
+  }
+
+  /* 夕方：少し暗く戻す */
+  90%{
+    filter:saturate(.84) contrast(.94) brightness(.76);
+  }
+  100%{
+    filter:saturate(.66) contrast(.88) brightness(.48);
+  }
+}
+
+/* 既存の天候・夜間ライト演出は完全停止 */
+.weather-effects,
+.weather-clouds,
+.weather-rain,
+.weather-night-lights{
+  display:none !important;
+  opacity:0 !important;
+}
+
+/* 車は常にクリア。背景フィルターの影響を受けない */
+.drive-cars{
+  position:absolute;
+  inset:0;
+  z-index:4;
+  pointer-events:none;
+  filter:none !important;
+}
+
+.drive-car,
+.drive-car-slot,
+.drive-car img,
+.drive-car-slot img{
+  filter:none !important;
+}
+
+/* ただし既存の車の影は維持したい場合の最低限 */
+.drive-car{
+  filter:drop-shadow(0 14px 14px rgba(0,0,0,.55)) !important;
+}
+
+@media (max-width:900px){
+  .drive-stage{
+    height:150px;
+    min-height:150px;
+  }
+
+  .era-bg-layer{
+    background-position-y:56% !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .era-bg-layer{
+    animation:none !important;
+    background-position-x:0 !important;
+    filter:saturate(.95) contrast(.96) brightness(1.02) !important;
+  }
+}
+
+
+/* =========================================================
+   RUN-CAR 背景移動 強制表示版
+   原因:
+   前回はJS側で横流れ時間まで120秒になり、ほぼ止まって見えていました。
+   今回は横流れと昼夜サイクルを分離します。
+   ========================================================= */
+
+.drive-stage{
+  --run-bg-pan-duration:16s;
+  --run-bg-day-duration:120s;
+  position:relative;
+  height:180px;
+  min-height:180px;
+  overflow:hidden;
+  background:#111;
+}
+
+.drive-stage[data-bg-speed="verySlow"]{
+  --run-bg-pan-duration:34s;
+  --run-bg-day-duration:120s;
+}
+
+.drive-stage[data-bg-speed="slow"]{
+  --run-bg-pan-duration:24s;
+  --run-bg-day-duration:120s;
+}
+
+.drive-stage[data-bg-speed="normal"]{
+  --run-bg-pan-duration:16s;
+  --run-bg-day-duration:120s;
+}
+
+.drive-bg{
+  position:absolute !important;
+  inset:0 !important;
+  width:100% !important;
+  height:100% !important;
+  overflow:hidden !important;
+  background:none !important;
+  animation:none !important;
+  transform:none !important;
+  filter:none !important;
+  z-index:1 !important;
+}
+
+.drive-bg::before,
+.drive-bg::after,
+.drive-bg .era-bg-layer::after,
+.drive-bg .era-bg-layer.is-visible::after{
+  content:none !important;
+  display:none !important;
+  opacity:0 !important;
+  animation:none !important;
+  background:none !important;
+}
+
+/* 背景そのものを大きく横に動かす。これで必ず流れが見える */
+.era-bg-layer{
+  position:absolute !important;
+  top:0 !important;
+  bottom:0 !important;
+  left:-120% !important;
+  width:240% !important;
+  height:100% !important;
+  opacity:0;
+
+  background-repeat:repeat-x !important;
+  background-size:auto 100% !important;
+  background-position:center 56% !important;
+
+  transform:translateX(0) !important;
+  transition:opacity 1.8s ease-in-out !important;
+  will-change:transform, filter, opacity;
+
+  animation:runCarBgLayerMoveLeftToRight var(--run-bg-pan-duration) linear infinite !important;
+  filter:saturate(.96) contrast(.96) brightness(1.08) !important;
+}
+
+.era-bg-layer.is-visible{
+  opacity:1 !important;
+}
+
+/* 左から右へ流す：背景レイヤーを右へ大きく動かす */
+@keyframes runCarBgLayerMoveLeftToRight{
+  0%{
+    transform:translateX(0) !important;
+  }
+  100%{
+    transform:translateX(50%) !important;
+  }
+}
+
+/* 1979年までは昼固定 */
+.era-bg-layer[data-era="1960"],
+.era-bg-layer[data-era="1970"]{
+  animation:runCarBgLayerMoveLeftToRight var(--run-bg-pan-duration) linear infinite !important;
+  filter:saturate(.98) contrast(.96) brightness(1.12) !important;
+}
+
+/* 1980年以降だけ、横流れ + 120秒昼夜サイクル */
+.era-bg-layer[data-era="1980"],
+.era-bg-layer[data-era="1990"],
+.era-bg-layer[data-era="2000"],
+.era-bg-layer[data-era="2010"],
+.era-bg-layer[data-era="2020"]{
+  animation:
+    runCarBgLayerMoveLeftToRight var(--run-bg-pan-duration) linear infinite,
+    runCarDayCycleHoldNight120 var(--run-bg-day-duration) linear infinite !important;
+}
+
+/* 120秒中、最初の約40秒は夜を維持 */
+@keyframes runCarDayCycleHoldNight120{
+  0%{
+    filter:saturate(.58) contrast(.86) brightness(.42);
+  }
+  12%{
+    filter:saturate(.58) contrast(.86) brightness(.40);
+  }
+  24%{
+    filter:saturate(.60) contrast(.87) brightness(.40);
+  }
+  33.333%{
+    filter:saturate(.64) contrast(.88) brightness(.44);
+  }
+
+  /* 朝 */
+  45%{
+    filter:saturate(.78) contrast(.92) brightness(.70);
+  }
+  55%{
+    filter:saturate(.92) contrast(.96) brightness(.95);
+  }
+
+  /* 昼 */
+  68%{
+    filter:saturate(1.06) contrast(1.00) brightness(1.18);
+  }
+  78%{
+    filter:saturate(1.02) contrast(.98) brightness(1.10);
+  }
+
+  /* 夕方 */
+  90%{
+    filter:saturate(.84) contrast(.94) brightness(.76);
+  }
+  100%{
+    filter:saturate(.66) contrast(.88) brightness(.48);
+  }
+}
+
+/* 天候・夜ライト演出は停止 */
+.weather-effects,
+.weather-clouds,
+.weather-rain,
+.weather-night-lights{
+  display:none !important;
+  opacity:0 !important;
+}
+
+/* 車は常にクリア */
+.drive-cars{
+  position:absolute;
+  inset:0;
+  z-index:4;
+  pointer-events:none;
+  filter:none !important;
+}
+
+.drive-car-slot,
+.drive-car-slot img{
+  filter:none !important;
+}
+
+.drive-car{
+  filter:drop-shadow(0 14px 14px rgba(0,0,0,.55)) !important;
+}
+
+@media (max-width:900px){
+  .drive-stage{
+    height:150px;
+    min-height:150px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .era-bg-layer{
+    animation:none !important;
+    transform:translateX(20%) !important;
+    filter:saturate(.95) contrast(.96) brightness(1.02) !important;
+  }
+}
+
+
+/* =========================================================
+   RUN-CAR 背景移動 v3：JS制御版
+   - CSSアニメーションの競合を避ける
+   - transform はCSS変数で固定し、JSが値を更新
+   - 年表停止中も背景は止まらない
+   - つなぎ目は許容し、走行感を優先
+   ========================================================= */
+
+.drive-stage{
+  --run-bg-x:0px;
+  --run-bg-filter:saturate(.98) contrast(.96) brightness(1.12);
+  position:relative;
+  overflow:hidden;
+  background:#111;
+}
+
+.drive-bg{
+  position:absolute !important;
+  inset:0 !important;
+  width:100% !important;
+  height:100% !important;
+  overflow:hidden !important;
+  background:none !important;
+  animation:none !important;
+  transform:none !important;
+  filter:none !important;
+  z-index:1 !important;
+}
+
+.drive-bg::before,
+.drive-bg::after,
+.drive-bg .era-bg-layer::before,
+.drive-bg .era-bg-layer::after{
+  content:none !important;
+  display:none !important;
+  background:none !important;
+  animation:none !important;
+  opacity:0 !important;
+}
+
+/* 背景レイヤーはJSが動かす。過去CSSのanimation/transform競合を完全に止める */
+.era-bg-layer{
+  position:absolute !important;
+  top:0 !important;
+  bottom:0 !important;
+  left:-140% !important;
+  width:280% !important;
+  height:100% !important;
+  opacity:0;
+  background-repeat:repeat-x !important;
+  background-size:auto 100% !important;
+  background-position:center 56% !important;
+  animation:none !important;
+  transform:translateX(var(--run-bg-x, 0px)) !important;
+  filter:var(--run-bg-filter, saturate(.98) contrast(.96) brightness(1.12)) !important;
+  transition:opacity 1.2s ease-in-out !important;
+  will-change:transform, filter, opacity;
+}
+
+.era-bg-layer.is-visible{
+  opacity:1 !important;
+}
+
+/* 車の上下ふわふわを止める。走行感は背景移動で出す */
+@keyframes driveFloat{
+  from{ translate:0 0; }
+  to{ translate:0 0; }
+}
+
+.drive-car-slot,
+.drive-car-slot img{
+  filter:none !important;
+}
+
+.drive-car{
+  filter:drop-shadow(0 14px 14px rgba(0,0,0,.55)) !important;
+}
+
+.weather-effects,
+.weather-clouds,
+.weather-rain,
+.weather-night-lights{
+  display:none !important;
+  opacity:0 !important;
+}
+
+
+/* =========================================================
+   RUN-CAR 微調整 v4
+   - 背景速度を落とした版に合わせる
+   - 夜はRUN-CARのライトを点灯
+   - 先頭カローラを少し低くする
+   ========================================================= */
+
+/* 先頭の初代カローラを少し低くする */
+.car-slot-1966{
+  bottom:6px !important;
+}
+
+/* 通常時はライト非表示 */
+.drive-car-slot::before,
+.drive-car-slot::after{
+  content:"";
+  position:absolute;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .8s ease;
+}
+
+/* 車は左向き想定。左前方へライトを出す */
+.drive-car-slot::before{
+  left:-58px;
+  top:48%;
+  width:82px;
+  height:22px;
+  transform:translateY(-50%);
+  border-radius:999px;
+  background:linear-gradient(90deg,
+    rgba(255,245,185,0),
+    rgba(255,238,150,.48),
+    rgba(255,250,210,.76)
+  );
+  filter:blur(6px);
+  z-index:-1;
+}
+
+.drive-car-slot::after{
+  left:-14px;
+  top:48%;
+  width:13px;
+  height:8px;
+  transform:translateY(-50%);
+  border-radius:999px;
+  background:rgba(255,245,180,.96);
+  box-shadow:
+    0 0 10px rgba(255,240,160,.85),
+    0 0 22px rgba(255,220,100,.55);
+  z-index:2;
+}
+
+/* 1980年以降の夜だけライト点灯 */
+.drive-stage.is-bg-night .drive-car-slot{
+  overflow:visible;
+}
+
+.drive-stage.is-bg-night .drive-car-slot::before,
+.drive-stage.is-bg-night .drive-car-slot::after{
+  opacity:1;
+}
+
+/* 非表示中の車のライトは出さない */
+.drive-car-slot:not(.car-slot-1966){
+  visibility:visible;
+}
+
+.drive-car-slot:not(.car-slot-1966):not([style*="opacity: 1"])::before,
+.drive-car-slot:not(.car-slot-1966):not([style*="opacity: 1"])::after{
+  opacity:0;
+}
+
+/* クラス表示中の年代車はCSS上で表示されるため、夜ライトも表示 */
+.drive-stage.show-1970 .car-slot-1970::before,
+.drive-stage.show-1970 .car-slot-1970::after,
+.drive-stage.show-1980 .car-slot-1980::before,
+.drive-stage.show-1980 .car-slot-1980::after,
+.drive-stage.show-1990 .car-slot-1990::before,
+.drive-stage.show-1990 .car-slot-1990::after,
+.drive-stage.show-2000 .car-slot-2000::before,
+.drive-stage.show-2000 .car-slot-2000::after,
+.drive-stage.show-2010 .car-slot-2010::before,
+.drive-stage.show-2010 .car-slot-2010::after,
+.drive-stage.show-2020 .car-slot-2020::before,
+.drive-stage.show-2020 .car-slot-2020::after{
+  opacity:inherit;
+}
+
+/* 夜ライトは走行感を出すため少し長め。車自体は暗くしない */
+.drive-stage.is-bg-night .drive-car{
+  filter:
+    drop-shadow(0 14px 14px rgba(0,0,0,.55))
+    drop-shadow(0 0 8px rgba(255,230,150,.20)) !important;
+}
+
+
+/* =========================================================
+   RUN-CAR 車の上下揺れ v5
+   - 以前の2px揺れの約半分
+   - 完全停止ではなく、走行中の自然な振動だけ残す
+   ========================================================= */
+
+@keyframes driveFloat{
+  from{
+    translate:0 0;
+  }
+  to{
+    translate:0 -1px;
+  }
+}
+
+.car-slot-1966{
+  animation:driveFloat .62s ease-in-out infinite alternate !important;
+}
+
+.drive-stage.show-1970 .car-slot-1970,
+.drive-stage.show-1980 .car-slot-1980,
+.drive-stage.show-1990 .car-slot-1990,
+.drive-stage.show-2000 .car-slot-2000,
+.drive-stage.show-2010 .car-slot-2010,
+.drive-stage.show-2020 .car-slot-2020{
+  animation:
+    driveJoinWithCenterStop 3.1s ease-in-out both,
+    driveFloat .62s ease-in-out 3.1s infinite alternate !important;
+}
+
+/* 周回復帰後の初代カローラも半分揺れに戻す */
+.drive-stage.is-loop-reset .car-slot-1966{
+  animation:
+    driveFleetExit 2.4s cubic-bezier(.32,.02,.58,1) both,
+    corollaReturnToLead 3.2s cubic-bezier(.18,.72,.24,1) 2.65s both,
+    driveFloat .62s ease-in-out 5.85s infinite alternate !important;
+}
+
+/* =========================================================
+   v4: drive-stage隊列用ライト高さの個別調整
+   ---------------------------------------------------------
+   注意:
+   ERA_RUNNER_CARS の lightTop は、年表上を走り抜ける
+   .rav4-runner / .rav4-speed-light 用です。
+
+   画面中央のRUN-CAR隊列に見えているライトは、
+   .drive-car-slot::before と .drive-car-slot::after で作っています。
+   そのため、隊列側のライト高さはここで車種別に調整します。
+
+   top の数値を大きくするとライトは下がります。
+   top の数値を小さくするとライトは上がります。
+   ========================================================= */
+
+/* 1970年 グリーンカローラ：ライトを少し下げる */
+.car-slot-1970::before,
+.car-slot-1970::after{
+  top:calc(48% + 10px) !important;
+}
+
+/* 2010年 青いハリヤー hayy：v4では下がりすぎたため、+24px → +12px に戻す */
+.car-slot-2010::before,
+.car-slot-2010::after{
+  top:calc(48% + 12px) !important;
+}
+
+/* =========================================================
+   プレゼン比較版：RUN-CARより下を年代ごとに横スライド
+   年号・見出しの最終表示位置は全ページ共通で固定
+   ========================================================= */
+.presentation-mode-badge{
+  display:inline-flex;
+  align-items:center;
+  min-height:34px;
+  padding:7px 12px;
+  border:1px solid rgba(247,216,121,.45);
+  border-radius:999px;
+  color:#f7d879;
+  background:rgba(218,178,78,.08);
+  font-size:12px;
+  letter-spacing:.08em;
+  white-space:nowrap;
+}
+.slide-control{display:flex;gap:8px;}
+
+/* スライド中に画面外要素が見えない */
+.page{overflow:hidden;}
+.main-card{
+  position:relative;
+  will-change:transform, opacity, filter;
+  transform:translateX(0);
+  opacity:1;
+  filter:none;
+}
+.main-card.slide-out-to-left{
+  transition:transform var(--lower-slide-phase, 1400ms) linear, opacity var(--lower-slide-phase, 1400ms) linear, filter var(--lower-slide-phase, 1400ms) linear;
+  transform:translateX(-112%);
+  opacity:.72;
+  filter:blur(.4px);
+}
+.main-card.slide-in-from-right{
+  transition:none;
+  transform:translateX(112%);
+  opacity:.72;
+  filter:blur(.4px);
+}
+.main-card.slide-in-from-right.slide-in-active{
+  transition:transform var(--lower-slide-phase, 1400ms) linear, opacity var(--lower-slide-phase, 1400ms) linear, filter var(--lower-slide-phase, 1400ms) linear;
+  transform:translateX(0);
+  opacity:1;
+  filter:none;
+}
+
+/* 年代表示を毎ページ同一位置・同一書体に固定 */
+.left-panel .label{height:16px;}
+.year-line{
+  min-height:62px;
+  align-items:flex-end;
+  flex-wrap:nowrap;
+}
+.big-year{
+  display:inline-block;
+  min-width:230px;
+  font-family:"Avenir Next","Helvetica Neue","Noto Sans JP",sans-serif;
+  font-size:clamp(48px,4.7vw,68px);
+  font-weight:700;
+  letter-spacing:.015em;
+  color:#f7f4e8;
+  text-shadow:0 1px 0 rgba(255,255,255,.16),0 0 24px rgba(218,178,78,.18);
+  font-variant-numeric:tabular-nums;
+}
+.era-badge{flex:0 0 auto;margin-bottom:4px;}
+#selectedTitle{
+  min-height:34px;
+  max-height:34px;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  color:#fff;
+  font-weight:600;
+  letter-spacing:.02em;
+}
+
+/* プレゼン時の不足画像は白背景の車両画像でも品位を保つ */
+.photo-link{
+  background:linear-gradient(180deg,#f7f7f5,#e9e9e6);
+}
+.photo-link img{
+  padding:10px;
+  object-fit:contain;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .main-card.slide-out-to-left,
+  .main-card.slide-in-from-right.slide-in-active{transition-duration:.15s;}
+}
+
+/* =========================================================
+   プレゼン版レイアウト調整 v2
+   - RUN-CARエリアは上側を50px分カットして高さ130px
+   - 下段スライドコンテナとの間隔を40px確保
+   ========================================================= */
+.drive-stage{
+  min-height:130px !important;
+  height:130px !important;
+  margin-bottom:40px !important;
+}
+
+/* 元の180px構図を保ち、上側だけ50px見切る */
+.drive-stage .drive-bg,
+.drive-stage .weather-effects,
+.drive-stage .drive-cars{
+  top:-50px !important;
+  bottom:auto !important;
+  height:180px !important;
+}
+
+/* 車列は従来の下端位置を維持する */
+.drive-stage .drive-cars{
+  transform:translateY(50px);
+}
+
+
+/* =========================================================
+   完全同期版：年表カードと下段4コンテナを同一進行率で移動
+   ========================================================= */
+.page{position:relative;overflow:hidden;}
+.main-card.lower-slide-live{
+  position:relative;
+  z-index:11;
+  transition:none !important;
+  will-change:transform;
+}
+.lower-slide-snapshot{
+  position:absolute !important;
+  z-index:10;
+  margin:0 !important;
+  pointer-events:none;
+  transition:none !important;
+  will-change:transform;
+}
+.main-card.slide-out-to-left,
+.main-card.slide-in-from-right,
+.main-card.slide-in-from-right.slide-in-active{
+  transition:none !important;
+}
+
+/* 5秒固定スライド版：開始は上段年表と同時、下段は必ず5秒で定位置へ */
+
+/* v9 起動位置安定化：JSが1966年位置を確定するまで年表カードを隠す */
+.timeline-track{visibility:hidden;}
+
+/* =========================================================
+   v10 レイアウト修正
+   - RUN-CARは180px構図の上側50pxを切り、下端側を表示
+   - 車列を相殺していた下方向50px移動を解除
+   - 下段4コンテナをRUN-CAR直下まで引き上げる
+   ========================================================= */
+.drive-stage{
+  min-height:130px !important;
+  height:130px !important;
+  margin-bottom:8px !important;
+}
+
+/* 180pxの中身全体を上へ50px移動し、上側だけを見切る */
+.drive-stage .drive-bg,
+.drive-stage .weather-effects,
+.drive-stage .drive-cars{
+  top:-50px !important;
+  bottom:auto !important;
+  height:180px !important;
+}
+
+/* 旧指定の translateY(50px) が下側カットの原因だったため解除 */
+.drive-stage .drive-cars{
+  transform:none !important;
+}
+
+/* 下段4コンテナを上へ詰め、同じ上端・高さで揃える */
+.main-card{
+  margin-top:0 !important;
+  align-items:stretch !important;
+}
+.left-panel,
+.event-grid,
+.event-grid article{
+  height:100%;
+}
+
+/* ===== 1サイクル残タイマー ===== */
+.cycle-timer{
+  display:inline-flex;
+  align-items:baseline;
+  justify-content:center;
+  gap:6px;
+  min-height:38px;
+  padding:8px 13px;
+  border:1px solid rgba(247,216,121,.48);
+  border-radius:999px;
+  color:#fff;
+  background:linear-gradient(180deg, rgba(28,24,12,.92), rgba(5,5,5,.94));
+  box-shadow:0 0 16px rgba(218,178,78,.16), inset 0 0 12px rgba(218,178,78,.08);
+  white-space:nowrap;
+}
+.cycle-timer-label{
+  color:rgba(255,255,255,.78);
+  font-size:12px;
+  letter-spacing:.04em;
+}
+#cycleRemainingSeconds{
+  min-width:4ch;
+  color:var(--gold2);
+  font-variant-numeric:tabular-nums;
+  font-size:20px;
+  line-height:1;
+  text-align:right;
+  text-shadow:0 0 10px rgba(247,216,121,.34);
+}
+.cycle-timer-unit{
+  color:rgba(255,255,255,.72);
+  font-size:12px;
+}
+
+/* =========================================================
+   SELECTED YEAR 年度色連動
+   - 年表・下段4コンテナ移動中：白
+   - 下段4コンテナ停止・表示確定時：ゴールド
+   ========================================================= */
+#selectedYear{
+  color:#f7f4e8 !important;
+  transition:
+    color .45s ease,
+    text-shadow .45s ease,
+    transform .45s ease;
+}
+
+body #selectedYear.year-stopped{
+  color:var(--gold2, #f7d879) !important;
+  text-shadow:
+    0 0 8px rgba(247,216,121,.78),
+    0 0 22px rgba(218,178,78,.48),
+    0 1px 0 rgba(255,255,255,.18) !important;
+  transform:scale(1.03);
+}
+
+
+/* =========================================================
+   センター年表カード：停止時の年度・年号ゴールド連動
+   - 移動中：年度・年号は白
+   - センター停止中：年度・年号をゴールド
+   - カード外周の既存ゴールド光は消さず、そのまま維持
+   ========================================================= */
+.year-node .era,
+.year-node .wheel strong{
+  transition:
+    color .38s ease,
+    text-shadow .38s ease;
+}
+
+body.timeline-year-stopped .year-node.active .era,
+body.timeline-year-stopped .year-node.is-active .era,
+body.timeline-year-stopped .year-node.selected .era,
+body.timeline-year-stopped .year-node.active .wheel strong,
+body.timeline-year-stopped .year-node.is-active .wheel strong,
+body.timeline-year-stopped .year-node.selected .wheel strong{
+  color:var(--gold2, #f7d879) !important;
+  text-shadow:
+    0 0 7px rgba(247,216,121,.88),
+    0 0 18px rgba(218,178,78,.62),
+    0 1px 0 rgba(255,255,255,.2) !important;
+}
+
+/* =========================================================
+   大型モニター対応 オープニング画面
+   背景画像: images/opening/top-page.jpg
+   ========================================================= */
+
+body.opening-active {
+  overflow: hidden;
+}
+
+.opening-page {
+  position: fixed;
+  inset: 0;
+  z-index: 50000;
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 100dvh;
+  overflow: hidden;
+  color: #fff;
+  background-color: #07111b;
+  background-image: url("images/opening/top-page.jpg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  opacity: 1;
+  visibility: visible;
+  isolation: isolate;
+  transition: opacity 1.15s ease, visibility 1.15s ease;
+}
+
+.opening-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 50% 98%, rgba(2, 12, 24, .18) 0%, rgba(2, 12, 24, 0) 48%),
+    linear-gradient(180deg, rgba(0, 0, 0, .02) 0%, rgba(0, 0, 0, .04) 56%, rgba(0, 9, 20, .28) 100%);
+}
+
+.opening-page::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgba(245, 183, 77, .05),
+    transparent 36%,
+    transparent 64%,
+    rgba(77, 212, 255, .05)
+  );
+}
+
+.opening-page__shade {
+  position: absolute;
+  left: 50%;
+  bottom: -4%;
+  width: min(48vw, 920px);
+  height: min(39vh, 430px);
+  transform: translateX(-50%);
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(3, 15, 29, .76) 0%,
+    rgba(3, 15, 29, .51) 48%,
+    rgba(3, 15, 29, 0) 76%
+  );
+  filter: blur(8px);
+}
+
+.opening-controls {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(20px, 3.2vh, 62px);
+  z-index: 3;
+  display: flex;
+  width: min(36vw, 700px);
+  min-width: 420px;
+  transform: translateX(-50%);
+  flex-direction: column;
+  align-items: center;
+}
+
+.opening-meter {
+  position: relative;
+  width: clamp(215px, 15vw, 330px);
+  aspect-ratio: 260 / 155;
+  margin-bottom: clamp(6px, .7vh, 12px);
+  filter:
+    drop-shadow(-8px 0 12px rgba(245, 183, 77, .34))
+    drop-shadow(8px 0 12px rgba(77, 212, 255, .34));
+}
+
+.opening-meter__svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.opening-meter__track,
+.opening-meter__progress {
+  fill: none;
+  stroke-width: 8;
+  stroke-linecap: round;
+}
+
+.opening-meter__track {
+  stroke: rgba(255, 255, 255, .20);
+}
+
+.opening-meter__progress {
+  stroke: url(#openingMeterGradient);
+  stroke-dasharray: 314.2;
+  stroke-dashoffset: 314.2;
+  transition: stroke-dashoffset .07s linear;
+}
+
+.opening-meter__ticks line {
+  stroke: rgba(255, 255, 255, .78);
+  stroke-width: 2;
+}
+
+.opening-meter__needle {
+  transform-origin: 130px 130px;
+  transform: rotate(-90deg);
+  transition: transform .07s linear;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, .9));
+}
+
+.opening-meter__needle line {
+  stroke: #fff;
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.opening-meter__needle circle {
+  fill: #fff;
+}
+
+.opening-meter__readout {
+  position: absolute;
+  left: 50%;
+  bottom: -2px;
+  display: flex;
+  width: 100%;
+  transform: translateX(-50%);
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  font-family: "Segoe UI", "Noto Sans JP", system-ui, sans-serif;
+  text-shadow: 0 2px 9px rgba(0, 0, 0, .8);
+}
+
+.opening-meter__readout strong {
+  color: #fff;
+  font-size: clamp(30px, 2.7vw, 54px);
+  font-weight: 300;
+  line-height: .96;
+  letter-spacing: .02em;
+}
+
+.opening-meter__readout span {
+  margin-top: 6px;
+  color: rgba(255, 255, 255, .94);
+  font-size: clamp(10px, .72vw, 14px);
+  font-weight: 600;
+  letter-spacing: .20em;
+}
+
+.opening-start-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(34vw, 650px);
+  min-width: 400px;
+  min-height: clamp(64px, 6.8vh, 92px);
+  padding: 14px 78px 14px 48px;
+  border: 2px solid rgba(255, 255, 255, .90);
+  border-radius: 999px;
+  color: #fff;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(95, 53, 17, .78) 0%,
+      rgba(6, 29, 51, .92) 45%,
+      rgba(5, 51, 82, .88) 100%
+    );
+  box-shadow:
+    -12px 0 28px rgba(245, 183, 77, .36),
+    12px 0 30px rgba(77, 212, 255, .40),
+    inset 0 0 22px rgba(255, 255, 255, .09);
+  backdrop-filter: blur(8px);
+  font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-size: clamp(24px, 2.15vw, 42px);
+  font-weight: 600;
+  letter-spacing: .11em;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, .68);
+  cursor: pointer;
+  transition:
+    transform .24s ease,
+    box-shadow .24s ease,
+    opacity .32s ease;
+}
+
+.opening-start-button__arrow {
+  position: absolute;
+  right: 38px;
+  top: 50%;
+  transform: translateY(-55%);
+  font-family: Arial, sans-serif;
+  font-size: 1.55em;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.opening-start-button:hover {
+  transform: scale(1.025);
+  box-shadow:
+    -15px 0 36px rgba(245, 183, 77, .50),
+    15px 0 38px rgba(77, 212, 255, .54),
+    inset 0 0 28px rgba(255, 255, 255, .13);
+}
+
+.opening-start-button:focus-visible {
+  outline: 4px solid #fff;
+  outline-offset: 6px;
+}
+
+.opening-start-button:disabled {
+  opacity: .58;
+  cursor: default;
+  transform: none;
+}
+
+.opening-controls__caption {
+  margin: clamp(8px, 1vh, 14px) 0 0;
+  color: rgba(255, 255, 255, .92);
+  font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-size: clamp(14px, 1.05vw, 20px);
+  letter-spacing: .13em;
+  text-shadow: 0 2px 9px rgba(0, 0, 0, .82);
+}
+
+.opening-page.is-loading .opening-start-button {
+  pointer-events: none;
+}
+
+.opening-page.is-finished {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* 16:9大型モニター（Full HD / 4K） */
+@media (min-width: 1600px) and (min-aspect-ratio: 16/10) {
+  .opening-page {
+    background-position: center 48%;
+  }
+
+  .opening-controls {
+    bottom: clamp(20px, 2.8vh, 58px);
+  }
+}
+
+/* 縦が低いモニターでも操作部を収める */
+@media (max-height: 780px) {
+  .opening-controls {
+    bottom: 12px;
+    transform: translateX(-50%) scale(.84);
+    transform-origin: center bottom;
+  }
+}
+
+/* 画面幅が狭い場合の保険 */
+@media (max-width: 900px) {
+  .opening-controls {
+    width: 84vw;
+    min-width: 0;
+  }
+
+  .opening-start-button {
+    width: min(78vw, 560px);
+    min-width: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .opening-page,
+  .opening-meter__progress,
+  .opening-meter__needle,
+  .opening-start-button {
+    transition-duration: .01ms !important;
+  }
+}
+
+
+/* ===== トップページ：テーマ選択 ===== */
+.opening-theme-picker{width:min(92vw,760px);padding:14px 16px;border:1px solid rgba(255,255,255,.28);border-radius:18px;background:rgba(0,0,0,.34);backdrop-filter:blur(10px);}
+.opening-theme-picker__title{margin:0 0 10px;color:#fff;font-size:14px;font-weight:700;letter-spacing:.12em;text-align:center;text-shadow:0 2px 8px rgba(0,0,0,.55);}
+.opening-theme-options{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;}
+.theme-select-button{min-height:42px;padding:8px;border:1px solid rgba(255,255,255,.36);border-radius:999px;color:#fff;background:rgba(10,10,10,.56);font-weight:700;cursor:pointer;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;}
+.theme-select-button:hover{transform:translateY(-2px);}
+.theme-select-button.is-active{border-color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.24),0 0 22px rgba(255,255,255,.28);}
+.theme-select-button:focus-visible{outline:3px solid rgba(255,255,255,.82);outline-offset:3px;}
+@media(max-width:700px){.opening-theme-options{grid-template-columns:repeat(2,minmax(0,1fr));}.theme-select-button:last-child{grid-column:1/-1;}}
+
+
+/* ===== Excel編集・オフライン確認対応 ===== */
+:root{
+  --excel-content-font-size:22px;
+  --excel-title-font-size:34px;
+  --excel-year-font-size:64px;
+  --excel-caption-font-size:18px;
+}
+.content-text{font-size:var(--excel-content-font-size) !important;line-height:1.5;}
+#selectedTitle{font-size:var(--excel-title-font-size) !important;}
+#selectedYear{font-size:var(--excel-year-font-size) !important;}
+.image-block figcaption{font-size:var(--excel-caption-font-size) !important;}
+.offline-excel-panel{position:fixed;right:14px;bottom:14px;z-index:99999;display:flex;align-items:center;gap:10px;max-width:min(640px,calc(100vw - 28px));padding:10px 12px;border:1px solid rgba(255,255,255,.35);border-radius:12px;background:rgba(0,0,0,.84);box-shadow:0 8px 24px rgba(0,0,0,.4);color:#fff;font-family:Meiryo,sans-serif;font-size:14px;}
+.offline-excel-panel button{padding:8px 14px;border:0;border-radius:8px;background:#f5b74d;color:#111;font-weight:700;cursor:pointer;white-space:nowrap;}
+.offline-excel-panel span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.offline-excel-panel .is-error{color:#ff9d9d;}
+@media (max-width:700px){.offline-excel-panel{left:8px;right:8px;bottom:8px;font-size:12px;}}
+/* トップ画面：デザイン選択を右下へ固定 */
+.opening-theme-picker {
+  position: absolute;
+  right: clamp(20px, 3vw, 60px);
+  bottom: clamp(20px, 3vh, 50px);
+  left: auto;
+  top: auto;
+  z-index: 20;
+  margin: 0;
+}
+/* トップ画面：デザイン選択を画面右下へ固定 */
+#openingPage > .opening-theme-picker {
+  position:absolute !important;
+  right:clamp(24px, 3vw, 56px) !important;
+  bottom:clamp(92px, 11vh, 126px) !important;
+  left:auto !important;
+  top:auto !important;
+  width:min(48vw, 760px) !important;
+  max-width:calc(100vw - 48px) !important;
+  margin:0 !important;
+  transform:none !important;
+  z-index:50 !important;
+}
+@media (max-width:900px){
+  #openingPage > .opening-theme-picker{
+    right:16px !important;
+    bottom:92px !important;
+    width:min(720px, calc(100vw - 32px)) !important;
+  }
+}
+
+/* ===== トップ画面：デザイン選択を以前の縦配列へ戻す ===== */
+#openingPage > .opening-theme-picker {
+  right: 28px !important;
+  bottom: 92px !important;
+  width: 190px !important;
+  max-width: calc(100vw - 56px) !important;
+  padding: 12px !important;
+}
+
+#openingPage > .opening-theme-picker .opening-theme-picker__title {
+  margin: 0 0 8px !important;
+  text-align: center !important;
+}
+
+#openingPage > .opening-theme-picker .opening-theme-options {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 7px !important;
+}
+
+#openingPage > .opening-theme-picker .theme-select-button,
+#openingPage > .opening-theme-picker .theme-select-button:last-child {
+  width: 100% !important;
+  min-height: 38px !important;
+  grid-column: auto !important;
+}
+
+@media (max-width: 700px) {
+  #openingPage > .opening-theme-picker {
+    right: 12px !important;
+    bottom: 84px !important;
+    width: 170px !important;
+  }
+}
+
+
+/* ===== 最終配置：トップ画面のテーマ選択は右端中央・縦型 ===== */
+#openingPage > .opening-theme-picker{
+  top:50% !important;
+  right:clamp(14px,1.6vw,28px) !important;
+  bottom:auto !important;
+  left:auto !important;
+  width:clamp(132px,10vw,158px) !important;
+  transform:translateY(-42%) !important;
+}
+#openingPage > .opening-theme-picker .opening-theme-options{
+  display:flex !important;
+  flex-direction:column !important;
+  grid-template-columns:none !important;
+  gap:6px !important;
+}
+
+/* ===== 最終配置：デザイン選択を右端の下段へ配置 ===== */
+#openingPage > .opening-theme-picker{
+  position:absolute !important;
+  top:auto !important;
+  right:clamp(10px,1.2vw,20px) !important;
+  bottom:clamp(96px,10vh,118px) !important;
+  left:auto !important;
+  width:clamp(132px,9.5vw,150px) !important;
+  max-width:150px !important;
+  padding:9px !important;
+  margin:0 !important;
+  transform:none !important;
+  z-index:60 !important;
+  border-radius:14px !important;
+  background:rgba(0,0,0,.42) !important;
+  backdrop-filter:blur(7px) !important;
+}
+
+#openingPage > .opening-theme-picker .opening-theme-picker__title{
+  margin:0 0 6px !important;
+  font-size:11px !important;
+  letter-spacing:.06em !important;
+  white-space:nowrap !important;
+}
+
+#openingPage > .opening-theme-picker .opening-theme-options{
+  display:flex !important;
+  flex-direction:column !important;
+  grid-template-columns:none !important;
+  gap:5px !important;
+}
+
+#openingPage > .opening-theme-picker .theme-select-button,
+#openingPage > .opening-theme-picker .theme-select-button:last-child{
+  width:100% !important;
+  min-height:30px !important;
+  height:30px !important;
+  padding:3px 7px !important;
+  font-size:12px !important;
+  line-height:1 !important;
+  grid-column:auto !important;
+}
+
+@media (max-width:900px){
+  #openingPage > .opening-theme-picker{
+    right:8px !important;
+    bottom:86px !important;
+    width:128px !important;
+    max-width:128px !important;
+  }
+}
+
+
+/* =========================================================
+   FINAL OVERRIDE: オープニングのデザイン選択
+   以前の右下・縦型パネル位置へ戻す
+   ========================================================= */
+#openingPage > .opening-theme-picker{
+  position:absolute !important;
+  right:clamp(18px,2vw,36px) !important;
+  bottom:clamp(58px,7vh,86px) !important;
+  left:auto !important;
+  top:auto !important;
+  width:clamp(176px,12.5vw,210px) !important;
+  max-width:none !important;
+  margin:0 !important;
+  padding:14px 12px 12px !important;
+  transform:none !important;
+  translate:none !important;
+  z-index:120 !important;
+}
+#openingPage > .opening-theme-picker .opening-theme-options{
+  display:grid !important;
+  grid-template-columns:1fr !important;
+  grid-auto-flow:row !important;
+  gap:7px !important;
+  width:100% !important;
+}
+#openingPage > .opening-theme-picker .theme-select-button,
+#openingPage > .opening-theme-picker .theme-select-button:last-child{
+  grid-column:auto !important;
+  width:100% !important;
+  min-width:0 !important;
+  min-height:40px !important;
+  padding:7px 10px !important;
+  text-align:left !important;
+}

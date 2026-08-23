@@ -27,7 +27,7 @@
      }
 */
 
-const MAX_IMAGES_PER_SECTION = 3;
+const MAX_IMAGES_PER_SECTION = Number.POSITIVE_INFINITY;
 const LOOP_COUNT = 3;
 const STORAGE_KEY = "takaokaTimelineLocalAdditions_v2";
 
@@ -1145,12 +1145,14 @@ function makeTextBlock(text) {
 }
 
 function makeTitleBlock(text) {
-  const paragraph = document.createElement("p");
-  paragraph.className = "content-text content-title";
-  paragraph.textContent = text || "";
-  paragraph.style.fontWeight = "700";
-  paragraph.style.margin = "0 0 8px";
-  return paragraph;
+  const title = document.createElement("h3");
+  title.className = "content-block-title";
+  title.textContent = text || "";
+  title.style.margin = "0.35em 0 0.25em";
+  title.style.fontSize = "1.08em";
+  title.style.fontWeight = "700";
+  title.style.lineHeight = "1.35";
+  return title;
 }
 
 function makeImageBlock(block) {
@@ -1971,6 +1973,140 @@ function restoreToyotaMark() {
   mark.src = TOYOTA_MARK_IMAGE;
 }
 
+let RUN_CAR_MAX_ACTIVE = 7;
+let RUN_CAR_BY_ID = new Map();
+let activeExcelRunCars = [];
+let runCarSerial = 0;
+
+function normalizeRunFlag(value, fallback = false) {
+  return normalizeExcelBoolean(value, fallback);
+}
+
+function getRunCarForItem(item) {
+  if (!item) return null;
+  return item.runnerCar || RUN_CAR_BY_ID.get(String(item.id || "")) || null;
+}
+
+function ensureExcelRunnerLayer() {
+  const stage = document.getElementById("driveStage");
+  if (!stage) return null;
+
+  let layer = stage.querySelector("#excelRunnerLayer");
+  if (!layer) {
+    layer = document.createElement("div");
+    layer.id = "excelRunnerLayer";
+    layer.setAttribute("aria-hidden", "true");
+    Object.assign(layer.style, {
+      position: "absolute", inset: "0", overflow: "hidden",
+      pointerEvents: "none", zIndex: "6"
+    });
+    stage.appendChild(layer);
+  }
+
+  // 旧固定RUN-CARだけを非表示。背景などは残します。
+  Array.from(stage.children).forEach((child) => {
+    if (child === layer || child.classList.contains("drive-bg")) return;
+    const classText = String(child.className || "");
+    if (/car|runner/i.test(classText)) child.style.display = "none";
+  });
+
+  if (getComputedStyle(stage).position === "static") stage.style.position = "relative";
+  return layer;
+}
+
+function removeActiveRunCar(entry, animated = true) {
+  if (!entry) return;
+  const index = activeExcelRunCars.indexOf(entry);
+  if (index >= 0) activeExcelRunCars.splice(index, 1);
+
+  if (!entry.element) return;
+  if (entry.animation) {
+    try { entry.animation.cancel(); } catch (_) {}
+  }
+
+  const el = entry.element;
+  if (!animated) { el.remove(); return; }
+  el.style.transition = "transform 1.15s cubic-bezier(.2,.7,.25,1), opacity .8s";
+  el.style.transform = `translateX(${Math.max(window.innerWidth, 1800)}px)`;
+  el.style.opacity = "0";
+  window.setTimeout(() => el.remove(), 1250);
+}
+
+function chooseRunCarToEvict() {
+  // push入替方式：8台目以降を最後尾へ追加する前に、常に先頭車両を押し出す。
+  // これにより走行中の2台目が新しい先頭になる。
+  return activeExcelRunCars[0] || null;
+}
+
+function startRunCarMotion(entry, phaseIndex = 0) {
+  const stage = document.getElementById("driveStage");
+  if (!stage || !entry || !entry.element) return;
+  const width = Math.max(stage.clientWidth, 1200);
+  const carWidth = entry.config.width || 260;
+  const baseDuration = 15000 / Math.max(0.55, Math.min(1.8, entry.config.speed || 1));
+  const duration = Math.round(baseDuration * (0.92 + Math.random() * 0.18));
+  const startX = -carWidth - 80;
+  const endX = width + carWidth + 120;
+  const animation = entry.element.animate(
+    [
+      { transform: `translateX(${startX}px)` },
+      { transform: `translateX(${endX}px)` }
+    ],
+    { duration, iterations: Infinity, easing: "linear" }
+  );
+
+  // 等間隔を基準に少しだけ揺らして、前方集中を防ぎます。
+  const count = Math.max(1, activeExcelRunCars.length);
+  const basePhase = ((phaseIndex + 0.35 * Math.random()) / count) % 1;
+  animation.currentTime = duration * basePhase;
+  entry.animation = animation;
+}
+
+function addRunCarToStage(config) {
+  if (!config || !config.enabled || !config.src) return;
+  if (activeExcelRunCars.some((entry) => entry.config.id === config.id)) return;
+
+  while (activeExcelRunCars.length >= RUN_CAR_MAX_ACTIVE) {
+    const evict = chooseRunCarToEvict();
+    if (!evict) break;
+    removeActiveRunCar(evict, true);
+  }
+
+  const layer = ensureExcelRunnerLayer();
+  if (!layer) return;
+
+  const img = document.createElement("img");
+  img.src = config.src;
+  img.alt = config.alt || "走行車両";
+  img.draggable = false;
+  img.dataset.runCarId = String(config.id);
+  Object.assign(img.style, {
+    position: "absolute", left: "0",
+    bottom: `${Math.max(0, config.top || 24)}px`,
+    width: `${Math.max(80, config.width || 260)}px`,
+    height: "auto", objectFit: "contain",
+    userSelect: "none", willChange: "transform",
+    zIndex: String(10 + (runCarSerial % 7))
+  });
+  layer.appendChild(img);
+
+  const entry = { config, element: img, animation: null, serial: runCarSerial++ };
+  activeExcelRunCars.push(entry);
+  startRunCarMotion(entry, activeExcelRunCars.length - 1);
+}
+
+function syncRunCarsForItem(item) {
+  if (allCarsParadeRunning) return;
+  const config = getRunCarForItem(item);
+  if (config && config.enabled) addRunCarToStage(config);
+}
+
+function clearAllExcelRunCars(animated = false) {
+  const entries = [...activeExcelRunCars];
+  entries.forEach((entry) => removeActiveRunCar(entry, animated));
+  activeExcelRunCars = [];
+}
+
 function getRunnerCarConfigByYear(year) {
   // 「1970~1972」「1975~」のような表記でも先頭の年を取得します。
   const targetYear = parseInt(year, 10);
@@ -1986,10 +2122,9 @@ function getRunnerCarConfigByYear(year) {
 
 function getCurrentRunnerCarConfig() {
   const item = getCurrentItem();
-  const year = 
-      item 
-      ? item.year 
-      : timelineData[0].year;
+  const linked = getRunCarForItem(item);
+  if (linked) return linked.enabled ? linked : null;
+  const year = item ? item.year : timelineData[0].year;
   return getRunnerCarConfigByYear(year);
 }
 
@@ -2043,6 +2178,7 @@ function runRav4Once() {
 
   const selectedCar = getCurrentRunnerCarConfig();
   const car = runner.querySelector("img");
+  if (!selectedCar) return;
 
   if (selectedCar && car) {
     car.src = selectedCar.src;
@@ -2076,27 +2212,21 @@ function runAllCarsParade() {
   if (!driveStage || allCarsParadeRunning || isPaused()) return;
 
   allCarsParadeRunning = true;
+  const normalRunner = timelineFrame ? timelineFrame.querySelector(".rav4-runner") : null;
+  if (normalRunner) normalRunner.classList.remove("is-running");
 
-  // 年表上を走る通常車は、この演出中だけ止めます。
-  const normalRunner = timelineFrame
-    ? timelineFrame.querySelector(".rav4-runner")
-    : null;
+  // 現在走っている全車を一斉に加速退出。
+  const departing = [...activeExcelRunCars];
+  departing.forEach((entry, index) => {
+    window.setTimeout(() => removeActiveRunCar(entry, true), index * 90);
+  });
 
-  if (normalRunner) {
-    normalRunner.classList.remove("is-running");
-  }
-
-  // 同じアニメーションを次の周回でも確実に再実行します。
-  driveStage.classList.remove("is-loop-reset");
-  void driveStage.offsetWidth;
-  driveStage.classList.add("is-loop-reset");
-
-  // 全車退出＋初代カローラ再登場が終わったら、1966年の通常表示へ戻します。
   window.setTimeout(function() {
-    driveStage.classList.remove("is-loop-reset");
+    clearAllExcelRunCars(false);
     allCarsParadeRunning = false;
-    updateDriveStage(getCurrentItem());
-  }, LOOP_RESET_HOLD_MS - 200);
+    const current = getCurrentItem();
+    updateDriveStage(current);
+  }, Math.min(LOOP_RESET_HOLD_MS - 200, 2600));
 }
 
 function scheduleRav4Run() {
@@ -2313,6 +2443,8 @@ function updateDriveStage(item) {
   stage.classList.toggle("show-2000", year >= 2000);
   stage.classList.toggle("show-2010", year >= 2010);
   stage.classList.toggle("show-2020", year >= 2020);
+
+  syncRunCarsForItem(item);
 }
 
 
@@ -2841,7 +2973,7 @@ function sheetRows(workbook, name) {
 }
 
 
-/* 匠会承認：画像ファイル名だけで表示する固定フォルダー */
+/* 匠会承認：Excelには画像ファイル名だけ入力する */
 function resolveTimelineImage(value, folder) {
   const raw = String(value || "").trim();
   if (!raw) return "";
@@ -2853,33 +2985,63 @@ function resolveTimelineImage(value, folder) {
 
 function makeSectionMap(rows, imageFolder) {
   const map = new Map();
+
+  // 新方式：同じIDで行を増やし、順番＋種類＋内容で自由配置。
+  // 旧方式（名称・説明文・画像1～3）も後方互換で読み込めます。
+  const isFreeBlockFormat = rows.some((row) =>
+    Object.prototype.hasOwnProperty.call(row, "種類") ||
+    Object.prototype.hasOwnProperty.call(row, "順番") ||
+    Object.prototype.hasOwnProperty.call(row, "内容／画像パス")
+  );
+
+  if (isFreeBlockFormat) {
+    const grouped = new Map();
+    rows.forEach((row, rowIndex) => {
+      const id = String(row.ID || "").trim();
+      if (!id) return;
+      if (!grouped.has(id)) grouped.set(id, []);
+      grouped.get(id).push({ row, rowIndex });
+    });
+
+    grouped.forEach((entries, id) => {
+      entries.sort((a, b) => {
+        const ao = Number(a.row["順番"]);
+        const bo = Number(b.row["順番"]);
+        const av = Number.isFinite(ao) ? ao : a.rowIndex;
+        const bv = Number.isFinite(bo) ? bo : b.rowIndex;
+        return av - bv || a.rowIndex - b.rowIndex;
+      });
+
+      const blocks = [];
+      entries.forEach(({ row }) => {
+        const type = String(row["種類"] || "TEXT").trim().toUpperCase();
+        const value = String(row["内容／画像パス"] || "").trim();
+        if (!value) return;
+
+        if (type === "IMAGE") {
+          blocks.push({
+            type: "image",
+            src: value,
+            alt: String(row["画像説明"] || "年表画像").trim()
+          });
+        } else if (type === "TITLE") {
+          blocks.push({ type: "title", text: value });
+        } else {
+          blocks.push({ type: "text", text: value });
+        }
+      });
+      map.set(id, blocks);
+    });
+    return map;
+  }
+
   rows.forEach((row) => {
     const blocks = [];
-    const altBase = String(row["タイトル1"] || row["タイトル2"] || row["タイトル3"] || "年表画像");
-
-    // Excelの列順をそのまま表示順として扱います。
-    // タイトル1 → 写真1 → タイトル2 → 写真2 → タイトル3 → 写真3
-    for (let i = 1; i <= 3; i += 1) {
-      const title = row[`タイトル${i}`];
-      const photo = row[`写真${i}`];
-
-      if (title) {
-        blocks.push({ type: "title", text: String(title) });
-      }
-      if (photo) {
-        blocks.push({ type: "image", src: resolveTimelineImage(photo, imageFolder), alt: altBase });
-      }
-    }
-
-    // 旧Excel互換：従来列しかないファイルでも表示できるよう残します。
-    if (!blocks.length) {
-      if (row["名称"]) blocks.push({ type: "text", text: String(row["名称"]) });
-      if (row["説明文"]) blocks.push({ type: "text", text: String(row["説明文"]) });
-      ["画像1", "画像2", "画像3"].forEach((key) => {
-        if (row[key]) blocks.push({ type: "image", src: resolveTimelineImage(row[key], imageFolder), alt: String(row["名称"] || "年表画像") });
-      });
-    }
-
+    if (row["名称"]) blocks.push({ type: "title", text: String(row["名称"]) });
+    if (row["説明文"]) blocks.push({ type: "text", text: String(row["説明文"]) });
+    ["画像1", "画像2", "画像3"].forEach((key) => {
+      if (row[key]) blocks.push({ type: "image", src: resolveTimelineImage(row[key], imageFolder), alt: String(row["名称"] || "年表画像") });
+    });
     map.set(String(row.ID), blocks);
   });
   return map;
@@ -2941,18 +3103,36 @@ function applyExcelWorkbook(workbook) {
   }
 
   const runnerRows = sheetRows(workbook, "RUN-CAR設定");
-  if (runnerRows.length) {
-    ERA_RUNNER_CARS = runnerRows.map((row, index) => {
-      const fallback = ERA_RUNNER_CARS[index] || ERA_RUNNER_CARS[ERA_RUNNER_CARS.length - 1];
-      return {
-        ...fallback,
-        from: Number(row["年代開始"]),
-        to: Number(row["年代終了"]),
-        alt: String(row["表示名"] || fallback.alt || "走行車両"),
-        src: String(row["車画像"] || fallback.src || "")
-      };
-    });
+  RUN_CAR_BY_ID = new Map();
+  const maxRow = runnerRows.find((row) => Number(row["最大表示台数"]) > 0);
+  if (maxRow) {
+    RUN_CAR_MAX_ACTIVE = Math.max(1, Math.min(30, Number(maxRow["最大表示台数"])));
   }
+
+  runnerRows.forEach((row) => {
+    const id = String(row.ID || "").trim();
+    if (!id) return;
+    const config = {
+      id,
+      enabled: normalizeRunFlag(row.RUN, false),
+      fixed: normalizeRunFlag(row["固定"], false),
+      alt: String(row["表示名"] || "走行車両").trim(),
+      src: String(row["車画像"] || "").trim(),
+      speed: Number(row["速度係数"]) || 1,
+      width: Number(row["サイズ(px)"]) || 260,
+      top: Number(row["走行高さ(px)"]) || 24,
+      lightTop: "48%",
+      stopOffset: "0px"
+    };
+    RUN_CAR_BY_ID.set(id, config);
+  });
+
+  loadedTimelineData.forEach((item) => {
+    item.runnerCar = RUN_CAR_BY_ID.get(String(item.id)) || null;
+  });
+
+  // Excel再読込時は、以前のRUN-CARを残さず先頭から再構成します。
+  clearAllExcelRunCars(false);
 
   const backgroundRows = sheetRows(workbook, "RUN-CAR背景設定");
   if (backgroundRows.length) {

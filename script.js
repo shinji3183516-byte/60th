@@ -2026,8 +2026,10 @@ function removeActiveRunCar(entry, animated = true) {
 
   const el = entry.element;
   if (!animated) { el.remove(); return; }
+
+  // 先頭車両は左側へ前進して退出する。
   el.style.transition = "transform 1.15s cubic-bezier(.2,.7,.25,1), opacity .8s";
-  el.style.transform = `translateX(${Math.max(window.innerWidth, 1800)}px)`;
+  el.style.transform = `translateX(${-Math.max(window.innerWidth, 1800)}px)`;
   el.style.opacity = "0";
   window.setTimeout(() => el.remove(), 1250);
 }
@@ -2038,33 +2040,61 @@ function chooseRunCarToEvict() {
   return activeExcelRunCars[0] || null;
 }
 
-function startRunCarMotion(entry, phaseIndex = 0) {
+function layoutRunCarQueue() {
+  const stage = document.getElementById("driveStage");
+  if (!stage) return;
+  const width = Math.max(stage.clientWidth, 1200);
+  const count = Math.max(1, activeExcelRunCars.length);
+  const leftMargin = Math.max(20, width * 0.04);
+  const rightMargin = Math.max(80, width * 0.08);
+  const usable = Math.max(200, width - leftMargin - rightMargin);
+  const step = count > 1 ? usable / Math.max(6, count - 1) : 0;
+
+  activeExcelRunCars.forEach((entry, i) => {
+    if (!entry.element) return;
+    const x = leftMargin + i * step;
+    entry.element.style.transition = "transform 1.0s cubic-bezier(.2,.7,.25,1)";
+    entry.element.style.transform = `translateX(${x}px)`;
+  });
+}
+
+function startRunCarMotion(entry) {
   const stage = document.getElementById("driveStage");
   if (!stage || !entry || !entry.element) return;
   const width = Math.max(stage.clientWidth, 1200);
   const carWidth = entry.config.width || 260;
-  const baseDuration = 15000 / Math.max(0.55, Math.min(1.8, entry.config.speed || 1));
-  const duration = Math.round(baseDuration * (0.92 + Math.random() * 0.18));
-  const startX = -carWidth - 80;
-  const endX = width + carWidth + 120;
-  const animation = entry.element.animate(
-    [
-      { transform: `translateX(${startX}px)` },
-      { transform: `translateX(${endX}px)` }
-    ],
-    { duration, iterations: Infinity, easing: "linear" }
-  );
 
-  // 等間隔を基準に少しだけ揺らして、前方集中を防ぎます。
-  const count = Math.max(1, activeExcelRunCars.length);
-  const basePhase = ((phaseIndex + 0.35 * Math.random()) / count) % 1;
-  animation.currentTime = duration * basePhase;
-  entry.animation = animation;
+  // 新しい車だけを右側から左向きに前進させる。
+  const startX = width + carWidth + 80;
+  entry.element.style.transition = "none";
+  entry.element.style.transform = `translateX(${startX}px)`;
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => layoutRunCarQueue());
+  });
+}
+
+
+function getRunCarImageKey(src) {
+  return String(src || "")
+    .trim()
+    .replace(/\\/g, "/")
+    .replace(/[?#].*$/, "")
+    .toLowerCase();
 }
 
 function addRunCarToStage(config) {
   if (!config || !config.enabled || !config.src) return;
-  if (activeExcelRunCars.some((entry) => entry.config.id === config.id)) return;
+
+  const imageKey = getRunCarImageKey(config.src);
+
+  // 同じ画像の車が確認エリアに既にいる場合は追加しない。
+  // Excelで別IDに同じ車画像が指定されていても、同一車両を二重表示しません。
+  if (activeExcelRunCars.some((entry) =>
+    getRunCarImageKey(entry.config.src) === imageKey
+  )) {
+    return;
+  }
 
   while (activeExcelRunCars.length >= RUN_CAR_MAX_ACTIVE) {
     const evict = chooseRunCarToEvict();
@@ -2073,26 +2103,93 @@ function addRunCarToStage(config) {
   }
 
   const layer = ensureExcelRunnerLayer();
-  if (!layer) return;
+  const stage = document.getElementById("driveStage");
+  if (!layer || !stage) return;
 
   const img = document.createElement("img");
   img.src = config.src;
   img.alt = config.alt || "走行車両";
   img.draggable = false;
   img.dataset.runCarId = String(config.id);
+  img.dataset.runCarImageKey = imageKey;
+
+  const requestedTop = Math.max(0, Number(config.top ?? 24));
+  const requestedWidth = Math.max(80, Number(config.width || 260));
+
   Object.assign(img.style, {
-    position: "absolute", left: "0",
-    bottom: `${Math.max(0, config.top || 24)}px`,
-    width: `${Math.max(80, config.width || 260)}px`,
-    height: "auto", objectFit: "contain",
-    userSelect: "none", willChange: "transform",
-    zIndex: String(10 + (runCarSerial % 7))
+    position: "absolute",
+    left: "0",
+    top: "auto",
+    bottom: "6px",
+    width: "auto",
+    height: "auto",
+    maxWidth: "none",
+    maxHeight: "none",
+    objectFit: "contain",
+    userSelect: "none",
+    willChange: "transform",
+    zIndex: String(10 + (runCarSerial % 7)),
+    visibility: "hidden"
   });
+
   layer.appendChild(img);
 
-  const entry = { config, element: img, animation: null, serial: runCarSerial++ };
+  const fitInsideRunCarArea = () => {
+    const stageHeight = Math.max(80, stage.clientHeight);
+    const stageWidth = Math.max(600, stage.clientWidth);
+    const naturalWidth = Math.max(1, img.naturalWidth || requestedWidth);
+    const naturalHeight = Math.max(1, img.naturalHeight || 1);
+    const aspect = naturalWidth / naturalHeight;
+
+    // Excelのサイズ値は「大きさの微調整」としてだけ使い、
+    // 画像ファイルごとのキャンバス差で極端な大小にならないよう制限します。
+    const sizeScale = Math.min(1.08, Math.max(0.92, requestedWidth / 260));
+    const targetHeight = stageHeight * 0.50 * sizeScale;
+
+    // 7台並んでも重なりにくい最大幅。
+    const maxWidthPerCar = stageWidth / 7.35;
+    const widthFromHeight = targetHeight * aspect;
+    const fittedWidth = Math.min(widthFromHeight, maxWidthPerCar);
+    const fittedHeight = fittedWidth / aspect;
+
+    // 「走行高さ(px)」は24pxを基準に小さな上下補正として使う。
+    // 数字が大きいほど車を下げる既存の意味を維持します。
+    const verticalDelta = Math.min(12, Math.max(-12, requestedTop - 24));
+    const bottomMargin = Math.min(
+      18,
+      Math.max(2, 8 - verticalDelta)
+    );
+
+    // 最終フェイルセーフ：上下に必ず余白を残す。
+    const maxHeight = Math.max(36, stageHeight - bottomMargin - 8);
+    const safeHeight = Math.min(fittedHeight, maxHeight);
+    const safeWidth = safeHeight * aspect;
+
+    img.style.width = `${Math.max(60, Math.round(safeWidth))}px`;
+    img.style.height = `${Math.round(safeHeight)}px`;
+    img.style.bottom = `${Math.round(bottomMargin)}px`;
+    img.style.visibility = "visible";
+  };
+
+  if (img.complete && img.naturalWidth > 0) {
+    fitInsideRunCarArea();
+  } else {
+    img.addEventListener("load", fitInsideRunCarArea, { once: true });
+    img.addEventListener("error", () => {
+      img.style.visibility = "visible";
+    }, { once: true });
+  }
+
+  const entry = {
+    config,
+    element: img,
+    animation: null,
+    serial: runCarSerial++,
+    imageKey
+  };
+
   activeExcelRunCars.push(entry);
-  startRunCarMotion(entry, activeExcelRunCars.length - 1);
+  startRunCarMotion(entry);
 }
 
 function syncRunCarsForItem(item) {

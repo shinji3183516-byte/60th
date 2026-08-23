@@ -2014,6 +2014,7 @@ function ensureExcelRunnerLayer() {
   return layer;
 }
 
+
 function removeActiveRunCar(entry, animated = true) {
   if (!entry) return;
   const index = activeExcelRunCars.indexOf(entry);
@@ -2025,7 +2026,10 @@ function removeActiveRunCar(entry, animated = true) {
   }
 
   const el = entry.element;
-  if (!animated) { el.remove(); return; }
+  if (!animated) {
+    el.remove();
+    return;
+  }
 
   // 先頭車両は左側へ前進して退出する。
   el.style.transition = "transform 1.15s cubic-bezier(.2,.7,.25,1), opacity .8s";
@@ -2134,6 +2138,7 @@ function addRunCarToStage(config) {
 
   layer.appendChild(img);
 
+
   const fitInsideRunCarArea = () => {
     const stageHeight = Math.max(80, stage.clientHeight);
     const stageWidth = Math.max(600, stage.clientWidth);
@@ -2235,6 +2240,7 @@ function createRav4Runner() {
 
   const light = document.createElement("span");
   light.className = "rav4-speed-light";
+  light.style.display = "none"; // 昼表示固定のためヘッドライトは使用しない
 
   const car = document.createElement("img");
   const initialCar = getCurrentRunnerCarConfig();
@@ -2676,17 +2682,15 @@ function updateDriveStage(item) {
 
       // inline important で、過去CSSの transform:...!important に必ず勝たせる
       layer.style.setProperty("--run-bg-x", bgX.toFixed(1) + "px");
-      layer.style.setProperty("--run-bg-filter", getDayFilter(layer.dataset.era, now));
+      layer.style.setProperty("--run-bg-filter", "brightness(1) saturate(1)");
       layer.style.setProperty("transform", "translateX(var(--run-bg-x))", "important");
       layer.style.setProperty("animation", "none", "important");
       layer.style.setProperty("background-repeat", "repeat-x", "important");
       layer.style.setProperty("background-size", "auto 100%", "important");
     });
 
-    // 1980年以降の夜だけ、RUN-CARのライトを点灯
-    const dayPhase = (now % DAY_MS) / DAY_MS;
-    const isNight = visibleEra >= 1980 && dayPhase < 0.50;
-    stage.classList.toggle("is-bg-night", isNight);
+    // 昼表示固定：夜間状態は使用しません。
+    stage.classList.remove("is-bg-night");
 
     requestAnimationFrame(step);
   }

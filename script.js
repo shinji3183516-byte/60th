@@ -2015,7 +2015,7 @@ function ensureExcelRunnerLayer() {
 }
 
 
-function removeActiveRunCar(entry, animated = true) {
+function removeActiveRunCar(entry, animated = true, exitDurationMs = 1150) {
   if (!entry) return;
   const index = activeExcelRunCars.indexOf(entry);
   if (index >= 0) activeExcelRunCars.splice(index, 1);
@@ -2032,10 +2032,12 @@ function removeActiveRunCar(entry, animated = true) {
   }
 
   // 先頭車両は左側へ前進して退出する。
-  el.style.transition = "transform 1.15s cubic-bezier(.2,.7,.25,1), opacity .8s";
+  const exitSeconds = Math.max(0.1, exitDurationMs / 1000);
+  const opacitySeconds = Math.max(0.1, exitSeconds * 0.7);
+  el.style.transition = `transform ${exitSeconds}s cubic-bezier(.2,.7,.25,1), opacity ${opacitySeconds}s`;
   el.style.transform = `translateX(${-Math.max(window.innerWidth, 1800)}px)`;
   el.style.opacity = "0";
-  window.setTimeout(() => el.remove(), 1250);
+  window.setTimeout(() => el.remove(), exitDurationMs + 100);
 }
 
 function chooseRunCarToEvict() {
@@ -2044,37 +2046,60 @@ function chooseRunCarToEvict() {
   return activeExcelRunCars[0] || null;
 }
 
-function layoutRunCarQueue() {
+function layoutRunCarQueue(arrivingEntry = null) {
   const stage = document.getElementById("driveStage");
   if (!stage) return;
-  const width = Math.max(stage.clientWidth, 1200);
-  const count = Math.max(1, activeExcelRunCars.length);
-  const leftMargin = Math.max(20, width * 0.04);
-  const rightMargin = Math.max(80, width * 0.08);
-  const usable = Math.max(200, width - leftMargin - rightMargin);
-  const step = count > 1 ? usable / Math.max(6, count - 1) : 0;
 
-  activeExcelRunCars.forEach((entry, i) => {
+  const stageWidth = Math.max(stage.clientWidth, 1200);
+  if (!activeExcelRunCars.length) return;
+
+  // 確定仕様：
+  // 1台目（白カローラ）は左側の先頭位置に固定。
+  // 2台目以降は、先頭車のすぐ後ろへ順番に詰めて停止する。
+  // 車両サイズ・車両高さには一切触れない。
+  const firstX = Math.max(54, stageWidth * 0.045);
+  const gap = 34;
+
+  let x = firstX;
+
+  activeExcelRunCars.forEach((entry, index) => {
     if (!entry.element) return;
-    const x = leftMargin + i * step;
-    entry.element.style.transition = "transform 1.0s cubic-bezier(.2,.7,.25,1)";
-    entry.element.style.transform = `translateX(${x}px)`;
+
+    const width = Math.max(90, Number(entry.visibleWidth || 130));
+    entry.targetX = Math.round(x);
+
+    // 新しく来た車は右側から左向きに走って隊列の最後尾へ。
+    // 既存車は8台目push等で必要な時だけ短時間で左へ詰める。
+    entry.element.style.transition = entry === arrivingEntry
+      ? "transform 2.2s cubic-bezier(.18,.72,.20,1)"
+      : "transform 0.75s cubic-bezier(.2,.7,.25,1)";
+
+    entry.element.style.transform = `translateX(${entry.targetX}px)`;
+    entry.element.style.opacity = "1";
+
+    x += width + gap;
   });
 }
 
 function startRunCarMotion(entry) {
   const stage = document.getElementById("driveStage");
   if (!stage || !entry || !entry.element) return;
-  const width = Math.max(stage.clientWidth, 1200);
-  const carWidth = entry.config.width || 260;
 
-  // 新しい車だけを右側から左向きに前進させる。
-  const startX = width + carWidth + 80;
+  const stageWidth = Math.max(stage.clientWidth, 1200);
+  const carWidth = Math.max(90, Number(entry.visibleWidth || 130));
+
+  // 新規車両は必ず画面右外から入り、
+  // 白カローラ → 緑カローラ → 次車…の順で直後に停止する。
+  const startX = stageWidth + carWidth + 90;
+
   entry.element.style.transition = "none";
-  entry.element.style.transform = `translateX(${startX}px)`;
+  entry.element.style.transform = `translateX(${Math.round(startX)}px)`;
+  entry.element.style.opacity = "1";
 
   requestAnimationFrame(() => {
-    requestAnimationFrame(() => layoutRunCarQueue());
+    requestAnimationFrame(() => {
+      layoutRunCarQueue(entry);
+    });
   });
 }
 
@@ -2092,14 +2117,14 @@ function addRunCarToStage(config) {
 
   const imageKey = getRunCarImageKey(config.src);
 
-  // 同じ画像の車が確認エリアに既にいる場合は追加しない。
-  // Excelで別IDに同じ車画像が指定されていても、同一車両を二重表示しません。
+  // 同一画像は二重表示しない。
   if (activeExcelRunCars.some((entry) =>
     getRunCarImageKey(entry.config.src) === imageKey
   )) {
     return;
   }
 
+  // 最大7台（Excel設定値を上限として使用）。8台目は先頭を押し出す。
   while (activeExcelRunCars.length >= RUN_CAR_MAX_ACTIVE) {
     const evict = chooseRunCarToEvict();
     if (!evict) break;
@@ -2107,8 +2132,7 @@ function addRunCarToStage(config) {
   }
 
   const layer = ensureExcelRunnerLayer();
-  const stage = document.getElementById("driveStage");
-  if (!layer || !stage) return;
+  if (!layer) return;
 
   const img = document.createElement("img");
   img.src = config.src;
@@ -2118,79 +2142,44 @@ function addRunCarToStage(config) {
   img.dataset.runCarImageKey = imageKey;
 
   const requestedTop = Math.max(0, Number(config.top ?? 24));
+  // 2026-08-24 縦位置確定補正：
+  // スクショ基準で全車を道路面へ下げる。Excel値は保持し、表示時だけ +26px。
+  const roadVerticalOffset = 26;
+  const displayTop = requestedTop + roadVerticalOffset;
   const requestedWidth = Math.max(80, Number(config.width || 260));
+
+  // 2026-08-24 議長・副議長確定：
+  // 良かった時の見た目（約130px級）へ戻す。
+  // Excel「サイズ(px)」を基準値として50%表示し、極端な大小だけ安全範囲に収める。
+  // canvasによる透明余白自動検出、自動トリミング、縦横比からの再拡大は行わない。
+  const displayWidth = Math.max(105, Math.min(155, requestedWidth * 0.50));
 
   Object.assign(img.style, {
     position: "absolute",
     left: "0",
-    top: "auto",
-    bottom: "6px",
-    width: "auto",
+    top: `${displayTop}px`,
+    bottom: "auto",
+    width: `${Math.round(displayWidth)}px`,
     height: "auto",
     maxWidth: "none",
     maxHeight: "none",
     objectFit: "contain",
     userSelect: "none",
+    pointerEvents: "none",
     willChange: "transform",
     zIndex: String(10 + (runCarSerial % 7)),
-    visibility: "hidden"
+    visibility: "visible"
   });
 
   layer.appendChild(img);
-
-
-  const fitInsideRunCarArea = () => {
-    const stageHeight = Math.max(80, stage.clientHeight);
-    const stageWidth = Math.max(600, stage.clientWidth);
-    const naturalWidth = Math.max(1, img.naturalWidth || requestedWidth);
-    const naturalHeight = Math.max(1, img.naturalHeight || 1);
-    const aspect = naturalWidth / naturalHeight;
-
-    // Excelのサイズ値は「大きさの微調整」としてだけ使い、
-    // 画像ファイルごとのキャンバス差で極端な大小にならないよう制限します。
-    const sizeScale = Math.min(1.08, Math.max(0.92, requestedWidth / 260));
-    const targetHeight = stageHeight * 0.50 * sizeScale;
-
-    // 7台並んでも重なりにくい最大幅。
-    const maxWidthPerCar = stageWidth / 7.35;
-    const widthFromHeight = targetHeight * aspect;
-    const fittedWidth = Math.min(widthFromHeight, maxWidthPerCar);
-    const fittedHeight = fittedWidth / aspect;
-
-    // 「走行高さ(px)」は24pxを基準に小さな上下補正として使う。
-    // 数字が大きいほど車を下げる既存の意味を維持します。
-    const verticalDelta = Math.min(12, Math.max(-12, requestedTop - 24));
-    const bottomMargin = Math.min(
-      18,
-      Math.max(2, 8 - verticalDelta)
-    );
-
-    // 最終フェイルセーフ：上下に必ず余白を残す。
-    const maxHeight = Math.max(36, stageHeight - bottomMargin - 8);
-    const safeHeight = Math.min(fittedHeight, maxHeight);
-    const safeWidth = safeHeight * aspect;
-
-    img.style.width = `${Math.max(60, Math.round(safeWidth))}px`;
-    img.style.height = `${Math.round(safeHeight)}px`;
-    img.style.bottom = `${Math.round(bottomMargin)}px`;
-    img.style.visibility = "visible";
-  };
-
-  if (img.complete && img.naturalWidth > 0) {
-    fitInsideRunCarArea();
-  } else {
-    img.addEventListener("load", fitInsideRunCarArea, { once: true });
-    img.addEventListener("error", () => {
-      img.style.visibility = "visible";
-    }, { once: true });
-  }
 
   const entry = {
     config,
     element: img,
     animation: null,
     serial: runCarSerial++,
-    imageKey
+    imageKey,
+    visibleWidth: displayWidth
   };
 
   activeExcelRunCars.push(entry);
@@ -2318,18 +2307,24 @@ function runAllCarsParade() {
   const normalRunner = timelineFrame ? timelineFrame.querySelector(".rav4-runner") : null;
   if (normalRunner) normalRunner.classList.remove("is-running");
 
-  // 現在走っている全車を一斉に加速退出。
+  // 2026→1966の周回演出は、以前の「良かった時」の6.6秒リズムへ戻す。
+  // 通常のpush退出には触れず、この一斉退出だけをゆっくり見せる。
   const departing = [...activeExcelRunCars];
-  departing.forEach((entry, index) => {
-    window.setTimeout(() => removeActiveRunCar(entry, true), index * 90);
+  const paradeExitDurationMs = 5200;
+
+  // 「一斉に抜ける」ため開始時刻は全車共通。90msの車間ずらしは使わない。
+  departing.forEach((entry) => {
+    removeActiveRunCar(entry, true, paradeExitDurationMs);
   });
 
+  // 以前の仕様と同じく、周回リセット全体は6.6秒保持し、
+  // 6.4秒時点で1966年の通常表示へ戻す。
   window.setTimeout(function() {
     clearAllExcelRunCars(false);
     allCarsParadeRunning = false;
     const current = getCurrentItem();
     updateDriveStage(current);
-  }, Math.min(LOOP_RESET_HOLD_MS - 200, 2600));
+  }, LOOP_RESET_HOLD_MS - 200);
 }
 
 function scheduleRav4Run() {
@@ -2948,6 +2943,12 @@ async function startTimelineBgm() {
       return;
     }
 
+    // オフライン起動時は、Excelの読込完了前に年表を開始させない。
+    if (!canLoadExcelFromCurrentLocation() && !window.__timelineExcelReady) {
+      alert("先に［Excelを読み込む］から timeline.xlsx を選択してください。");
+      return;
+    }
+
     openingRunning = true;
 
     openingPage.classList.add("is-loading");
@@ -3152,6 +3153,24 @@ function canLoadExcelFromCurrentLocation() {
   return location.protocol === "http:" || location.protocol === "https:";
 }
 
+// オフライン起動時のTOPページ開始ロック。
+// Excelの読込が成功したときだけ「年表をはじめる」を有効化する。
+window.__timelineExcelReady = false;
+
+function setOpeningStartAvailability(enabled) {
+  const startButton = document.getElementById("openingStartButton");
+  if (!startButton) return;
+
+  const buttonText = startButton.querySelector("span");
+  startButton.disabled = !enabled;
+
+  if (buttonText) {
+    buttonText.textContent = enabled
+      ? "年表をはじめる"
+      : "Excelを読み込んでください";
+  }
+}
+
 function readDisplaySettings(workbook) {
   const sheet = workbook.Sheets["デザイン設定"];
   if (!sheet) return;
@@ -3270,6 +3289,8 @@ async function loadWorkbookFromFile(file) {
     if (typeof XLSX === "undefined") throw new Error("XLSXライブラリを読み込めませんでした。");
     const workbook = XLSX.read(await file.arrayBuffer(), { type: "array" });
     applyExcelWorkbook(workbook);
+    window.__timelineExcelReady = true;
+    setOpeningStartAvailability(true);
     setOfflineExcelStatus(`${file.name} を読み込みました`);
     hideOfflineExcelPanel();
     console.info(`オフラインExcel「${file.name}」を読み込みました。`);
@@ -3296,11 +3317,13 @@ async function loadExcelTimeline() {
   initializeOfflineExcelPicker();
 
   if (!canLoadExcelFromCurrentLocation()) {
-    excelTimelineData = timelineData;
-    activeIndex = 0;
-    buildTimeline();
+    // 重要：オフラインでは内蔵データへフォールバックしない。
+    // Excelを読み込むまでTOPページの開始ボタンをロックする。
+    excelTimelineData = [];
+    window.__timelineExcelReady = false;
+    setOpeningStartAvailability(false);
     setOfflineExcelStatus("オフライン起動中：［Excelを読み込む］から timeline.xlsx を選択してください");
-    console.info("ローカル直接起動です。Excel選択後に編集内容を反映します。");
+    console.info("ローカル直接起動です。Excel読込完了まで年表開始をロックします。");
     return;
   }
 
@@ -3310,14 +3333,16 @@ async function loadExcelTimeline() {
     if (!response.ok) throw new Error(`timeline.xlsx取得失敗（HTTP ${response.status}）`);
     const workbook = XLSX.read(await response.arrayBuffer(), { type: "array" });
     applyExcelWorkbook(workbook);
+    window.__timelineExcelReady = true;
+    setOpeningStartAvailability(true);
     setOfflineExcelStatus("timeline.xlsx を自動読み込みしました");
     hideOfflineExcelPanel();
     console.info(`Excel年表を${timelineData.length}件読み込みました。`);
   } catch (error) {
-    console.warn("Excel年表を読み込めなかったため、内蔵データへ切り替えました。", error);
-    excelTimelineData = timelineData;
-    activeIndex = 0;
-    buildTimeline();
+    console.warn("Excel年表を自動読込できませんでした。手動選択を待機します。", error);
+    excelTimelineData = [];
+    window.__timelineExcelReady = false;
+    setOpeningStartAvailability(false);
     setOfflineExcelStatus("自動読込に失敗しました。Excelを手動選択してください", true);
   }
 }

@@ -4088,163 +4088,166 @@ body.opening-active {
   z-index: 20;
   margin: 0;
 }
-/* トップ画面：デザイン選択を画面右下へ固定 */
-#openingPage > .opening-theme-picker {
-  position:absolute !important;
-  right:clamp(24px, 3vw, 56px) !important;
-  bottom:clamp(92px, 11vh, 126px) !important;
-  left:auto !important;
-  top:auto !important;
-  width:min(48vw, 760px) !important;
-  max-width:calc(100vw - 48px) !important;
-  margin:0 !important;
-  transform:none !important;
-  z-index:50 !important;
-}
-@media (max-width:900px){
-  #openingPage > .opening-theme-picker{
-    right:16px !important;
-    bottom:92px !important;
-    width:min(720px, calc(100vw - 32px)) !important;
-  }
-}
-
-/* ===== トップ画面：デザイン選択を以前の縦配列へ戻す ===== */
-#openingPage > .opening-theme-picker {
-  right: 28px !important;
-  bottom: 92px !important;
-  width: 190px !important;
-  max-width: calc(100vw - 56px) !important;
-  padding: 12px !important;
-}
-
-#openingPage > .opening-theme-picker .opening-theme-picker__title {
-  margin: 0 0 8px !important;
-  text-align: center !important;
-}
-
-#openingPage > .opening-theme-picker .opening-theme-options {
-  display: grid !important;
-  grid-template-columns: 1fr !important;
-  gap: 7px !important;
-}
-
-#openingPage > .opening-theme-picker .theme-select-button,
-#openingPage > .opening-theme-picker .theme-select-button:last-child {
-  width: 100% !important;
-  min-height: 38px !important;
-  grid-column: auto !important;
-}
-
-@media (max-width: 700px) {
-  #openingPage > .opening-theme-picker {
-    right: 12px !important;
-    bottom: 84px !important;
-    width: 170px !important;
-  }
-}
-
-
-/* ===== 最終配置：トップ画面のテーマ選択は右端中央・縦型 ===== */
-#openingPage > .opening-theme-picker{
-  top:50% !important;
-  right:clamp(14px,1.6vw,28px) !important;
-  bottom:auto !important;
-  left:auto !important;
-  width:clamp(132px,10vw,158px) !important;
-  transform:translateY(-42%) !important;
-}
-#openingPage > .opening-theme-picker .opening-theme-options{
-  display:flex !important;
-  flex-direction:column !important;
-  grid-template-columns:none !important;
-  gap:6px !important;
-}
-
-/* ===== 最終配置：デザイン選択を右端の下段へ配置 ===== */
-#openingPage > .opening-theme-picker{
-  position:absolute !important;
-  top:auto !important;
-  right:clamp(10px,1.2vw,20px) !important;
-  bottom:clamp(96px,10vh,118px) !important;
-  left:auto !important;
-  width:clamp(132px,9.5vw,150px) !important;
-  max-width:150px !important;
-  padding:9px !important;
-  margin:0 !important;
-  transform:none !important;
-  z-index:60 !important;
-  border-radius:14px !important;
-  background:rgba(0,0,0,.42) !important;
-  backdrop-filter:blur(7px) !important;
-}
-
-#openingPage > .opening-theme-picker .opening-theme-picker__title{
-  margin:0 0 6px !important;
-  font-size:11px !important;
-  letter-spacing:.06em !important;
-  white-space:nowrap !important;
-}
-
-#openingPage > .opening-theme-picker .opening-theme-options{
-  display:flex !important;
-  flex-direction:column !important;
-  grid-template-columns:none !important;
-  gap:5px !important;
-}
-
-#openingPage > .opening-theme-picker .theme-select-button,
-#openingPage > .opening-theme-picker .theme-select-button:last-child{
-  width:100% !important;
-  min-height:30px !important;
-  height:30px !important;
-  padding:3px 7px !important;
-  font-size:12px !important;
-  line-height:1 !important;
-  grid-column:auto !important;
-}
-
-@media (max-width:900px){
-  #openingPage > .opening-theme-picker{
-    right:8px !important;
-    bottom:86px !important;
-    width:128px !important;
-    max-width:128px !important;
-  }
-}
-
 
 /* =========================================================
-   FINAL OVERRIDE: オープニングのデザイン選択
-   以前の右下・縦型パネル位置へ戻す
+   2026-08-25 メインコンテナ：年度右側へタイトル移動
+   - 年度の下にあったタイトルを右側へ配置
+   - タイトル分の縦スペースを写真へ返す
+   - JS/ExcelのIDは変更しない
    ========================================================= */
-#openingPage > .opening-theme-picker{
-  position:absolute !important;
-  right:clamp(18px,2vw,36px) !important;
-  bottom:clamp(58px,7vh,86px) !important;
-  left:auto !important;
-  top:auto !important;
-  width:clamp(176px,12.5vw,210px) !important;
-  max-width:none !important;
-  margin:0 !important;
-  padding:14px 12px 12px !important;
-  transform:none !important;
-  translate:none !important;
-  z-index:120 !important;
-}
-#openingPage > .opening-theme-picker .opening-theme-options{
+.left-panel .year-line.year-line--with-title{
   display:grid !important;
-  grid-template-columns:1fr !important;
-  grid-auto-flow:row !important;
-  gap:7px !important;
-  width:100% !important;
+  grid-template-columns:auto minmax(0,1fr) !important;
+  align-items:end !important;
+  column-gap:14px !important;
+  min-height:62px !important;
+  margin-bottom:6px !important;
+  flex-wrap:nowrap !important;
 }
-#openingPage > .opening-theme-picker .theme-select-button,
-#openingPage > .opening-theme-picker .theme-select-button:last-child{
-  grid-column:auto !important;
-  width:100% !important;
-  min-width:0 !important;
-  min-height:40px !important;
-  padding:7px 10px !important;
-  text-align:left !important;
+
+.left-panel .year-line--with-title .big-year{
+  align-self:end;
+  white-space:nowrap;
 }
+
+.left-panel .selected-year-meta{
+  min-width:0;
+  min-height:62px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  align-items:flex-start;
+  padding-bottom:2px;
+}
+
+.left-panel .year-line--with-title #selectedTitle{
+  width:100%;
+  min-width:0;
+  min-height:0 !important;
+  max-height:2.25em !important;
+  margin:0 0 5px !important;
+  overflow:hidden;
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  white-space:normal !important;
+  text-overflow:ellipsis;
+  font-size:clamp(17px, 1.35vw, 24px) !important;
+  line-height:1.08 !important;
+  font-weight:700;
+}
+
+.left-panel .year-line--with-title .era-badge{
+  flex:0 0 auto;
+  margin:0 !important;
+}
+
+/* タイトルが独立行ではなくなった分、写真を残り高さまで拡大 */
+.left-panel > .photo-link{
+  flex:1 1 0 !important;
+  height:0 !important;
+  min-height:0 !important;
+  margin-top:0 !important;
+}
+
+.left-panel > .photo-link img{
+  width:100%;
+  height:100%;
+  min-height:0 !important;
+  object-fit:contain;
+}
+
+/* 狭い画面では破綻を避ける */
+@media (max-width:900px){
+  .left-panel .year-line.year-line--with-title{
+    grid-template-columns:auto minmax(0,1fr) !important;
+    column-gap:10px !important;
+  }
+  .left-panel .year-line--with-title #selectedTitle{
+    font-size:clamp(16px, 3.2vw, 22px) !important;
+  }
+}
+
+/* =========================================================
+   2026-08-26 写真内側コンテナ非表示化
+   - メイン写真／下段3コンテナ共通
+   - 写真制御用の構造は残す
+   - 見た目の枠・背景・影だけ消す
+   - 写真は切らずに contain で表示
+   ========================================================= */
+
+/* メイン写真：親コンテナと一体化して見せる */
+.photo-link{
+  background:transparent !important;
+  border:none !important;
+  box-shadow:none !important;
+}
+
+/* メイン写真は比率を維持して全体表示 */
+.photo-link img{
+  width:100% !important;
+  height:100% !important;
+  max-width:100% !important;
+  max-height:100% !important;
+  object-fit:contain !important;
+  object-position:center !important;
+  background:transparent !important;
+}
+
+/* 下段3コンテナ：写真用の内側枠を見えなくする */
+.image-block{
+  background:transparent !important;
+  border:none !important;
+  box-shadow:none !important;
+  border-radius:0 !important;
+}
+
+/* 下段写真は比率を維持して全体表示 */
+.image-block .info-photo,
+.info-photo{
+  width:100% !important;
+  height:100% !important;
+  max-width:100% !important;
+  max-height:100% !important;
+  object-fit:contain !important;
+  object-position:center !important;
+  background:transparent !important;
+}
+
+/* メイン写真の「画像を開く」表示だけ削除 */
+.photo-link > span{
+  display:none !important;
+}
+
+/* 2026-08-26 写真そのものの角丸を統一 */
+.photo-link img,
+.image-block .info-photo,
+.info-photo{
+  border-radius:12px !important;
+}
+
+/* =========================================================
+   2026-08-26 副議長修正：写真角丸を確実に適用
+   枠・背景・影は表示しないまま、クリップ領域だけ12pxにする
+   ========================================================= */
+
+/* メイン写真領域：見た目は透明、角丸クリップだけ有効 */
+.photo-link{
+  border-radius:12px !important;
+  overflow:hidden !important;
+}
+
+/* 下段3コンテナの写真領域：見た目は透明、角丸クリップだけ有効 */
+.image-block{
+  border-radius:12px !important;
+  overflow:hidden !important;
+}
+
+/* 実画像にも二重で角丸を保証 */
+.photo-link img,
+.image-block .info-photo,
+.info-photo{
+  border-radius:12px !important;
+  clip-path:inset(0 round 12px) !important;
+}
+

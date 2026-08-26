@@ -1161,8 +1161,6 @@ function makeImageBlock(block) {
 
   const image = document.createElement("img");
   image.className = "info-photo";
-  image.style.setProperty("border-radius", "18px", "important");
-  image.style.setProperty("-webkit-border-radius", "18px", "important");
   image.src = block.src;
   image.alt = block.alt || "";
   image.loading = "lazy";
@@ -1231,8 +1229,6 @@ function renderContent(sectionKey, item) {
 
 function setMainPhoto(item) {
   if (mainPhoto) {
-    mainPhoto.style.setProperty("border-radius", "18px", "important");
-    mainPhoto.style.setProperty("-webkit-border-radius", "18px", "important");
   }
   if (item.image) {
     mainPhoto.src = item.image;

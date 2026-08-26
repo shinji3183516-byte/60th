@@ -9,7 +9,7 @@
   <script src="library/xlsx.full.min.js"></script>
  
   
-  <link href="css/base.css?v=20260826-2" rel="stylesheet"/>
+  <link href="css/base.css?v=20260827-photo-radius-fix-v1" rel="stylesheet"/>
    <link id="themeStylesheet" href="css/theme-toyota.css?v=1" rel="stylesheet"/>
   <style id="opening-theme-position-override">
    /* オープニング画面：デザイン選択を以前の右下・縦型位置へ戻す */
@@ -76,20 +76,9 @@
      }
    }
   </style>
-<script defer="" src="script.js?v=opening-v1">
+<script defer="" src="script.js?v=20260827-photo-radius-fix-v1">
   </script>
-
-  <style id="photo-radius-lower-only">
-    /* 下段のメイン写真＋CAR/PLANT/SOCIETY写真だけ角丸 */
-    #mainPhoto,
-    .event-grid .info-photo{
-      border-radius:18px !important;
-      -webkit-clip-path:inset(0 round 18px) !important;
-      clip-path:inset(0 round 18px) !important;
-    }
-  </style>
-
- </head>
+</head>
  <body class="opening-active">
   <audio id="bgm" preload="none" hidden></audio>
   <div class="offline-excel-panel" aria-label="オフラインExcel読込">

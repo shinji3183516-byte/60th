@@ -9,7 +9,7 @@
   <script src="library/xlsx.full.min.js"></script>
  
   
-  <link href="css/base.css?v=1" rel="stylesheet"/>
+  <link href="css/base.css?v=20260826-2" rel="stylesheet"/>
    <link id="themeStylesheet" href="css/theme-toyota.css?v=1" rel="stylesheet"/>
   <style id="opening-theme-position-override">
    /* オープニング画面：デザイン選択を以前の右下・縦型位置へ戻す */
@@ -76,11 +76,22 @@
      }
    }
   </style>
-<script defer="" src="script.js?v=bgm-excel-v1">
+<script defer="" src="script.js?v=opening-v1">
   </script>
+
+  <style id="photo-radius-lower-only">
+    /* 下段のメイン写真＋CAR/PLANT/SOCIETY写真だけ角丸 */
+    #mainPhoto,
+    .event-grid .info-photo{
+      border-radius:18px !important;
+      -webkit-clip-path:inset(0 round 18px) !important;
+      clip-path:inset(0 round 18px) !important;
+    }
+  </style>
+
  </head>
  <body class="opening-active">
-  <audio id="bgm" preload="auto"></audio>
+  <audio id="bgm" preload="none" hidden></audio>
   <div class="offline-excel-panel" aria-label="オフラインExcel読込">
     <button id="offlineExcelButton" type="button">Excelを読み込む</button>
     <input id="offlineExcelInput" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden>
@@ -90,7 +101,7 @@
 
   <!-- ======================================================
        デジタル年表 オープニング
-       オープニング動画: movie/top.mp4
+       背景画像: images/opening/top-page.jpg
   ======================================================= -->
 <section
   id="openingPage"
@@ -181,21 +192,18 @@
     <p class="opening-theme-picker__title">デザインを選択</p>
     <div class="opening-theme-options">
       <button class="theme-select-button" type="button" data-theme="toyota">TOYOTA</button>
-      <button class="theme-select-button" type="button" data-theme="blueprint">設計図</button>
       <button class="theme-select-button" type="button" data-theme="anime">アニメ</button>
       <button class="theme-select-button" type="button" data-theme="colorful">カラフル</button>
       <button class="theme-select-button" type="button" data-theme="healing">ヒーリング</button>
       <button class="theme-select-button" type="button" data-theme="monotone">モノトーン</button>
-      <button class="theme-select-button" type="button" data-theme="country">カントリー</button>
-      
-
+      <button class="theme-select-button" type="button" data-theme="country">COUNTRY</button>
     </div>
   </section>
 </section>
   <main class="page">
    <header class="header">
     <div class="title-area">
-     <img id="headerLeftImage" alt="ヘッダー左画像" class="mark" src="images/logo/toyotamark.jpg?v=20260612"/>
+     <img alt="トヨタマーク" class="mark" src="images/logo/toyotamark.jpg?v=20260826"/>
      <div>
       <h1>
        <span>
@@ -263,7 +271,7 @@
       </button>
      </div>
      <!-- 高岡60周年公式ロゴ　無断使用・転載・転用禁止 -->
-     <img id="headerRightImage" alt="ヘッダー右画像" class="archive-logo" src="images/logo/60thLOGO.jpeg"/>
+     <img alt="高岡工場60周年ロゴ" class="archive-logo" src="images/logo/60thLOGO.jpeg"/>
     </div>
    </header>
    <section aria-label="自動スクロール年表" class="timeline-frame" id="timelineFrame">
@@ -314,17 +322,19 @@
      <p class="label">
       SELECTED YEAR
      </p>
-     <div class="year-line">
+     <div class="year-line year-line--with-title">
       <span class="big-year" id="selectedYear">
        1966
       </span>
-      <span class="era-badge" id="selectedEra">
-       昭和41年
-      </span>
+      <div class="selected-year-meta">
+       <h2 id="selectedTitle">
+        高岡工場スタート
+       </h2>
+       <span class="era-badge" id="selectedEra">
+        昭和41年
+       </span>
+      </div>
      </div>
-     <h2 id="selectedTitle">
-      高岡工場スタート
-     </h2>
      <button class="photo-link" data-placeholder="メイン写真を追加してください" id="photoLink" type="button">
       <img alt="選択された年代の写真" id="mainPhoto"/>
       <span>

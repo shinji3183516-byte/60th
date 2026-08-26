@@ -172,7 +172,7 @@ let ERA_RUNNER_CARS = [
   }
 ];
 
-const TOYOTA_MARK_IMAGE = "images/toyotamark.jpg";
+const TOYOTA_MARK_IMAGE = "images/logo/toyotamark.jpg";
 
 let timelineData = [
   {
@@ -1005,69 +1005,6 @@ const sectionConfig = {
   }
 };
 
-
-// ===== 下段コンテナ1～3：4種類フォント選択 =====
-// ヘッダー／メインコンテナには適用しない。
-const TIMELINE_CONTENT_FONT_CHOICES = Object.freeze({
-  "メイリオ": '"Meiryo", "メイリオ", sans-serif',
-  "游ゴシック": '"Yu Gothic", "YuGothic", "游ゴシック", sans-serif',
-  "MS Pゴシック": '"MS PGothic", "ＭＳ Ｐゴシック", sans-serif',
-  "游明朝": '"Yu Mincho", "YuMincho", "游明朝", serif'
-});
-
-const TIMELINE_CONTENT_FONT_ALIASES = Object.freeze({
-  "1": "メイリオ",
-  "2": "游ゴシック",
-  "3": "MS Pゴシック",
-  "4": "游明朝",
-  "MEIRYO": "メイリオ",
-  "YU GOTHIC": "游ゴシック",
-  "YUGOTHIC": "游ゴシック",
-  "MS PGOTHIC": "MS Pゴシック",
-  "MS Pゴシック": "MS Pゴシック",
-  "YU MINCHO": "游明朝",
-  "YUMINCHO": "游明朝"
-});
-
-let activeTimelineContentFont = "";
-
-function normalizeTimelineContentFont(value) {
-  const raw = String(value == null ? "" : value).trim();
-  if (!raw) return "";
-  if (TIMELINE_CONTENT_FONT_CHOICES[raw]) return raw;
-
-  const alias = TIMELINE_CONTENT_FONT_ALIASES[raw.toUpperCase()] ||
-    TIMELINE_CONTENT_FONT_ALIASES[raw];
-  return alias && TIMELINE_CONTENT_FONT_CHOICES[alias] ? alias : "";
-}
-
-function applyTimelineFontToContainer(container) {
-  if (!container || !activeTimelineContentFont) return;
-  const fontFamily = TIMELINE_CONTENT_FONT_CHOICES[activeTimelineContentFont];
-  if (!fontFamily) return;
-
-  // コンテナ自体に継承用フォントを設定。
-  container.style.fontFamily = fontFamily;
-
-  // CSS側に個別font-family指定があっても確実に反映する対象。
-  container.querySelectorAll(".content-text, .content-block-title, figcaption").forEach((element) => {
-    element.style.fontFamily = fontFamily;
-  });
-}
-
-function setTimelineContentFont(value) {
-  const normalized = normalizeTimelineContentFont(value);
-  if (!normalized) return false;
-  activeTimelineContentFont = normalized;
-
-  [carContent, factoryContent, societyContent].forEach(applyTimelineFontToContainer);
-  return true;
-}
-
-// Excel以外から確認するときにも利用可能。
-window.TIMELINE_CONTENT_FONT_CHOICES = Object.keys(TIMELINE_CONTENT_FONT_CHOICES);
-window.setTimelineContentFont = setTimelineContentFont;
-
 let offset = 0;
 let manualPaused = false;
 let hoverPaused = false;
@@ -1211,7 +1148,7 @@ function makeTitleBlock(text) {
   const title = document.createElement("h3");
   title.className = "content-block-title";
   title.textContent = text || "";
-  title.style.margin = "0.35em 0 0.25em";
+  title.style.margin = "0.05em 0 0";
   title.style.fontSize = "1.08em";
   title.style.fontWeight = "700";
   title.style.lineHeight = "1.35";
@@ -1224,78 +1161,26 @@ function makeImageBlock(block) {
 
   const image = document.createElement("img");
   image.className = "info-photo";
+  image.style.setProperty("border-radius", "18px", "important");
+  image.style.setProperty("-webkit-border-radius", "18px", "important");
   image.src = block.src;
   image.alt = block.alt || "";
   image.loading = "lazy";
 
   image.addEventListener("error", function() {
-    // Excel写真フォルダ互換:
-    // 新汎用名 content-01/02/03 と旧運用名 container1/2/3 の両方を許可する。
-    const currentSrc = String(image.getAttribute("src") || "");
-    const fallbackPairs = [
-      ["images/content-01/", "images/container1/"],
-      ["images/content-02/", "images/container2/"],
-      ["images/content-03/", "images/container3/"],
-      ["images/container1/", "images/content-01/"],
-      ["images/container2/", "images/content-02/"],
-      ["images/container3/", "images/content-03/"]
-    ];
-
-    if (!image.dataset.folderFallbackTried) {
-      const pair = fallbackPairs.find(([from]) => currentSrc.includes(from));
-      if (pair) {
-        image.dataset.folderFallbackTried = "1";
-        image.src = currentSrc.replace(pair[0], pair[1]);
-        return;
-      }
-    }
-
     figure.classList.add("image-missing");
     figure.textContent = "画像が見つかりません: " + block.src;
   });
 
   figure.appendChild(image);
 
-  // 写真ファイル名は表示しない。
-  // タイトル／本文が空欄でも、画像の下に src・caption・ファイル名を代替表示しない。
+  if (block.caption) {
+    const caption = document.createElement("figcaption");
+    caption.textContent = block.caption;
+    figure.appendChild(caption);
+  }
+
   return figure;
-}
-
-// 下段コンテナ内の写真が2枚以上ある場合、
-// CSSの固定高さ・overflow:hiddenで後ろの写真が隠れないよう、
-// JS側で写真枠だけを残り高さへ均等配分する。
-function fitSectionImages(container) {
-  if (!container) return;
-
-  const figures = Array.from(container.querySelectorAll(".image-block"));
-  if (figures.length < 2) return;
-
-  // TITLE / TEXT は必要な高さを維持し、写真だけで残り高さを分ける。
-  figures.forEach(function(figure) {
-    figure.style.display = "flex";
-    figure.style.flexDirection = "column";
-    figure.style.flex = "1 1 0";
-    figure.style.height = "0";
-    figure.style.minHeight = "0";
-    figure.style.maxHeight = "none";
-    figure.style.overflow = "hidden";
-
-    const image = figure.querySelector("img.info-photo");
-    if (image) {
-      image.style.display = "block";
-      image.style.flex = "1 1 0";
-      image.style.width = "100%";
-      image.style.height = "100%";
-      image.style.minHeight = "0";
-      image.style.maxHeight = "none";
-      image.style.objectFit = "contain";
-    }
-
-    const caption = figure.querySelector("figcaption");
-    if (caption) {
-      caption.style.flex = "0 0 auto";
-    }
-  });
 }
 
 function renderContent(sectionKey, item) {
@@ -1342,15 +1227,13 @@ function renderContent(sectionKey, item) {
     empty.textContent = config.emptyText;
     container.appendChild(empty);
   }
-
-  // 2枚目・3枚目がコンテナ外へ押し出されるのを防止。
-  fitSectionImages(container);
-
-  // Excelで選択したフォントを、再描画後のコンテナ1～3にも再適用。
-  applyTimelineFontToContainer(container);
 }
 
 function setMainPhoto(item) {
+  if (mainPhoto) {
+    mainPhoto.style.setProperty("border-radius", "18px", "important");
+    mainPhoto.style.setProperty("-webkit-border-radius", "18px", "important");
+  }
   if (item.image) {
     mainPhoto.src = item.image;
     mainPhoto.alt = item.year + " " + item.title;
@@ -2043,7 +1926,8 @@ async function addImagesToCurrentYear(files) {
     localSection.push({
       type: "image",
       src: dataURL,
-      alt: file.name
+      alt: file.name,
+      caption: file.name
     });
   }
 
@@ -2858,9 +2742,18 @@ function normalizeExcelBoolean(value, fallback = false) {
 }
 
 function readSystemSettings(workbook) {
+  const bgm = document.getElementById("bgm");
   const sheet = workbook.Sheets["設定"];
   if (!sheet) {
-    console.info('Excelに「設定」シートがないため、BGMは使用しません。');
+    // 設定シートがない場合は、以前のBGMが鳴り続けないよう確実に停止します。
+    bgmSettings.enabled = false;
+    if (bgm) {
+      bgm.pause();
+      bgm.currentTime = 0;
+      bgm.removeAttribute("src");
+      bgm.load();
+    }
+    console.info('Excelに「設定」シートがないため、BGMを停止します。');
     return;
   }
   const rows = XLSX.utils.sheet_to_json(sheet, { range: 1, defval: "" });
@@ -2880,11 +2773,20 @@ function readSystemSettings(workbook) {
   const fadeIn = Number(settings.get("BGM_FADE_IN"));
   bgmSettings.fadeInSeconds = Number.isFinite(fadeIn) ? Math.max(0, fadeIn) : 0;
 
-  const bgm = document.getElementById("bgm");
-  if (bgm && bgmSettings.file) {
-    bgm.src = `./audio/${bgmSettings.file}`;
-    bgm.loop = bgmSettings.loop;
-    bgm.preload = "auto";
+  // BGM_USE=OFF またはファイル未設定なら、その場で確実に停止します。
+  // ONの場合も、ここでは再生せず「年表をはじめる」押下時まで待ちます。
+  if (bgm) {
+    bgm.pause();
+    bgm.currentTime = 0;
+
+    if (bgmSettings.enabled && bgmSettings.file) {
+      bgm.src = `./audio/${bgmSettings.file}`;
+      bgm.loop = bgmSettings.loop;
+      bgm.preload = "auto";
+    } else {
+      bgm.removeAttribute("src");
+      bgm.load();
+    }
   }
   console.info("ExcelのBGM設定を読み込みました。", { ...bgmSettings });
 }
@@ -3193,39 +3095,13 @@ function sheetRows(workbook, name) {
 
 
 /* 匠会承認：Excelには画像ファイル名だけ入力する */
-function resolveTimelineImage(value, baseFolder) {
+function resolveTimelineImage(value, folder) {
   const raw = String(value || "").trim();
   if (!raw) return "";
-
-  const normalized = raw.replace(/\\/g, "/");
-
-  // 既存の相対パス／URL／Data URL はそのまま使用する。
-  if (
-    normalized.startsWith("images/") ||
-    normalized.startsWith("library/") ||
-    normalized.startsWith("data:") ||
-    normalized.startsWith("blob:") ||
-    normalized.startsWith("/") ||
-    normalized.startsWith("./") ||
-    normalized.startsWith("../") ||
-    /^https?:\/\//i.test(normalized)
-  ) {
-    return normalized;
+  if (/^(?:https?:|data:|blob:|\/|\.\/|\.\.\/)/i.test(raw) || raw.includes("/") || raw.includes("\\")) {
+    return raw.replace(/\\/g, "/");
   }
-
-  // Excelには通常「ファイル名だけ」を入力する。
-  // 誤ってWindows/Macのフルパスを貼った場合も末尾のファイル名だけ使用する。
-  const fileName = normalized.split("/").pop();
-  let base = String(baseFolder || "").trim().replace(/\\/g, "/");
-
-  // 旧JS互換: "main" / "container1" のような短縮指定にも対応する。
-  if (base && !base.includes("/")) {
-    base = `images/${base}/`;
-  } else if (base) {
-    base = base.replace(/^\.\/+/, "").replace(/\/?$/, "/");
-  }
-
-  return base ? base + fileName : fileName;
+  return `images/${folder}/${raw}`;
 }
 
 function makeSectionMap(rows, imageFolder) {
@@ -3249,13 +3125,9 @@ function makeSectionMap(rows, imageFolder) {
     });
 
     grouped.forEach((entries, id) => {
-      entries.sort((a, b) => {
-        const ao = Number(a.row["順番"]);
-        const bo = Number(b.row["順番"]);
-        const av = Number.isFinite(ao) ? ao : a.rowIndex;
-        const bv = Number.isFinite(bo) ? bo : b.rowIndex;
-        return av - bv || a.rowIndex - b.rowIndex;
-      });
+      // 自由配置形式はExcelの行順をそのまま表示順として扱う。
+      // 「順番」列の重複・振り直しで TITLE / TEXT / IMAGE が入れ替わる事故を防止。
+      entries.sort((a, b) => a.rowIndex - b.rowIndex);
 
       const blocks = [];
       entries.forEach(({ row }) => {
@@ -3318,13 +3190,7 @@ function readDisplaySettings(workbook) {
   const sheet = workbook.Sheets["デザイン設定"];
   if (!sheet) return;
   const rows = XLSX.utils.sheet_to_json(sheet, { range: 9, defval: "" });
-
-  // 数値だけでなくフォント名も扱うため、値は文字列のまま保持する。
-  const settings = new Map(rows.map((row) => [
-    String(row["設定名"] || "").trim(),
-    String(row["値"] == null ? "" : row["値"]).trim()
-  ]));
-
+  const settings = new Map(rows.map((row) => [String(row["設定名"] || "").trim(), row["値"]]));
   const setPx = (name, cssVar, min, max) => {
     const value = Number(settings.get(name));
     if (Number.isFinite(value)) {
@@ -3336,43 +3202,23 @@ function readDisplaySettings(workbook) {
   setPx("年表示サイズ", "--excel-year-font-size", 48, 90);
   setPx("写真説明サイズ", "--excel-caption-font-size", 14, 28);
 
-  // Excel「デザイン設定」の設定名「本文フォント種類」で選択。
-  // 値は 1～4 または以下の名称を使用可能：
-  // 1=メイリオ / 2=游ゴシック / 3=MS Pゴシック / 4=游明朝
-  const fontSetting =
-    settings.get("本文フォント種類") ||
-    settings.get("コンテナフォント") ||
-    settings.get("フォント種類") ||
-    "";
-
-  if (fontSetting) {
-    setTimelineContentFont(fontSetting);
+  const contentFontChoices = {
+    "メイリオ": '"Meiryo", "メイリオ", sans-serif',
+    "游ゴシック": '"Yu Gothic", "YuGothic", "游ゴシック", sans-serif',
+    "MS Pゴシック": '"MS PGothic", "ＭＳ Ｐゴシック", sans-serif',
+    "游明朝": '"Yu Mincho", "YuMincho", "游明朝", serif'
+  };
+  const selectedFont = String(settings.get("本文フォント") || "").trim();
+  if (contentFontChoices[selectedFont]) {
+    document.documentElement.style.setProperty("--excel-content-font-family", contentFontChoices[selectedFont]);
   }
 }
 
 function applyExcelWorkbook(workbook) {
   const masterRows = sheetRows(workbook, "年表マスター");
-
-  // Excel「設定」シートの画像保存先を使用する。
-  // 設定がない旧Excelでも既定値で動作する。
-  const settingsSheet = workbook.Sheets["設定"];
-  const settingsRows = settingsSheet
-    ? XLSX.utils.sheet_to_json(settingsSheet, { range: 1, defval: "" })
-    : [];
-  const genericSettings = new Map(
-    settingsRows
-      .filter((row) => row["設定キー"])
-      .map((row) => [String(row["設定キー"]).trim(), String(row["設定値"] || "").trim()])
-  );
-
-  const mainFolder = genericSettings.get("MAIN_IMAGE_FOLDER") || "images/main/";
-  const content01Folder = genericSettings.get("CONTENT_01_FOLDER") || "images/content-01/";
-  const content02Folder = genericSettings.get("CONTENT_02_FOLDER") || "images/content-02/";
-  const content03Folder = genericSettings.get("CONTENT_03_FOLDER") || "images/content-03/";
-
-  const carMap = makeSectionMap(sheetRows(workbook, "CAR"), content01Folder);
-  const plantMap = makeSectionMap(sheetRows(workbook, "PLANT"), content02Folder);
-  const societyMap = makeSectionMap(sheetRows(workbook, "SOCIETY"), content03Folder);
+  const carMap = makeSectionMap(sheetRows(workbook, "CAR"), "container1");
+  const plantMap = makeSectionMap(sheetRows(workbook, "PLANT"), "container2");
+  const societyMap = makeSectionMap(sheetRows(workbook, "SOCIETY"), "container3");
 
   const loadedTimelineData = masterRows
     .filter((row) => Number(row.DISPLAY) !== 0 && row.YEAR)
@@ -3384,7 +3230,7 @@ function applyExcelWorkbook(workbook) {
         era: getEra(row.YEAR),
         title: String(row.TITLE || ""),
         visual: String(row.VISUAL || ""),
-        image: resolveTimelineImage(row.MAIN_IMAGE, mainFolder),
+        image: resolveTimelineImage(row.MAIN_IMAGE, "main"),
         spec1: String(row.SPEC1 || ""),
         spec2: String(row.SPEC2 || ""),
         spec3: String(row.SPEC3 || ""),

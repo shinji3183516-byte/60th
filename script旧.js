@@ -1005,69 +1005,6 @@ const sectionConfig = {
   }
 };
 
-
-// ===== 下段コンテナ1～3：4種類フォント選択 =====
-// ヘッダー／メインコンテナには適用しない。
-const TIMELINE_CONTENT_FONT_CHOICES = Object.freeze({
-  "メイリオ": '"Meiryo", "メイリオ", sans-serif',
-  "游ゴシック": '"Yu Gothic", "YuGothic", "游ゴシック", sans-serif',
-  "MS Pゴシック": '"MS PGothic", "ＭＳ Ｐゴシック", sans-serif',
-  "游明朝": '"Yu Mincho", "YuMincho", "游明朝", serif'
-});
-
-const TIMELINE_CONTENT_FONT_ALIASES = Object.freeze({
-  "1": "メイリオ",
-  "2": "游ゴシック",
-  "3": "MS Pゴシック",
-  "4": "游明朝",
-  "MEIRYO": "メイリオ",
-  "YU GOTHIC": "游ゴシック",
-  "YUGOTHIC": "游ゴシック",
-  "MS PGOTHIC": "MS Pゴシック",
-  "MS Pゴシック": "MS Pゴシック",
-  "YU MINCHO": "游明朝",
-  "YUMINCHO": "游明朝"
-});
-
-let activeTimelineContentFont = "";
-
-function normalizeTimelineContentFont(value) {
-  const raw = String(value == null ? "" : value).trim();
-  if (!raw) return "";
-  if (TIMELINE_CONTENT_FONT_CHOICES[raw]) return raw;
-
-  const alias = TIMELINE_CONTENT_FONT_ALIASES[raw.toUpperCase()] ||
-    TIMELINE_CONTENT_FONT_ALIASES[raw];
-  return alias && TIMELINE_CONTENT_FONT_CHOICES[alias] ? alias : "";
-}
-
-function applyTimelineFontToContainer(container) {
-  if (!container || !activeTimelineContentFont) return;
-  const fontFamily = TIMELINE_CONTENT_FONT_CHOICES[activeTimelineContentFont];
-  if (!fontFamily) return;
-
-  // コンテナ自体に継承用フォントを設定。
-  container.style.fontFamily = fontFamily;
-
-  // CSS側に個別font-family指定があっても確実に反映する対象。
-  container.querySelectorAll(".content-text, .content-block-title, figcaption").forEach((element) => {
-    element.style.fontFamily = fontFamily;
-  });
-}
-
-function setTimelineContentFont(value) {
-  const normalized = normalizeTimelineContentFont(value);
-  if (!normalized) return false;
-  activeTimelineContentFont = normalized;
-
-  [carContent, factoryContent, societyContent].forEach(applyTimelineFontToContainer);
-  return true;
-}
-
-// Excel以外から確認するときにも利用可能。
-window.TIMELINE_CONTENT_FONT_CHOICES = Object.keys(TIMELINE_CONTENT_FONT_CHOICES);
-window.setTimelineContentFont = setTimelineContentFont;
-
 let offset = 0;
 let manualPaused = false;
 let hoverPaused = false;
@@ -1256,8 +1193,12 @@ function makeImageBlock(block) {
 
   figure.appendChild(image);
 
-  // 写真ファイル名は表示しない。
-  // タイトル／本文が空欄でも、画像の下に src・caption・ファイル名を代替表示しない。
+  if (block.caption) {
+    const caption = document.createElement("figcaption");
+    caption.textContent = block.caption;
+    figure.appendChild(caption);
+  }
+
   return figure;
 }
 
@@ -1345,9 +1286,6 @@ function renderContent(sectionKey, item) {
 
   // 2枚目・3枚目がコンテナ外へ押し出されるのを防止。
   fitSectionImages(container);
-
-  // Excelで選択したフォントを、再描画後のコンテナ1～3にも再適用。
-  applyTimelineFontToContainer(container);
 }
 
 function setMainPhoto(item) {
@@ -2043,7 +1981,8 @@ async function addImagesToCurrentYear(files) {
     localSection.push({
       type: "image",
       src: dataURL,
-      alt: file.name
+      alt: file.name,
+      caption: file.name
     });
   }
 
@@ -3318,15 +3257,9 @@ function readDisplaySettings(workbook) {
   const sheet = workbook.Sheets["デザイン設定"];
   if (!sheet) return;
   const rows = XLSX.utils.sheet_to_json(sheet, { range: 9, defval: "" });
-
-  // 数値だけでなくフォント名も扱うため、値は文字列のまま保持する。
-  const settings = new Map(rows.map((row) => [
-    String(row["設定名"] || "").trim(),
-    String(row["値"] == null ? "" : row["値"]).trim()
-  ]));
-
+  const settings = new Map(rows.map((row) => [String(row["設定名"] || "").trim(), Number(row["値"])]));
   const setPx = (name, cssVar, min, max) => {
-    const value = Number(settings.get(name));
+    const value = settings.get(name);
     if (Number.isFinite(value)) {
       document.documentElement.style.setProperty(cssVar, `${Math.min(max, Math.max(min, value))}px`);
     }
@@ -3335,19 +3268,6 @@ function readDisplaySettings(workbook) {
   setPx("選択年タイトルサイズ", "--excel-title-font-size", 28, 52);
   setPx("年表示サイズ", "--excel-year-font-size", 48, 90);
   setPx("写真説明サイズ", "--excel-caption-font-size", 14, 28);
-
-  // Excel「デザイン設定」の設定名「本文フォント種類」で選択。
-  // 値は 1～4 または以下の名称を使用可能：
-  // 1=メイリオ / 2=游ゴシック / 3=MS Pゴシック / 4=游明朝
-  const fontSetting =
-    settings.get("本文フォント種類") ||
-    settings.get("コンテナフォント") ||
-    settings.get("フォント種類") ||
-    "";
-
-  if (fontSetting) {
-    setTimelineContentFont(fontSetting);
-  }
 }
 
 function applyExcelWorkbook(workbook) {

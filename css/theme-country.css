@@ -345,6 +345,7 @@ h1 span{
   color: #261d15 !important;
   font-size: 12.5px !important;
   line-height: 1.4 !important;
+  text-shadow: none !important;
 }
 
 .image-block{

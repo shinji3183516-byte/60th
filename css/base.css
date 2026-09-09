@@ -2968,3 +2968,28 @@ body.opening-active{
   transform:none !important;
   display:block !important;
 }
+
+/* =========================================================
+   2026-09-09 匠会：60周年ロゴで編集用ヘッダー操作を表示切替
+   通常（本番）:
+   - 非表示：写真・文章を追加 / 1サイクル残り / 速度3ボタン
+   - 表示：停止 / 再開 / 60周年ロゴ
+   編集時：60周年ロゴを押すと編集用3領域を再表示
+   ※ 表示/非表示だけを切り替え、選択中の速度値は変更しない
+   ========================================================= */
+body:not(.editor-header-tools-visible) .header-uploader,
+body:not(.editor-header-tools-visible) .cycle-timer,
+body:not(.editor-header-tools-visible) .speed-control{
+  display:none !important;
+}
+
+.archive-logo{
+  cursor:pointer;
+  user-select:none;
+  -webkit-user-drag:none;
+}
+
+.archive-logo:focus-visible{
+  outline:3px solid var(--gold2, #f7d879);
+  outline-offset:3px;
+}

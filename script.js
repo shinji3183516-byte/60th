@@ -3372,3 +3372,52 @@ async function loadExcelTimeline() {
 initializeThemeSelector();
 loadExcelTimeline();
 
+
+/* =========================================================
+   2026-09-09 匠会：60周年ロゴで編集用ヘッダー操作を表示切替
+   - 初期状態は編集用操作を非表示（本番表示）
+   - ロゴクリックで表示 / 非表示を切替
+   - 停止 / 再開は常時表示
+   - 現在の速度モードには一切触れないため、収納後も最後の速度を維持
+   ========================================================= */
+(function initializeHeaderToolsLogoToggle(){
+  const VISIBLE_CLASS = "editor-header-tools-visible";
+
+  function setup(){
+    const logo = document.querySelector(".archive-logo");
+    if (!logo || !document.body) return;
+
+    // 本番表示を標準にする。速度状態そのものは変更しない。
+    document.body.classList.remove(VISIBLE_CLASS);
+
+    logo.setAttribute("role", "button");
+    logo.setAttribute("tabindex", "0");
+    logo.setAttribute("aria-pressed", "false");
+    logo.setAttribute("aria-label", "編集用操作を表示");
+    logo.setAttribute("title", "クリック：編集用操作の表示／非表示");
+
+    function setToolsVisible(visible){
+      document.body.classList.toggle(VISIBLE_CLASS, visible);
+      logo.setAttribute("aria-pressed", String(visible));
+      logo.setAttribute("aria-label", visible ? "編集用操作を非表示" : "編集用操作を表示");
+    }
+
+    function toggleTools(){
+      setToolsVisible(!document.body.classList.contains(VISIBLE_CLASS));
+    }
+
+    logo.addEventListener("click", toggleTools);
+    logo.addEventListener("keydown", function(event){
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        toggleTools();
+      }
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", setup, { once:true });
+  } else {
+    setup();
+  }
+})();

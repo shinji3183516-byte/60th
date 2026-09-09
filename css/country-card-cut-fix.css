@@ -1,0 +1,117 @@
+/* =========================================================
+   高岡工場60周年年表
+   年表カード下面切れ対策 v2  2026-09-07
+
+   v1からの変更点:
+   - クリアランスが空きすぎたため、余白を22pxから8pxへ縮小
+   - 年表フレームを152pxから138pxへ戻す
+   - カードを上寄せから上下中央揃えへ変更し、上下の余白を均等化
+   - ヘッダー圧縮（84px）はそのまま維持
+
+   読み込み位置:
+   base.css と themeStylesheet より後（最後）
+   ========================================================= */
+
+/* PC・大型モニター */
+@media (min-width:1101px){
+
+  /* ヘッダーは右端ロゴぎりぎりまで圧縮したまま維持 */
+  .header{
+    height:84px !important;
+    min-height:84px !important;
+    padding:2px 10px !important;
+    margin-bottom:6px !important;
+    align-items:center !important;
+  }
+
+  .archive-logo{
+    width:76px !important;
+    height:76px !important;
+    max-width:76px !important;
+    max-height:76px !important;
+    flex:0 0 76px !important;
+  }
+
+  .mark,
+  .toyota-mark{
+    width:72px !important;
+    height:44px !important;
+  }
+
+  h1{
+    font-size:clamp(22px, 2.55vw, 39px) !important;
+    line-height:.96 !important;
+  }
+
+  .header-actions{
+    gap:10px !important;
+  }
+
+  /*
+    年表フレーム高さの内訳
+    上余白 9px ＋ 表示領域 120px ＋ 下余白 9px ＝ 138px
+    カード本体は112pxのため、選択時 scale(1.04) の
+    約4.5pxと影を吸収できる最小限の余白だけを残します。
+  */
+  .timeline-frame{
+    height:138px !important;
+    min-height:138px !important;
+    margin-bottom:10px !important;
+  }
+
+  .track-mask{
+    top:9px !important;
+    right:18px !important;
+    bottom:9px !important;
+    left:18px !important;
+    overflow:hidden !important;
+  }
+
+  /* 上寄せをやめ、上下中央に置くことで余白を均等にします */
+  .timeline-track{
+    top:0 !important;
+    height:120px !important;
+    align-items:center !important;
+  }
+
+  .year-node{
+    height:112px !important;
+    min-height:112px !important;
+  }
+
+  /* 拡大の基準を中央に固定し、下方向だけ伸びないようにします */
+  .year-node.active,
+  .year-node.is-active,
+  .year-node.selected{
+    transform-origin:center center !important;
+  }
+
+  .center-line{
+    top:7px !important;
+    bottom:7px !important;
+  }
+}
+
+/* 1100px以下 */
+@media (max-width:1100px){
+  .timeline-frame{
+    min-height:138px !important;
+  }
+
+  .track-mask{
+    top:9px !important;
+    bottom:9px !important;
+  }
+
+  .timeline-track{
+    align-items:center !important;
+  }
+}
+
+/* 640px以下は既存のモバイル高さを維持 */
+@media (max-width:640px){
+  .timeline-frame{
+    height:164px !important;
+    min-height:164px !important;
+  }
+}
